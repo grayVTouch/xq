@@ -54,6 +54,7 @@ class video extends Base
         $param['fail_reason']   = $param['fail_reason'] ?? '';
         $param['src']           = $param['src'] ?? '';
         $param['created_at']    = $param['created_at'] ?? '';
+        $param['tags']    = $param['tags'] ?? '';
         $res = VideoAction::update($this , $id ,$param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);
@@ -81,6 +82,7 @@ class video extends Base
         $param['status']        = $param['status'] ?? '';
         $param['fail_reason']   = $param['fail_reason'] ?? '';
         $param['src']           = $param['src'] ?? '';
+        $param['tags']    = $param['tags'] ?? '';
         $param['created_at']    = $param['created_at'] ?? '';
         $res = VideoAction::store($this ,$param);
         if ($res['code'] != 0) {
@@ -136,6 +138,19 @@ class video extends Base
         $ids = $this->request->post('ids' , []);
         $ids = json_decode($ids , true);
         $res = VideoAction::retry($this , $ids);
+        if ($res['code'] != 0) {
+            return error($res['message'] , $res['data'] , $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
+
+
+    public function destroyTag()
+    {
+        $param = $this->request->post();
+        $param['video_id'] = $param['video_id'] ?? '';
+        $param['tag_id'] = $param['tag_id'] ?? '';
+        $res = VideoAction::destroyTag($this , $param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);
         }

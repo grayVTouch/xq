@@ -9,6 +9,7 @@
     --border-color-yellow: #f3c669;
     --font-color-yellow: #f3c669;
     --fixed-top: 105px;
+    --fixed-btm: calc(132px + 50px);
     --fixed-top-with-extra: 125px;
     --button-background-color: #5d5d5d;
     --button-background-color-hover: #828282;

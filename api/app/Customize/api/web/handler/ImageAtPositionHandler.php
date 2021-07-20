@@ -19,17 +19,6 @@ class ImageAtPositionHandler extends Handler
         }
         $res = convert_object($model);
 
-        $module = ModuleModel::find($res->module_id);
-        ModuleHandler::handle($module);
-
-        $position = PositionModel::find($res->position_id);
-        $position = PositionHandler::handle($position);
-
-        $res->module = $module;
-        $res->position = $position;
-
-
-
         return $res;
     }
 

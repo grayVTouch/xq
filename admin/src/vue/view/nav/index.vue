@@ -10,7 +10,7 @@
 
                 <my-search-form-item name="类型">
                     <i-select v-model="search.type" class="w-200">
-                        <i-option v-for="(v,k) in TopContext.business.category.type" :key="k" :value="k">{{ v }}</i-option>
+                        <i-option v-for="(v,k) in TopContext.business.contentType" :key="k" :value="k">{{ v }}</i-option>
                     </i-select>
                 </my-search-form-item>
 
@@ -36,7 +36,6 @@
                     ref="table"
                     class="w-r-100"
                     border
-                    :height="TopContext.table.height + 150"
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

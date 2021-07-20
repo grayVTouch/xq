@@ -6,6 +6,7 @@ namespace App\Customize\api\web\action;
 
 use App\Customize\api\web\util\FileUtil;
 use App\Customize\api\web\repository\ResourceRepository;
+use App\Customize\api\web\util\Util;
 use App\Http\Controllers\api\web\Base;
 use Core\Lib\ImageProcessor;
 use Exception;
@@ -13,6 +14,7 @@ use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use function api\web\my_config;
+use function api\web\get_form_error;
 
 class FileAction extends Action
 {
@@ -26,13 +28,16 @@ class FileAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -51,12 +56,18 @@ class FileAction extends Action
             'm' => ['sometimes' , Rule::in($mode_range)] ,
             'w' => 'sometimes|integer' ,
             'h' => 'sometimes|integer' ,
-            'file' => 'required|mimes:jpg,jpeg,png,gif,webp' ,
+//            'file' => 'required|mimes:jpg,jpeg,png,gif,webp' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
         }
+        $mime_range = ['jpg','jpeg','png','gif','webp','bmp'];
+        $extension = $file->getClientOriginalExtension();
+        if (!in_array($extension , $mime_range)) {
+            return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
+        }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
@@ -95,8 +106,10 @@ class FileAction extends Action
                 $url = FileUtil::generateUrlByRealPath($real_path);
             }
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -105,19 +118,27 @@ class FileAction extends Action
     public static function uploadVideo(Base $context , ?UploadedFile $file , array $param = [])
     {
         $validator = Validator::make($param , [
-            'file' => 'required|mimes:mp4,mov,mkv,avi,flv,rm,rmvb,ts' ,
+//            'file' => 'required|mimes:mp4,mov,mkv,avi,flv,rm,rmvb,ts,webm' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
         }
+        $mime_range = ['mp4','mov','mkv','avi','flv','rm','rmvb','ts','webm'];
+        $extension = $file->getClientOriginalExtension();
+        if (!in_array($extension , $mime_range)) {
+            return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
+        }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -132,18 +153,21 @@ class FileAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $extension = $file->getClientOriginalExtension();
-        $ext_range = ['ass' , 'idx' , 'sub' , 'srt' , 'vtt' , 'ssa'];
-        if (!in_array($extension , $ext_range)) {
-            return self::error('不支持的文件类型');
+        $mime_range = ['ass' , 'idx' , 'sub' , 'srt' , 'vtt' , 'ssa'];
+        if (!in_array($extension , $mime_range)) {
+            return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -158,13 +182,16 @@ class FileAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }

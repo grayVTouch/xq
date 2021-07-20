@@ -8,13 +8,21 @@
 
             <div class="content">
                 <div class="big-image">
-                    <a class="mask" :href="imageSubject.length > 0 ? imageSubject[0].link : 'javascript:;'"><img :src="imageSubject.length > 0 ? imageSubject[0].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
+                    <a class="mask" :href="imageSubject.length > 0 ? imageSubject[0].link : 'javascript:;'">
+                        <img
+                                data-id="test"
+                                :data-src="imageSubject.length > 0 ? imageSubject[0].src : TopContext.res.notFound"
+                                v-judge-img-size
+                                alt=""
+                                class="image judge-img-size"
+                        >
+                    </a>
                 </div>
                 <div class="small-image">
-                    <a class="mask" :href="imageSubject.length > 1 ? imageSubject[1].link : 'javascript:;'"><img :src="imageSubject.length > 1 ? imageSubject[1].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
-                    <a class="mask" :href="imageSubject.length > 2 ? imageSubject[2].link : 'javascript:;'"><img :src="imageSubject.length > 2 ? imageSubject[2].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
-                    <a class="mask" :href="imageSubject.length > 3 ? imageSubject[3].link : 'javascript:;'"><img :src="imageSubject.length > 3 ? imageSubject[3].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
-                    <a class="mask" :href="imageSubject.length > 4 ? imageSubject[4].link : 'javascript:;'"><img :src="imageSubject.length > 4 ? imageSubject[4].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
+                    <a class="mask" :href="imageSubject.length > 1 ? imageSubject[1].link : 'javascript:;'"><img :data-src="imageSubject.length > 1 ? imageSubject[1].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
+                    <a class="mask" :href="imageSubject.length > 2 ? imageSubject[2].link : 'javascript:;'"><img :data-src="imageSubject.length > 2 ? imageSubject[2].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
+                    <a class="mask" :href="imageSubject.length > 3 ? imageSubject[3].link : 'javascript:;'"><img :data-src="imageSubject.length > 3 ? imageSubject[3].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
+                    <a class="mask" :href="imageSubject.length > 4 ? imageSubject[4].link : 'javascript:;'"><img :data-src="imageSubject.length > 4 ? imageSubject[4].src : TopContext.res.notFound" v-judge-img-size alt="" class="image judge-img-size"></a>
                 </div>
             </div>
         </div>
@@ -46,55 +54,16 @@
                 <div class="empty" v-if="!val.pending.switchImages && images.data.length <= 0"><my-icon icon="empty" size="40"></my-icon></div>
 
                 <div class="inner">
-                    <div class="item card-box" v-for="v in images.data" :key="v.id">
-                        <!-- 封面 -->
-                        <div class="thumb">
-                            <a class="link" :href="genUrl(`/image_project/${v.id}/show`)" target="_blank">
-                                <img :src="v.thumb" class="image judge-img-size" v-judge-img-size>
-                                <div class="mask">
-                                    <div class="top">
-                                        <div class="type" v-if="v.type === 'pro'"><my-icon icon="zhuanyerenzheng" size="35" /></div>
 
-                                        <div class="praise" v-ripple @click.prevent="praiseHandle(v)">
-                                            <my-loading size="16" v-if="val.pending.praiseHandle"></my-loading>
-                                            <my-icon icon="shoucang2" :class="{'run-red': v.is_praised }" /> 喜欢
-                                        </div>
-                                    </div>
-                                    <div class="btm">
-                                        <div class="count">{{ v.images.length }}P</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                    <my-image-project-card-box
+                            class="item"
+                            v-for="v in images.data"
+                            :key="v.id"
+                            :row="v"
+                            @on-praise="praiseHandle"
+                            :is-praise-pending="val.pending.praiseHandle"
+                    ></my-image-project-card-box>
 
-                        <div class="introduction">
-                            <!-- 标签 -->
-                            <div class="tags">
-                                <span class="ico"><my-icon icon="icontag" size="18" /></span>
-
-                                <a class="tag" v-for="tag in v.tags" :key="tag.id" :href="`#/image_project/search?tag_id=${tag.tag_id}`">{{ tag.name }}</a>
-                            </div>
-                            <!-- 标题 -->
-                            <div class="title"><a class="link" target="_blank" :href="`#/image_project/${v.id}/show`">{{ v.name }}</a></div>
-                            <!-- 发布者 -->
-                            <div class="user">
-                                <div class="sender">
-                                    <span class="avatar-outer"><img :src="v.user ? v.user.avatar : TopContext.res.avatar" alt="" class="image avatar"></span>
-                                    <a class="name">{{ v.user ? v.user.nickname : 'unknow' }}</a>
-                                </div>
-                                <div class="action"></div>
-                            </div>
-                            <!-- 统计信息 -->
-                            <div class="info">
-                                <div class="left"><my-icon icon="shijian" class="ico" mode="right" /> {{ v.created_at }}</div>
-                                <div class="right">
-                                    <span class="view-count"><my-icon icon="chakan" mode="right" />{{ v.view_count }}</span>
-                                    <span class="praise-count"><my-icon icon="shoucang2" mode="right" />{{ v.praise_count }}</span>
-                                    <span class="collect-count" v-if="$store.state.user"><my-icon icon="shoucang6" mode="right" />{{ v.collect_count }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
                 </div>
 
             </div>
@@ -160,11 +129,22 @@
                         </div>
                         <div class="list run-tags horizontal" :class="{loading: val.pending.hotTagsWithPager}">
                             <div class="mask" v-if="val.pending.hotTagsWithPager"><my-loading></my-loading></div>
-                            <div class="empty" v-if="!val.pending.hotTagsWithPager && allHotTags.total <= 0">暂无相关记录</div>
+                            <div class="empty" v-if="!val.pending.hotTagsWithPager && allHotTags.total <= 0">
+                                <my-icon icon="empty" size="40"></my-icon>
+                            </div>
                             <span class="tag" v-ripple v-for="v in allHotTags.data" :class="{selected: search.tagIds.indexOf(v.tag_id) >= 0}" :key="v.id" @click="filterByTag(v)">{{ v.name }}</span>
                         </div>
                         <div class="pager" v-if="allHotTags.total > 0">
-                            <my-page :total="allHotTags.total" :limit="allHotTags.size" :page="allHotTags.page" @on-change="tagPageEvent"></my-page>
+                            <my-page
+                                    class="run-page-center"
+                                    :total="allHotTags.total"
+                                    :size="allHotTags.size"
+                                    :sizes="allHotTags.sizes"
+                                    :show-sizes="false"
+                                    :page="allHotTags.page"
+                                    @on-page-change="tagPageEvent"
+                                    @on-size-change="tagSizeEvent"
+                            ></my-page>
                         </div>
                     </div>
                 </div>

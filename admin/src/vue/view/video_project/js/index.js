@@ -242,6 +242,7 @@ export default {
             .then(() => {
                 this.search.module_id = this.moduleId;
                 this.getData();
+                this.getCategories();
             });
     } ,
 
@@ -274,6 +275,30 @@ export default {
                         this.pending('getModules' , false);
                     });
             });
+        } ,
+
+        getCategories () {
+            this.search.category_id = '';
+            this.categories         = [];
+            if (!G.isNumeric(this.search.module_id)) {
+                return ;
+            }
+            this.pending('getCategories' , true);
+            Api.category
+                .search({
+                    module_id: this.search.module_id ,
+                    type: 'video_project' ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandle(res.message);
+                        return ;
+                    }
+                    this.categories = res.data;
+                })
+                .finally(() => {
+                    this.pending('getCategories' , false);
+                });
         } ,
 
 
@@ -375,6 +400,7 @@ export default {
             this.myVideoSeries = G.copy(myVideoSeries);
             this.myVideoCompany = G.copy(myVideoCompany);
             this.getData();
+            this.getCategories();
         } ,
 
         pageEvent (page , size) {

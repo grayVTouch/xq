@@ -17,6 +17,7 @@ class VideoProject extends Base
         $param['id']               = $param['id'] ?? '';
         $param['name']             = $param['name'] ?? '';
         $param['module_id']        = $param['module_id'] ?? '';
+        $param['category_id']  = $param['category_id'] ?? '';
         $param['video_series_id']  = $param['video_series_id'] ?? '';
         $param['video_company_id'] = $param['video_company_id'] ?? '';
         $param['order']            = $param['order'] ?? '';

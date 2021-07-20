@@ -18,7 +18,7 @@
 
                 <div class="table">
 
-                    <i-table border :height="TopContext.table.height" :columns="table.field" :data="table.data" @on-selection-change="selectionChangeEvent" :loading="myValue.pending.getData">
+                    <i-table border  :columns="table.field" :data="table.data" @on-selection-change="selectionChangeEvent" :loading="myValue.pending.getData">
                         <template v-slot:cn="{row,index}">
                             <template v-if="row.floor > 1">{{ '|' + '_'.repeat(row.floor * 2) + row.cn }}</template>
                             <template v-else>{{ row.cn }}</template>

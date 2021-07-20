@@ -94,7 +94,7 @@
 
                 <div class="table">
 
-                    <i-table border :loading="myValue.pending.getData" :height="TopContext.table.height" :columns="table.field" :data="table.data" @on-selection-change="selectionChangeEvent">
+                    <i-table border :loading="myValue.pending.getData"  :columns="table.field" :data="table.data" @on-selection-change="selectionChangeEvent">
                         <template v-slot:action="{row , index}">
                             <my-table-button @click="editEvent(row)"><my-icon icon="edit" />编辑</my-table-button>
                             <my-table-button @click="allocateEvent(row)"><my-icon icon="privilege" />权限分配</my-table-button>

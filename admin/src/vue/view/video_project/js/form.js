@@ -457,6 +457,10 @@ export default {
                 this.message('error' , '请提供标签名称');
                 return ;
             }
+            if (this.form.user_id <= 0) {
+                this.errorHandle('请先选择用户');
+                return ;
+            }
             if (this.isExistTagByName(name)) {
                 this.message('error' , '标签已经存在');
                 return ;
@@ -473,7 +477,7 @@ export default {
                 .then((res) => {
                     this.dom.tagInputOuter.removeClass('disabled');
                     if (res.code !== TopContext.code.Success) {
-                        this.error({tags: msg} , false);
+                        this.error({tags: res.message} , false);
                         return ;
                     }
                     this.tags.push(res.data);

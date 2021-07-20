@@ -9,6 +9,12 @@
                     <my-loading v-if="myValue.pending.getModules"></my-loading>
                 </my-search-form-item>
 
+                <my-search-form-item name="类型">
+                    <i-select v-model="search.type" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.contentType" :key="k" :value="k">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
                 <my-search-form-item name="ID">
                     <input type="text" class="form-text" v-model="search.id" />
                 </my-search-form-item>
@@ -46,7 +52,7 @@
                     ref="table"
                     class="w-r-100"
                     border
-                    :height="TopContext.table.height"
+
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

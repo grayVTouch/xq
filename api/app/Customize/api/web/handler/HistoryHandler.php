@@ -5,12 +5,15 @@ namespace App\Customize\api\web\handler;
 
 
 use App\Customize\api\web\model\HistoryModel;
+use App\Customize\api\web\model\ImageModel;
 use App\Customize\api\web\model\ImageProjectModel;
 use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\UserModel;
 use App\Customize\api\web\model\Model;
+use App\Customize\api\web\model\VideoModel;
 use App\Customize\api\web\model\VideoProjectModel;
 use stdClass;
+use function api\web\get_config_key_mapping_value;
 use function core\convert_object;
 
 class HistoryHandler extends Handler
@@ -20,9 +23,11 @@ class HistoryHandler extends Handler
         if (empty($model)) {
             return null;
         }
-        $res = convert_object($model);
+        $model = convert_object($model);
 
-        return $res;
+        $model->__relation_type__ = get_config_key_mapping_value('business.content_type' , $model->relation_type);
+
+        return $model;
     }
 
     public static function module($model): void
@@ -60,6 +65,14 @@ class HistoryHandler extends Handler
             case 'video_project':
                 $relation = VideoProjectModel::find($model->relation_id);
                 $relation = VideoProjectHandler::handle($relation);
+                break;
+            case 'image':
+                $relation = ImageModel::find($model->relation_id);
+                $relation = ImageHandler::handle($relation);
+                break;
+            case 'video':
+                $relation = VideoModel::find($model->relation_id);
+                $relation = VideoHandler::handle($relation);
                 break;
             default:
                 $relation = null;

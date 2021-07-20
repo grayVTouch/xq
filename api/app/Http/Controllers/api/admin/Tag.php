@@ -15,6 +15,7 @@ class Tag extends Base
         $param = $this->request->query();
         $param['name'] = $param['name'] ?? '';
         $param['module_id'] = $param['module_id'] ?? '';
+        $param['type'] = $param['type'] ?? '';
         $param['order'] = $param['order'] ?? '';
         $param['size'] = $param['size'] ?? '';
         $res = TagAction::index($this , $param);

@@ -161,9 +161,9 @@ class ImageProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                         $source_file = $image_processor->compress($original_file , [
                             'mode'      => 'fix-width' ,
                             // 质量
-                            'quality'     => 75 ,
+                            'quality'     => 95 ,
                             // 处理后图片宽度
-                            'width'     => 1280 ,
+                            'width'     => 1920 ,
                             // 输出文件类型（如果指定，那么将会以这种类型输出，否则以源文件类型输出）
                             'extension' => $extension ,
                         ] , false);

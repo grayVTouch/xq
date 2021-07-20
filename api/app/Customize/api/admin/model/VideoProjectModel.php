@@ -17,6 +17,7 @@ class VideoProjectModel extends Model
         $filter['id']               = $filter['id'] ?? '';
         $filter['name']             = $filter['name'] ?? '';
         $filter['module_id']        = $filter['module_id'] ?? '';
+        $filter['category_id']  = $filter['category_id'] ?? '';
         $filter['video_series_id']  = $filter['video_series_id'] ?? '';
         $filter['video_company_id'] = $filter['video_company_id'] ?? '';
 
@@ -35,6 +36,10 @@ class VideoProjectModel extends Model
 
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
+        }
+
+        if ($filter['category_id'] !== '') {
+            $where[] = ['category_id' , '=' , $filter['category_id']];
         }
 
         if ($filter['video_series_id'] !== '') {

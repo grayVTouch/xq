@@ -44,7 +44,10 @@ Vue.mixin({
         } ,
 
         state (key) {
-            return this.$store.state[key];
+            if (key) {
+                return this.$store.state[key];
+            }
+            return this.$store.state;
         } ,
 
         message (action , message , option = {}) {
@@ -173,13 +176,13 @@ Vue.mixin({
 
         genUrl (route) {
             if (!route) {
-                return ;
+                return '';
             }
-            const firstChar = route[0];
-            if (firstChar === '/') {
-                route = route.slice(1);
+            if (!TopContext.enabledHistoryMode) {
+                route = route.replace(/^(\/?#)?\/?/ , '');
+                return '#/' + route;
             }
-            return (TopContext.enabledHistoryMode ? '' : '#/') + route;
+            return route;
         } ,
 
         reload () {

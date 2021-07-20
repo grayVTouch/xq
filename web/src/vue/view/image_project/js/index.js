@@ -1,6 +1,7 @@
 const allHotTags = {
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     data: [] ,
     total: 0 ,
     value: '' ,
@@ -39,7 +40,7 @@ export default {
             partHotTags: G.copy(partHotTags) ,
 
             // 所有标签
-            allHotTags: {...allHotTags} ,
+            allHotTags: G.copy(allHotTags) ,
 
             // 图片
             images: {...images} ,
@@ -179,8 +180,15 @@ export default {
             this.getWithPagerInImageProject(this.search.tagIds , this.search.mode , true);
         } ,
 
-        tagPageEvent (page) {
+        tagPageEvent (page , size) {
             this.allHotTags.page = page;
+            this.allHotTags.size = size;
+            this.hotTagsWithPager();
+        } ,
+
+        tagSizeEvent (size , page) {
+            this.allHotTags.page = page;
+            this.allHotTags.size = size;
             this.hotTagsWithPager();
         } ,
 

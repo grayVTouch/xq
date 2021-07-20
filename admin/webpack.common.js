@@ -15,6 +15,7 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
+
 module.exports = {
     entry: {
         // babel-polyfill，在 ie 环境下，vuex 需要用到！
@@ -31,7 +32,15 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: '兴趣部落' ,
             filename: 'index.html' ,
-            template: 'template.html'
+            template: 'template.html' ,
+            meta: {
+                // 'viewport': 'width=device-width, initial-scale=1' ,
+            } ,
+            inject: true ,
+            favicon: __dirname + '/src/asset/res/logo.png' ,
+            templateParameters: {
+                // resUrl: 'http://res.xq.test'
+            } ,
         }) ,
         new VueLoaderPlugin() ,
     ],

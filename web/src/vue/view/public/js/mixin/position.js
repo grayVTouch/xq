@@ -67,5 +67,12 @@ export default {
             throw new Error('不支持的 key');
         } ,
 
+        getParentPositionsById (id , positions , isSaveSelf = true) {
+            positions = G.tree.flat(positions);
+            return G.tree.parents(id , positions , {
+                id: 'id' ,
+                p_id: 'parentId' ,
+            } , isSaveSelf , false);
+        } ,
     } ,
 };

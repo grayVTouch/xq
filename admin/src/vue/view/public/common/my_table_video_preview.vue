@@ -1,8 +1,8 @@
 <template>
     <i-poptip trigger="hover" placement="right" :transfer="true">
-        <video class="my-video" :src="src" type="video/mp4" :height="TopContext.table.imageH" @click="openWindow(src , '_blank')"></video>
+        <video class="my-video" autoplay muted :src="src" type="video/mp4" :height="TopContext.table.imageH" @click="openWindow(src , '_blank')"></video>
         <div slot="content" class="my-table-video-preview">
-            <video class="my-video" :src="src" type="video/mp4" loop autoplay controls></video>
+            <video class="my-video" :src="src" type="video/mp4" loop autoplay controls muted></video>
         </div>
     </i-poptip>
 </template>

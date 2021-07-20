@@ -431,4 +431,29 @@ class User extends Base
         return success($res['message'] , $res['data']);
     }
 
+    public function myPraise()
+    {
+        $param = $this->request->query();
+        $param['module_id'] = $param['module_id'] ?? '';
+        $param['relation_type'] = $param['relation_type'] ?? '';
+        $param['value'] = $param['value'] ?? '';
+        $param['size'] = $param['size'] ?? '';
+        $res = UserAction::myPraise($this , $param);
+        if ($res['code'] != 0) {
+            return error($res['message'] , $res['data'] , $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
+
+    public function destroyMyPraise()
+    {
+        $param = $this->request->post();
+        $param['module_id'] = $param['module_id'] ?? '';
+        $param['praise_ids'] = $param['praise_ids'] ?? '';
+        $res = UserAction::destroyMyPraise($this , $param);
+        if ($res['code'] !== 0) {
+            return error($res['message'] , $res['data'], $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
 }

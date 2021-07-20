@@ -6,6 +6,7 @@ namespace App\Customize\api\admin\handler;
 
 use App\Customize\api\admin\model\CategoryModel;
 use App\Customize\api\admin\model\ModuleModel;
+use App\Customize\api\admin\model\RelationTagModel;
 use App\Customize\api\admin\model\VideoSrcModel;
 use App\Customize\api\admin\model\VideoProjectModel;
 use App\Customize\api\admin\model\UserModel;
@@ -100,4 +101,12 @@ class VideoHandler extends Handler
         $model->video_subtitles = $video_subtitles;
     }
 
+    public static function tags($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $tags = RelationTagModel::getByRelationTypeAndRelationId('video' , $model->id);
+        $model->tags = $tags;
+    }
 }

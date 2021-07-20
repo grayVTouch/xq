@@ -6,6 +6,7 @@ const destroy = genUrl('video/{id}');
 const destroyAll = genUrl('destroy_all_video');
 const destroyVideos = genUrl('destroy_videos');
 const retryProcessVideo = genUrl('retry_process_video');
+const destroyTag = genUrl('destroy_video_tag');
 
 export default {
     index (query) {
@@ -50,5 +51,8 @@ export default {
         });
     } ,
 
+    destroyTag (data) {
+        return Http.delete(destroyTag , null , data);
+    } ,
 
 };

@@ -5,11 +5,13 @@ namespace App\Http\Controllers\api\admin;
 
 
 use App\Customize\api\admin\action\FileAction;
+use Illuminate\Http\Request;
 use function api\admin\error;
 use function api\admin\success;
 
 class File extends Base
 {
+
     public function upload()
     {
         $param = $this->request->post();

@@ -149,14 +149,6 @@ export default {
                  */
                 mime: 'image',
             },
-            mimeRange: {
-                image_project: '图片专题',
-                video_project: '视频专题',
-                // video: '视频',
-                // image: '图片',
-                // article: '资讯' ,
-                // bbs: '论坛' ,
-            },
             // 导航菜单
             positions ,
             // 是否缓存路由
@@ -190,14 +182,21 @@ export default {
     // } ,
 
     beforeRouteUpdate (to , from , next) {
-        this.initPositionByRouteAndPositions(to.fullPath , this.positions);
-        const position = this.$store.state.position;
+        if (!G.isObject(this.ins.nav)) {
+            next();
+            return ;
+        }
+        const route = this.genUrl(to.path);
+        this.initPositionByRouteAndPositions(route , this.positions);
+        const position = this.state().position;
+        const positionTree = this.getParentPositionsById(position.id , this.positions , true);
+        this.dispatch('positions' , positionTree);
         // 菜单失去焦点
         this.ins.nav.blur();
         // 菜单获取焦点
-        if (position.length > 0) {
-            const first = position[0];
-            const last  = position[position.length - 1];
+        if (positionTree.length > 0) {
+            const first = positionTree[0];
+            const last  = positionTree[positionTree.length - 1];
             const ids   = first.route === last.route ?  [first.route] : [first.route , last.route];
             this.ins.nav.focusByIds(ids);
         }
@@ -280,15 +279,26 @@ export default {
          * *****************
          */
         searchEvent () {
+            let url = '';
             switch (this.val.mime.key)
             {
                 case 'image_project':
-                    this.push('/image_project/search');
+                    url = '/image_project/search';
                     break;
                 case 'video_project':
-                    this.push('/video_project/search');
+                    url = '/video_project/search';
+                    break;
+                case 'image':
+                    url = '/image/search';
+                    break;
+                case 'video':
+                    url = '/video/search';
                     break;
             }
+            // url = this.genUrl(url);
+            console.log('url' , url);
+            // debugger
+            this.push(url);
         } ,
 
         initDom () {
@@ -304,20 +314,23 @@ export default {
         } ,
 
         initNav () {
-            this.initPositionByRouteAndPositions(this.$route.fullPath , this.positions);
+            const route = this.genUrl(this.$route.path);
+            this.initPositionByRouteAndPositions(route , this.positions);
 
             const self      = this;
-            const position  = this.$store.state.position;
-            const first     = position[0];
-            const last      = position[position.length - 1];
-            const ids       = position.length > 0 ?
+            const position  = this.state().position;
+            const positionTree = this.getParentPositionsById(position.id , this.positions , true);
+            this.dispatch('positions' , positionTree);
+
+            const first     = positionTree[0];
+            const last      = positionTree[positionTree.length - 1];
+            const ids       = positionTree.length > 0 ?
                 (
                     first.route === last.route ?
                     [first.route] :
                     [first.route , last.route]
                 ) :
                 [];
-            // console.log(this.$route.fullPath , position);
             this.ins.nav    = new Nav(this.dom.navMenu.get(0) , {
                 // click (id) {
                 //     self.openWindow(self.genUrl(id) , '_self');
@@ -396,7 +409,6 @@ export default {
                                     parentId: mapping.newParentId ,
                                     route: '/image_project/search?category_id=' + v.value ,
                                     hidden: false ,
-                                    isBuiltIn: false ,
                                 };
                                 appendImageProjectPosition.push(r);
                                 break;
@@ -408,7 +420,6 @@ export default {
                                     parentId: mapping.newParentId ,
                                     route: '/video_project/search?category_id=' + v.value ,
                                     hidden: false ,
-                                    isBuiltIn: false ,
                                 });
                                 break;
                             default:
@@ -545,12 +556,12 @@ export default {
                         v.data = v.data ? v.data : [];
                         v.data.forEach((v1) => {
                             v1.relation = v1.relation ? v1.relation : {};
-                            if (v1.relation_type === 'video_project') {
+                            v1.relation.user = v1.relation.user ? v1.relation.user : {};
+
+                            if (['video_project' , 'video'].includes(v1.relation_type)) {
                                 v1.relation.user_play_record = v1.relation.user_play_record ? v1.relation.user_play_record : {};
                                 v1.relation.user_play_record.video = v1.relation.user_play_record.video ? v1.relation.user_play_record.video : {};
                             }
-                            v1.relation.user = v1.relation.user ? v1.relation.user : {};
-                            v1.relation.module = v1.relation.module ? v1.relation.module : {};
                         });
                     });
                     this.histories = data;
@@ -676,23 +687,19 @@ export default {
                     const data = res.data;
                     data.collection_groups = data.collection_groups ? data.collection_groups : [];
                     data.collection_groups.forEach((v) => {
-                        v.user = v.user ? v.user : {};
-                        v.module = v.module ? v.module : {};
+
                         v.collections = v.collections ? v.collections : [];
                         v.collections.forEach((v1) => {
                             v1.relation = v1.relation ? v1.relation : {};
                             v1.relation.user = v1.relation.user ? v1.relation.user : {};
-                            v1.relation.module = v1.relation.module ? v1.relation.module : {};
-                            v1.relation.collection_group = v1.relation.collection_group ? v1.relation.collection_group : {};
-                            // v1.relation.relation = v1.relation.relation ? v1.relation.relation : {};
 
-                            if (v.relation_type === 'video_project') {
-                                v1.relation.user = v1.relation.user ? v1.relation.user : {};
+                            if (['video_project' , 'video'].includes(v1.relation_type)) {
                                 v1.relation.user_play_record = v1.relation.user_play_record ? v1.relation.user_play_record : {};
                                 v1.relation.user_play_record.video = v1.relation.user_play_record.video ? v1.relation.user_play_record.video : {};
                             }
                         });
                     });
+
                     this.favorites.total_collection_group = data.total_collection_group;
                     this.favorites.collectionGroups = data.collection_groups;
                     this.favorites.collection_group = data.collection_groups.length > 0 ? {...data.collection_groups[0]} : {...collectionGroup};

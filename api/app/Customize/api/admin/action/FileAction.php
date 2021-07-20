@@ -6,6 +6,7 @@ namespace App\Customize\api\admin\action;
 
 use App\Customize\api\admin\util\FileUtil;
 use App\Customize\api\admin\repository\ResourceRepository;
+use App\Customize\api\admin\util\Util;
 use App\Http\Controllers\api\admin\Base;
 use Core\Lib\ImageProcessor;
 use Exception;
@@ -27,13 +28,16 @@ class FileAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -63,6 +67,7 @@ class FileAction extends Action
             return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
@@ -101,8 +106,10 @@ class FileAction extends Action
                 $url = FileUtil::generateUrlByRealPath($real_path);
             }
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -116,19 +123,23 @@ class FileAction extends Action
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
         }
-        $mime_range = ['mp4','mov','mkv','avi','flv','rm','rmvb','ts','webm'];
+        $mime_range = ['mp4','mov','mkv','avi','flv','rm','rmvb','ts','webm' , 'mpg' , '3gp' , 'wmv'];
         $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($extension);
         if (!in_array($extension , $mime_range)) {
-            return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
+            return self::error("不支持的格式【{$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -148,13 +159,16 @@ class FileAction extends Action
             return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
@@ -169,13 +183,16 @@ class FileAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         try {
+            Util::systemPowerUp();
             $dir        = date('Ymd');
             $path       = FileUtil::upload($file , $dir);
             $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
             $url        = FileUtil::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
+            Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {
+            Util::systemPowerDown();
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }

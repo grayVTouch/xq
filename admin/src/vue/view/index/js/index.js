@@ -347,7 +347,7 @@ export default {
         createTab (routeId) {
             const route = this.findRouteById(routeId);
             document.title = route.cn + '-' + this.myValue.title;
-            if (TopContext.config.reuseTab) {
+            if (TopContext.reuseTab) {
                 // 标签复用
                 const tab = this.findTabByRouteId(routeId);
                 if (tab !== false) {

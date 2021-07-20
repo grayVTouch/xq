@@ -32,10 +32,7 @@ class ImageAtPositionAction extends Action
         $res = ImageAtPositionHandler::handleAll($res);
         foreach ($res as $v)
         {
-            // 附加：图片
-            ImageAtPositionHandler::module($v);
-            // 附加：位置
-            ImageAtPositionHandler::position($v);
+
         }
         return self::success('' , $res);
     }

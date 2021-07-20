@@ -4,6 +4,7 @@ const collections = {
     page: 1 ,
     total: 0 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     data: [] ,
 };
 
@@ -43,9 +44,7 @@ export default {
             },
 
             collections: G.copy(collections, true),
-
             currentCollectionGroup: {} ,
-
             collectionGroupForm: {...collectionGroupForm} ,
             updateCollectionGroupForm: {...updateCollectionGroupForm} ,
         };
@@ -97,20 +96,6 @@ export default {
                             reject();
                             return ;
                         }
-                        res.data.forEach((v) => {
-                            switch (v.relation_type)
-                            {
-                                case 'image_project':
-                                    this.handleImageProject(v.relation);
-                                    break;
-                                case 'video_project':
-                                    v.relation.user = v.relation.user ? v.relation.user : {};
-                                    v.relation.user_play_record = v.relation.user_play_record ? v.relation.user_play_record : {};
-                                    v.relation.user_play_record.video = v.relation.user_play_record.video ? v.relation.user_play_record.video : {};
-                                    break;
-                                default:
-                            }
-                        });
                         this.favorites = res.data;
                         resolve();
                     })
@@ -179,17 +164,25 @@ export default {
                         return ;
                     }
                     const data = res.data;
-                    data.data.forEach((collection) => {
-                        collection.relation = collection.relation ? collection.relation : {};
-                        switch (collection.relation_type)
+                    data.data.forEach((v) => {
+                        v.relation = v.relation ? v.relation : {};
+                        v.relation.user = v.relation.user ? v.relation.user : {};
+                        switch (v.relation_type)
                         {
                             case 'image_project':
-                                this.handleImageProject(collection.relation);
                                 break;
+                            case 'image':
+                                break;
+                            case 'video':
                             case 'video_project':
+                                v.relation.user_play_record = v.relation.user_play_record ? v.relation.user_play_record : {};
+                                v.relation.user_play_record.video = v.relation.user_play_record.video ? v.relation.user_play_record.video : {};
                                 break;
+                            default:
                         }
+
                     });
+                    this.collections.size = data.per_page;
                     this.collections.page = data.current_page;
                     this.collections.total = data.total;
                     this.collections.data = data.data;
@@ -199,7 +192,14 @@ export default {
                 });
         } ,
 
-        toPage (page) {
+        pageEvent (page , size) {
+            this.collections.page = page;
+            this.collections.size = size;
+            this.getCollections();
+        } ,
+
+        sizeEvent (size , page) {
+            this.collections.size = size;
             this.collections.page = page;
             this.getCollections(this.currentCollectionGroup.id);
         } ,

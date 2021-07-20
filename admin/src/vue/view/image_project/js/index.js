@@ -248,30 +248,6 @@ export default {
             });
         } ,
 
-        getCategories () {
-            this.categories = [];
-            this.search.category_id = '';
-            if (!G.isNumeric(this.search.module_id)) {
-                return ;
-            }
-            this.pending('getCategories' , true);
-            Api.category
-                .search({
-                    module_id: this.search.module_id ,
-                    type: 'image,image_project' ,
-                })
-                .then((res) => {
-                    if (res.code !== TopContext.code.Success) {
-                        this.errorHandle(res.message);
-                        return ;
-                    }
-                    this.categories = res.data;
-                })
-                .finally(() => {
-                    this.pending('getCategories' , false);
-                });
-        } ,
-
         getModules () {
             return new Promise((resolve , reject) => {
                 this.pending('getModules' , true);
@@ -289,6 +265,34 @@ export default {
                         this.pending('getModules' , false);
                     });
             });
+        } ,
+
+        getCategories () {
+            this.categories = [];
+            this.search.category_id = '';
+            if (!G.isNumeric(this.search.module_id)) {
+                return ;
+            }
+            this.pending('getCategories' , true);
+            Api.category
+                .search({
+                    module_id: this.search.module_id ,
+                    type: G.isEmptyString(this.search.type) ? 'image,image_project' : (this.search.type === 'pro' ? 'image_project' : 'image') ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandle(res.message);
+                        return ;
+                    }
+                    this.categories = res.data;
+                })
+                .finally(() => {
+                    this.pending('getCategories' , false);
+                });
+        } ,
+
+        typeChangedEvent () {
+            this.getCategories();
         } ,
 
         getData () {
@@ -389,6 +393,7 @@ export default {
             this.myUser = G.copy(myUser);
 
             this.getData();
+            this.getCategories();
         } ,
 
         pageEvent (page , size) {

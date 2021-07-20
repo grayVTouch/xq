@@ -53,12 +53,9 @@ class ImageProjectModel extends Model
             $where[] = ['type' , '=' , $filter['type']];
         }
         return self::where($where)
-            // 查看次数
-            ->orderBy('view_count' , 'desc')
-            // 点赞次数
+            ->orderBy('collect_count' , 'desc')
             ->orderBy('praise_count' , 'desc')
-            // todo 收藏次数
-            // id 倒叙排序
+            ->orderBy('view_count' , 'desc')
             ->orderBy('created_at' , 'desc')
             ->orderBy('id' , 'asc')
             ->limit($size)
@@ -340,7 +337,7 @@ class ImageProjectModel extends Model
     {
         $filter['module_id']    = $filter['module_id'] ?? '';
         $filter['category_id']  = $filter['category_id'] ?? '';
-        $filter['image_image_subject_id']   = $filter['image_image_subject_id'] ?? '';
+        $filter['image_subject_id']   = $filter['image_subject_id'] ?? '';
         $filter['type']         = $filter['type'] ?? '';
 
         $where = [
@@ -355,8 +352,8 @@ class ImageProjectModel extends Model
             $where[] = ['category_id' , '=' , $filter['category_id']];
         }
 
-        if ($filter['image_image_subject_id'] !== '') {
-            $where[] = ['image_image_subject_id' , '=' , $filter['image_image_subject_id']];
+        if ($filter['image_subject_id'] !== '') {
+            $where[] = ['image_subject_id' , '=' , $filter['image_subject_id']];
         }
 
         if ($filter['type'] !== '') {

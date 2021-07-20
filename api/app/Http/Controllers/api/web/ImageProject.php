@@ -189,14 +189,14 @@ class ImageProject extends Base
         return success($res['message'] , $res['data']);
     }
 
-    public function recommend(int $image_subject_id)
+    public function recommend(int $id)
     {
         $param = $this->request->query();
 
         $param['type']  = $param['type'] ?? '';
         $param['size'] = $param['size'] ?? '';
 
-        $res = ImageProjectAction::recommend($this , $image_subject_id , $param);
+        $res = ImageProjectAction::recommend($this , $id , $param);
         if ($res['code'] !== 0) {
             return error($res['message'] , $res['data'], $res['code']);
         }

@@ -3,6 +3,8 @@
             v-model="visible"
             title="请选择"
             :width="1000"
+            :mask-closable="true"
+            :closable="true"
     >
         <template slot="footer">
             <i-button v-ripple type="error" @click="hide">取消</i-button>

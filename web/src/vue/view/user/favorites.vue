@@ -72,11 +72,11 @@
                                 <a v-if="v.relation_type === 'image_project'" class="item" target="_blank" :key="v.id" :href="`#/image_project/${v.relation_id}/show`">
 
                                     <div class="thumb">
-                                        <div class="mask"><img :src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" alt="" v-judge-img-size class="image judge-img-size"></div>
+                                        <div class="mask"><img :data-src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" alt="" v-judge-img-size class="image judge-img-size"></div>
                                     </div>
                                     <div class="info">
                                         <div class="title">
-                                            <div class="name">{{ v.relation.name }}</div>
+                                            <div class="name">【{{ v.__relation_type__ }}】{{ v.relation.name }}</div>
                                             <div class="action">
                                                 <my-button class="button" @click.prevent="destroyCollection(v)">
                                                     <my-loading size="16" v-if="val.pending['destroyCollection_' + v.id]"></my-loading>
@@ -94,7 +94,7 @@
                                     <div class="thumb">
                                         <div class="mask">
                                             <img
-                                                    :src="v.relation.user_play_record.video.__thumb__ ? v.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
+                                                    :data-src="v.relation.user_play_record.video.__thumb__ ? v.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
                                                     v-judge-img-size
                                                     class="image judge-img-size">
                                         </div>
@@ -102,7 +102,7 @@
                                     </div>
                                     <div class="info">
                                         <div class="title">
-                                            <div class="name">{{ v.relation.name }}</div>
+                                            <div class="name">【{{ v.__relation_type__ }}】{{ v.relation.name }}</div>
                                             <div class="action">
                                                 <my-button class="button" @click.prevent="destroyCollection(v)">
                                                     <my-loading size="16" v-if="val.pending['destroyCollection_' + v.id]"></my-loading>
@@ -114,9 +114,57 @@
                                         <div class="desc">{{ v.relation.description }}</div>
                                     </div>
                                 </a>
+
+                                <a v-if="v.relation_type === 'video'" class="item" target="_blank" :key="v.id" :href="`#/video/${v.relation_id}/show`">
+
+                                    <div class="thumb">
+                                        <div class="mask">
+                                            <img
+                                                    :data-src="v.relation.__thumb__ ? v.relation.__thumb__ : TopContext.res.notFound"
+                                                    v-judge-img-size
+                                                    class="image judge-img-size">
+                                        </div>
+                                        <div class="progress-bar" :style="`width: ${v.relation.user_play_record.ratio * 100}%`"></div>
+                                    </div>
+                                    <div class="info">
+                                        <div class="title">
+                                            <div class="name">【{{ v.__relation_type__ }}】{{ v.relation.name }}</div>
+                                            <div class="action">
+                                                <my-button class="button" @click.prevent="destroyCollection(v)">
+                                                    <my-loading size="16" v-if="val.pending['destroyCollection_' + v.id]"></my-loading>
+                                                    <my-icon icon="delete" class="v-a-t" mode="right"></my-icon>删除
+                                                </my-button>
+                                            </div>
+                                        </div>
+                                        <div class="info">{{ v.created_at }} · {{ v.relation.view_count }}次观看 · {{ v.relation.collect_count }}次收藏 · {{ v.relation.praise_count }}次点赞 · {{ v.relation.user.username }}</div>
+                                        <div class="desc">{{ v.relation.description }}</div>
+                                    </div>
+                                </a>
+
+                                <a v-if="v.relation_type === 'image'" class="item" target="_blank" :key="v.id" :href="`#/image/${v.relation_id}/show`">
+
+                                    <div class="thumb">
+                                        <div class="mask"><img :data-src="v.relation.src ? v.relation.src : TopContext.res.notFound" alt="" v-judge-img-size class="image judge-img-size"></div>
+                                    </div>
+                                    <div class="info">
+                                        <div class="title">
+                                            <div class="name">【{{ v.__relation_type__ }}】{{ v.relation.name }}</div>
+                                            <div class="action">
+                                                <my-button class="button" @click.prevent="destroyCollection(v)">
+                                                    <my-loading size="16" v-if="val.pending['destroyCollection_' + v.id]"></my-loading>
+                                                    <my-icon icon="delete" class="v-a-t" mode="right"></my-icon>删除
+                                                </my-button>
+                                            </div>
+                                        </div>
+                                        <div class="info">{{ v.created_at }} · {{ v.relation.view_count }}次观看 · {{ v.relation.collect_count }}次收藏 · {{ v.relation.praise_count }}次点赞 · {{ v.relation.user.username }}</div>
+                                        <div class="desc"></div>
+                                    </div>
+                                </a>
                             </template>
 
-                            <div class="empty" v-if="!val.pending.getCollections && collections.data.length === 0">暂无数据</div>
+                            <div class="empty" v-if="!val.pending.getCollections && collections.data.length === 0">
+                                <my-icon icon="empty" size="40"></my-icon>
+                            </div>
 
                             <div class="loading" v-if="val.pending.getCollections">
                                 <my-loading size="30"></my-loading>
@@ -125,7 +173,15 @@
                         </div>
 
                         <div class="pager">
-                            <my-page :total="collections.total" :limit="collections.size" :page="collections.page" @on-change="toPage"></my-page>
+                            <my-page
+                                    class="run-page-center"
+                                    :total="collections.total"
+                                    :size="collections.size"
+                                    :sizes="collections.sizes"
+                                    :page="collections.page"
+                                    @on-page-change="pageEvent"
+                                    @on-size-change="sizeEvent"
+                            ></my-page>
                         </div>
                     </div>
                 </div>

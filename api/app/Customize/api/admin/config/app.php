@@ -27,7 +27,7 @@ return [
     'limit' => 20 ,
 
     // 视频第一帧截取的时间点（秒数）
-    'video_frist_frame_duration' => 5 ,
+    'video_frist_frame_duration' => 10 ,
 
     // 预览视频截取段数
     'video_simple_preview' => [
@@ -93,7 +93,7 @@ return [
     // 队列超时时间
     'queue_timeout' => 365 * 24 * 3600 ,
 
-    // 是否保存原视频
+    // 是否保存原视频（建议保留原视频 - 否则会影响重新处理视频的功能）
     'save_origin_video' => true ,
 
     // 字幕转换的格式

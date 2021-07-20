@@ -1122,10 +1122,18 @@
  * ****************
  */
 .main > .footer {
+    margin-top: 20px;
     padding: 20px 0;
+    border-top: 2px solid #f3c669;
+    /*background-color: #303030;*/
+    color: #ccc;
 }
 
-.main > .footer p {
+.main > .footer > .inner {
+
+}
+
+.main > .footer > .inner p {
     text-align: center;
     height: 30px;
     line-height: 30px;

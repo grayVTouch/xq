@@ -22,6 +22,7 @@ use function api\web\get_config_key_mapping_value;
 use function api\web\get_value;
 use function api\web\user;
 use function core\convert_object;
+use function core\get_time_diff;
 
 class VideoProjectHandler extends Handler
 {
@@ -30,58 +31,13 @@ class VideoProjectHandler extends Handler
         if (empty($model)) {
             return null;
         }
-        $res = convert_object($model);
+        $model = convert_object($model);
 
-        $module = ModuleModel::find($res->module_id);
-        $module = ModuleHandler::handle($module);
+        $model->__status__ = get_config_key_mapping_value('business.status_for_video_project' , $model->status);
 
-        $video_series = VideoSeriesModel::find($res->video_series_id);
-        $video_series = VideoSeriesHandler::handle($video_series);
+        $model->format_time = get_time_diff($model->created_at);
 
-        $video_company = VideoCompanyModel::find($res->video_company_id);
-        $video_company = VideoCompanyHandler::handle($video_company);
-
-        $category = CategoryModel::find($res->category_id);
-        $category = CategoryHandler::handle($category);
-
-        $videos = VideoModel::getByVideoProjectId($res->id);
-        $videos = VideoHandler::handleAll($videos);
-
-        $tags = RelationTagModel::getByRelationTypeAndRelationId('video_project' , $res->id);
-
-        $res->module = $module;
-        $res->video_series = $video_series;
-        $res->video_company = $video_company;
-        $res->tags = $tags;
-        $res->category = $category;
-        $res->videos = $videos;
-
-
-        $res->__status__ = get_config_key_mapping_value('business.status_for_video_project' , $res->status);
-
-        // 点赞数
-//        $res->play_count = VideoModel::sumPlayCountByVideoProjectId($res->id);
-//        // 观看数
-//        $res->view_count = VideoModel::sumViewCountByVideoProjectId($res->id);
-//        // 点赞数
-//        $res->praise_count = VideoModel::sumPraiseCountByVideoProjectId($res->id);
-//        // 反对数
-//        $res->against_count = VideoModel::sumAgainstCountByVideoProjectId($res->id);
-//        // 收藏数
-//        $res->collect_count = CollectionModel::countByModuleIdAndRelationTypeAndRelationId($res->module_id , 'video_project' , $res->id);
-
-//        $user = user();
-//        if (empty($user)) {
-//            $res->collected = 0;
-//            $res->praised   = 0;
-//        } else {
-//            $res->collected = CollectionModel::findByModuleIdAndUserIdAndRelationTypeAndRelationId($res->module_id , $user->id , 'video_project' , $res->id) ? 1 : 0;
-//            $res->praised   = PraiseModel::getByModuleIdAndUserIdAndRelationTypeAndRelationIds($res->module_id , $user->id , 'video' , array_column($videos , 'id'))->count() ? 1 : 0;
-//        }
-
-        $res->format_time = date('Y-m-d H:i' , strtotime($res->created_at));
-
-        return $res;
+        return $model;
     }
 
     // 附加：是否收藏
@@ -124,6 +80,18 @@ class VideoProjectHandler extends Handler
         $model->user_play_record = $user_play_record;
     }
 
+
+    public static function videos($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $videos = VideoModel::getByVideoProjectId($model->id);
+        $videos = VideoHandler::handleAll($videos);
+
+        $model->videos = $videos;
+    }
+
      public static function user($model): void
     {
         if (empty($model)) {
@@ -134,4 +102,49 @@ class VideoProjectHandler extends Handler
 
         $model->user = $user;
     }
+
+    // 附加：标签
+    public static function tags($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $tags = RelationTagModel::getByRelationTypeAndRelationId('video_project' , $model->id);
+        $tags = RelationTagHandler::handleAll($tags);
+        $model->tags = $tags;
+    }
+
+    public static function videoCompany($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $video_company = VideoCompanyModel::find($model->video_company_id);
+        $video_company = VideoCompanyHandler::handle($video_company);
+
+        $model->video_company = $video_company;
+    }
+
+    public static function videoSeries($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $video_series = VideoSeriesModel::find($model->video_series_id);
+        $video_series = VideoSeriesHandler::handle($video_series);
+
+        $model->video_series = $video_series;
+    }
+
+    public static function category($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $category = CategoryModel::find($model->category_id);
+        $category = CategoryHandler::handle($category);
+
+        $model->category = $category;
+    }
+
 }

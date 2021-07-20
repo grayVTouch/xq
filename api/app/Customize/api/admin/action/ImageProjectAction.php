@@ -193,6 +193,11 @@ class ImageProjectAction extends Action
                 ]);
                 ResourceRepository::used($v);
             }
+            ImageModel::updateByImageProjectId($image_project->id , [
+                'module_id'     => $param['module_id'] ,
+                'user_id'       => $param['user_id'] ,
+                'category_id'   => $param['category_id'] ,
+            ]);
             DB::commit();
             // 图片迁移
             ImageProjectResourceHandleJob::dispatch($id);
@@ -302,6 +307,9 @@ class ImageProjectAction extends Action
             foreach ($images as $v)
             {
                 ImageModel::insertGetId([
+                    'module_id'  => $param['module_id'] ,
+                    'user_id'  => $param['user_id'] ,
+                    'category_id'  => $param['category_id'] ,
                     'image_project_id'  => $id ,
                     'original_src'      => $v ,
                     'updated_at'        => $datetime ,

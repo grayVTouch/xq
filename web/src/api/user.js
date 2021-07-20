@@ -57,10 +57,6 @@ export default {
         return Http.get(`${TopContext.api}/user/collection_group_with_judge`, query);
     },
 
-    destroyCollectionGroup(data) {
-        return request(destroyCollectionGroup, 'delete', data);
-    },
-
     destroyAllCollectionGroup(query , data) {
         return Http.delete(`${TopContext.api}/user/destroy_all_collection_group`, query , data);
     },
@@ -127,5 +123,13 @@ export default {
 
     collectionGroupInfo (collectionGroupId) {
         return Http.get(`${TopContext.api}/user/${collectionGroupId}/collection_group_info`);
+    } ,
+
+    myPraise (query) {
+        return Http.get( `${TopContext.api}/my_praise`, query);
+    } ,
+
+    destroyMyPraise (query , data) {
+        return Http.delete(`${TopContext.api}/user/destroy_my_praise`, query , data);
     } ,
 };

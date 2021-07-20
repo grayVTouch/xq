@@ -1,6 +1,7 @@
 // import logo from "../res/logo.jpg";
 // import avatar from "../res/avatar.jpg";
 // import notFound from "../res/404.png";
+import config from './config.js';
 import business from './business.js';
 import table from './table.js';
 
@@ -10,12 +11,14 @@ import table from './table.js';
  * ******************
  */
 // 接口 host
-const apiUrl = 'http://api.xq.test';
+const apiUrl = config.apiUrl;
 // 资源 host
-const resUrl = 'http://res.xq.test';
+const resUrl = config.resUrl;
 
 window.TopContext = {
-    host: 'http://xq.test' ,
+    ...config ,
+
+    host: apiUrl ,
     api: apiUrl + '/api/web' ,
     // // 图片上传 api
     fileApi: apiUrl + '/api/web/upload' ,
@@ -26,9 +29,6 @@ window.TopContext = {
     uploadVideoApi: apiUrl + '/api/web/upload_video' ,
     uploadSubtitleApi: apiUrl + '/api/web/upload_subtitle' ,
     uploadOfficeApi: apiUrl + '/api/web/upload_office' ,
-
-    // 是否启用 history 模式
-    enabledHistoryMode: false ,
 
     code: {
         Success: 200 ,
@@ -49,10 +49,16 @@ window.TopContext = {
     table ,
     // 每页显示记录数
     size: 20 ,
+    sizes: [
+        20 ,
+        50 ,
+        100 ,
+        200 ,
+    ] ,
     val: {
         fixedTop: 105 ,
         headerH: 105 ,
-        footerH: 130 ,
+        footerH: 132 ,
         // 封面图 裁剪尺寸
         thumbW: 960 ,
         // 大图裁剪尺寸

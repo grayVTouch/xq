@@ -65,7 +65,7 @@ i<template>
                     ref="table"
                     border
                     class="w-r-100"
-                    :height="TopContext.table.height"
+
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

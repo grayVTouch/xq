@@ -1,6 +1,8 @@
 import myForm from '../form.vue';
 
-const search = {};
+const search = {
+    type: 'image' ,
+};
 
 const current = {id: ''};
 
@@ -368,6 +370,7 @@ export default {
 
         addEvent () {
             this.setValue('mode' , 'add');
+            this.setValue('addMode' , '');
             this.$nextTick(() => {
                 this.$refs.form.openFormModal();
             });

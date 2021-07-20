@@ -73,8 +73,8 @@
                                 <td>所属分类：</td>
                                 <td>
                                     <my-deep-select :data="categories" v-model="form.category_id" @change="myValue.error.category_id = ''" :has="false" :width="TopContext.style.inputItemW"></my-deep-select>
+                                    <i-button type="primary" :loading="myValue.pending.getCategories" @click="getCategories">刷新</i-button>
                                     <span class="need">*</span>
-                                    <my-loading v-if="myValue.pending.getCategories"></my-loading>
                                     <div class="msg">请务必在选择模块后操作</div>
                                     <div class="e-msg">{{ myValue.error.category_id }}</div>
                                 </td>
@@ -135,6 +135,48 @@
                                     <span class="need"></span>
                                     <div class="msg"></div>
                                     <div class="e-msg">{{ myValue.error.thumb }}</div>
+                                </td>
+                            </tr>
+
+                            <tr :class="{error: myValue.error.tags}" v-show="form.type === 'misc'">
+                                <td>标签：</td>
+                                <td>
+                                    <div class="tags">
+                                        <div class="line top">
+
+                                            <div class="active-tag" v-for="v in form.tags" @click="destroyTag(v.tag_id , false)">
+                                                <div class="text"><my-loading size="18" color="#b1b6bd" v-if="myValue.pending['destroy_tag_' + v.tag_id]" />{{ v.name }}</div>
+                                                <div class="close">
+                                                    <div class="inner">
+                                                        <div class="positive"></div>
+                                                        <div class="negative"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="active-tag" v-for="v in tags" @click="destroyTag(v.id)">
+                                                <div class="text">{{ v.name }}</div>
+                                                <div class="close">
+                                                    <div class="inner">
+                                                        <div class="positive"></div>
+                                                        <div class="negative"></div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="tag-input" ref="tag-input-outer"><span contenteditable="true" ref="tag-input" class="input" @input="myValue.error.tags = ''" @keyup.enter="createOrAppendTag"></span></div>
+                                        </div>
+                                        <div class="line btm">
+                                            <h5 class="title">推荐标签（选择模块后该列表会更新）</h5>
+                                            <div class="__tags__">
+                                                <span class="tag run-action-feedback" v-for="v in topTags" @click="appendTag(v)">{{ v.name }}</span>
+                                                <!--                                                <span class="tag run-action-feedback">发放</span>-->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <span class="need"></span>
+                                    <div class="msg">请务必在选择用户、模块后操作；输入框按回车键可搜寻已有标签，如不存在会自动创建</div>
+                                    <div class="e-msg">{{ myValue.error.tags }}</div>
                                 </td>
                             </tr>
 

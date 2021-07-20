@@ -78,7 +78,7 @@
                                 <td>所属分类：</td>
                                 <td>
                                     <my-deep-select :data="categories" v-model="form.category_id" @change="myValue.error.category_id = ''" :has="false" :width="TopContext.style.inputItemW"></my-deep-select>
-                                    <i-button type="primary" :loading="myValue.pending.getCategories" @click="refreshCategories">刷新</i-button>
+                                    <i-button type="primary" :loading="myValue.pending.getCategories" @click="getCategories">刷新</i-button>
                                     <span class="need">*</span>
                                     <div class="msg">请务必在选择类型、模块后操作</div>
                                     <div class="e-msg">{{ myValue.error.category_id }}</div>

@@ -71,69 +71,35 @@
                     <my-loading width="50" height="50"></my-loading>
                 </div>
 
-                <div class="empty" v-if="!val.pending.getWithPager && images.data.length === 0">暂无数据</div>
-
+                <div class="empty" v-if="!val.pending.getWithPager && images.data.length === 0">
+                    <my-icon icon="empty" size="40"></my-icon>
+                </div>
                 <div class="list">
 
-
-                    <div class="item card-box" v-for="v in images.data">
-                        <!-- 封面 -->
-                        <div class="thumb">
-                            <a class="link" :href="genUrl(`/image_project/${v.id}/show`)" target="_blank">
-                                <img :src="v.thumb" class="image judge-img-size" v-judge-img-size>
-                                <div class="mask">
-                                    <div class="top">
-                                        <div class="type" v-if="v.type === 'pro'"><my-icon icon="zhuanyerenzheng" size="35" /></div>
-
-                                        <div class="praise" v-ripple @click.prevent="praiseHandle(v)">
-                                            <my-loading size="16" v-if="val.pending.praiseHandle"></my-loading>
-                                            <my-icon icon="shoucang2" :class="{'run-red': v.is_praised }" /> 喜欢
-                                        </div>
-                                    </div>
-                                    <div class="btm">
-                                        <div class="count">{{ v.images.length }}P</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="introduction">
-                            <!-- 标签 -->
-                            <div class="tags">
-                                <span class="ico"><my-icon icon="icontag" size="18" /></span>
-
-                                <a class="tag" v-for="tag in v.tags" :href="`#/image_project/search?tag_id=${tag.tag_id}`">{{ tag.name }}</a>
-                            </div>
-                            <!-- 标题 -->
-                            <div class="title"><a class="link" target="_blank" :href="`#/image_project/${v.id}/show`">{{ v.name }}</a></div>
-                            <!-- 发布者 -->
-                            <div class="user">
-                                <div class="sender">
-                                    <span class="avatar-outer"><img :src="v.user ? v.user.avatar : TopContext.res.avatar" alt="" class="image avatar"></span>
-                                    <a class="name">{{ v.user ? v.user.nickname : 'unknow' }}</a>
-                                </div>
-                                <div class="action"></div>
-                            </div>
-                            <!-- 统计信息 -->
-                            <div class="info">
-                                <div class="left"><my-icon icon="shijian" class="ico" mode="right" /> {{ v.created_at }}</div>
-                                <div class="right">
-                                    <span class="view-count"><my-icon icon="chakan" mode="right" />{{ v.view_count }}</span>
-                                    <span class="praise-count"><my-icon icon="shoucang2" mode="right" />{{ v.praise_count }}</span>
-                                    <span class="collect-count" v-if="$store.state.user"><my-icon icon="shoucang6" mode="right" />{{ v.collect_count }}</span>
-                                </div>
-                            </div>
-                        </div>
-
-                    </div>
-
+                    <my-image-project-card-box
+                            class="item"
+                            v-for="v in images.data"
+                            :key="v.id"
+                            :row="v"
+                            @on-praise="praiseHandle"
+                            :is-praise-pending="val.pending.praiseHandle"
+                    ></my-image-project-card-box>
 
                 </div>
 
             </div>
 
             <div class="pager">
-                <my-page :total="images.total" :limit="images.size" :page="images.page" @on-change="toPageInImageProject"></my-page>
+                <my-page
+                        class="run-page-center"
+                        :total="images.total"
+                        :size="images.size"
+                        :sizes="images.sizes"
+                        :page="images.page"
+                        :show-sizes="false"
+                        @on-page-change="pageEventInImageProject"
+                        @on-size-change="sizeEventInImageProject"
+                ></my-page>
             </div>
 
         </div>
@@ -253,14 +219,24 @@
 
                     <div class="list">
                         <div class="loading" v-if="val.pending.getImageSubjects"><my-loading size="30"></my-loading></div>
-                        <div class="empty" v-if="!val.pending.getImageSubjects && imageSubjects.data.length === 0">暂无相关数据</div>
+                        <div class="empty" v-if="!val.pending.getImageSubjects && imageSubjects.data.length === 0">
+                            <my-icon icon="empty" size="40"></my-icon>
+                        </div>
                         <div class="item" v-ripple v-for="v in imageSubjects.data" :class="{cur: imageSubjects.selectedIds.indexOf(v.id) >= 0}" @click="filterByImageSubject(v)">
                             <div class="thumb"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image" alt=""></div>
                             <div class="name">{{ v.name }}</div>
                         </div>
                     </div>
                     <div class="pager">
-                        <my-page :total="imageSubjects.total" :limit="imageSubjects.size" :page="imageSubjects.page" @on-change="toPageInImageSubject"></my-page>
+                        <my-page
+                                class="run-page-center"
+                                :total="imageSubjects.total"
+                                :size="imageSubjects.size"
+                                :sizes="imageSubjects.sizes"
+                                :page="imageSubjects.page"
+                                @on-page-change="pageEventInImageSubject"
+                                @on-size-change="sizeEventInImageSubject"
+                        ></my-page>
                     </div>
                 </div>
             </div>
@@ -308,11 +284,21 @@
                         </div>
                         <div class="list run-tags horizontal" :class="{loading: val.pending.getTags}">
                             <div class="mask" v-if="val.pending.getTags"><my-loading></my-loading></div>
-                            <div class="empty" v-if="!val.pending.getTags && tags.total <= 0">暂无相关记录</div>
+                            <div class="empty" v-if="!val.pending.getTags && tags.total <= 0">
+                                <my-icon icon="empty" size="40"></my-icon>
+                            </div>
                             <my-button class="tag" v-for="v in tags.data" :class="{selected: tags.selectedIds.indexOf(v.tag_id) >= 0}" :key="v.id" @click="filterByTag(v)">{{ v.name }}</my-button>
                         </div>
                         <div class="pager" v-if="tags.total > 0">
-                            <my-page :total="tags.total" :limit="tags.size" :page="tags.page" @on-change="toPageInTag"></my-page>
+                            <my-page
+                                    class="run-page-center"
+                                    :total="tags.total"
+                                    :size="tags.size"
+                                    :sizes="tags.sizes"
+                                    :page="tags.page"
+                                    @on-page-change="pageEventInTag"
+                                    @on-size-change="sizeEventInTag"
+                            ></my-page>
                         </div>
                     </div>
                 </div>

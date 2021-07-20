@@ -43,7 +43,7 @@
 
                             <a class="item" v-for="v in recommend.data" :key="v.id" :href="genUrl(`/image_project/${v.id}/show`)" @click.prevent="linkToImageProject(v)">
                                 <div class="thumb">
-                                    <div class="mask"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
+                                    <div class="mask"><img :data-src="v.thumb ? v.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
                                 </div>
                                 <div class="info">
                                     <div class="title">{{ v.name }}</div>
@@ -60,14 +60,14 @@
 
             <!-- 其他 -->
             <div class="right misc" ref="misc">
-                <div class="inner" :class="{fixed: val.fixed}">
+                <div class="inner" :class="{'fixed-top': val.fixedTop , 'fixed-btm': val.fixedBtm}">
 
                     <!-- 发布者 -->
                     <a class="user m-b-20" target="_blank" :href="genUrl(`/channel/${data.user.id}`)">
-                        <div class="inner" :class="{fixed: val.fixed}">
+                        <div class="inner">
                             <div class="avatar">
                                 <div class="mask">
-                                    <img :src="data.user ? data.user.avatar : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt="">
+                                    <img :data-src="data.user ? data.user.avatar : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt="">
                                 </div>
                             </div>
                             <div class="name">{{ data.user ? data.user.username : '' }}</div>
@@ -89,11 +89,16 @@
                     </a>
 
                     <!-- 关联主题 -->
-                    <a class="subject m-b-20" v-if="data.type === 'pro'" target="_blank" :href="genUrl(`/image_project/search?image_subject_id=${data.image_subject_id}`)">
+                    <a
+                            v-if="!val.fixedTop && !val.fixedBtm"
+                            class="subject m-b-20"
+                            target="_blank"
+                            :href="genUrl(`/image_project/search?image_subject_id=${data.image_subject_id}`)"
+                    >
                         <div class="info">
                             <div class="thumb">
                                 <div class="mask">
-                                    <img :src="data.image_subject ? data.image_subject.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt="">
+                                    <img :data-src="data.image_subject ? data.image_subject.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt="">
                                 </div>
                             </div>
                             <div class="name">{{ data.image_subject.name }}</div>
@@ -115,13 +120,13 @@
                     </a>
                     <!-- 最新发布 -->
                     <div class="newest" ref="newest">
-                        <div class="inner" :class="{fixed: val.fixed}">
+                        <div class="inner">
                             <div class="title">最新发布</div>
                             <div class="list">
 
                                 <a class="item" v-for="v in newest.data" :Key="v.id" :href="genUrl(`/image_project/${v.id}/show`)" @click.prevent="linkToImageProject(v)">
                                     <div class="thumb">
-                                        <div class="mask"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
+                                        <div class="mask"><img :data-src="v.thumb ? v.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
                                     </div>
                                     <div class="info">
                                         <div class="title">{{ v.name }}</div>
@@ -149,51 +154,12 @@
         <my-pic-preview ref="pic-preview"></my-pic-preview>
 
         <!-- 收藏夹 -->
-        <div class="my-favorites hide" ref="my-favorites" @click="hideFavorites">
-            <div class="inner" @click.stop>
-                <div class="title">
-                    <span class="text">收藏夹</span>
-                    <my-button class="action close" @click="hideFavorites"><my-icon icon="close" size="12" /></my-button>
-                </div>
-
-                <div class="create">
-                    <div class="title m-b-15 run-weight">创建收藏夹</div>
-                    <div class="content">
-                        收藏夹名称 <input type="text" class="input" placeholder="请输入收藏夹名称" v-model="collectionGroup.name" @keyup.enter="createAndJoinCollectionGroup"> <my-button class="button" @click="createAndJoinCollectionGroup"><my-loading size="16" v-if="val.pending.createAndJoinCollectionGroup" />&nbsp;创建并添加</my-button>
-                    </div>
-                </div>
-
-                <div class="favorites">
-                    <div class="title m-b-15 run-weight">收藏夹列表</div>
-                    <div class="list">
-
-                        <div class="item" v-for="v in favorites">
-                            <div class="name">
-                                {{ v.name }}
-                                <span class="exists" v-if="v.is_inside">/已在此列表</span>
-                                <my-button class="button" @click="collectionHandle(v)">
-                                    <my-loading v-if="val.pending['collectionHandle_' + v.id]" size="16"></my-loading>
-                                    <template v-if="v.is_inside">移除</template>
-                                    <template v-else>添加</template>
-                                </my-button>
-                            </div>
-                            <div class="info">
-                                <span class="number">{{ v.count }}</span>
-                            </div>
-                        </div>
-
-                        <div class="loading" v-if="val.pending.getFavorites">
-                            <my-loading></my-loading>
-                        </div>
-
-                        <div class="empty" v-if="!val.pending.getFavorites && favorites.length <= 0">暂无数据</div>
-
-
-                    </div>
-
-                </div>
-            </div>
-        </div>
+        <my-collection-group
+                ref="my-collection-group"
+                :relation-id="id"
+                relation-type="image_project"
+                @on-change="collectionHandle"
+        ></my-collection-group>
 
     </div>
 </template>

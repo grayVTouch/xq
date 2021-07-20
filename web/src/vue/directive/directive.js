@@ -16,12 +16,17 @@ Vue.directive('ripple', {
 // 图片调整
 const judgeImgSize = (img) => {
     img = G(img);
-    const src= img.native('src');
-    if (!G.isValid(src)) {
+    const src = img.data('src');
+    if (G.isEmptyString(src)) {
         return ;
     }
     const imgCopy = new Image();
     imgCopy.onload = function(){
+        const newSrc = img.data('src');
+        if (newSrc !== src) {
+            // 图片原被更新了
+            return ;
+        }
         const w = this.width;
         const h = this.height;
 
@@ -77,6 +82,7 @@ const judgeImgSize = (img) => {
                 img.addClass('vertical-for-img');
             }
         }
+        img.native('src' , src);
     };
     imgCopy.src = src;
 };
@@ -84,6 +90,14 @@ const judgeImgSize = (img) => {
 Vue.directive('judge-img-size', {
     // 插入
     inserted: judgeImgSize ,
+    update (el , binds , vNode , oldVnode) {
+        const newSrc = el.getAttribute('data-src');
+        const oldSrc = oldVnode.data.attrs ? oldVnode.data.attrs['data-src'] : newSrc;
+        if (!newSrc || newSrc === oldSrc) {
+            return ;
+        }
+        judgeImgSize(el);
+    } ,
 });
 
 // 复制功能

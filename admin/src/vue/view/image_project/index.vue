@@ -9,9 +9,15 @@
                     <my-loading v-if="myValue.pending.getModules"></my-loading>
                 </my-search-form-item>
 
+                <my-search-form-item name="类型">
+                    <i-radio-group v-model="search.type" @on-change="typeChangedEvent">
+                        <i-radio v-for="(v,k) in TopContext.business.imageProject.type" :key="k" :label="k">{{ v }}</i-radio>
+                    </i-radio-group>
+                </my-search-form-item>
+
                 <my-search-form-item name="分类">
                     <my-deep-select :data="categories" v-model="search.category_id" :has="false" empty="">
-                        <template v-slot:extra="{row , index}">【{{ row.__type__ }}】</template>
+                        <template v-slot:extra="{row , index}" v-if="!search.type">【{{ row.__type__ }}】</template>
                     </my-deep-select>
                     <my-loading v-if="myValue.pending.getCategories"></my-loading>
                     <span class="msg">请选择模块后操作</span>
@@ -26,12 +32,6 @@
                             :readonly="true"
                             @click.native="showImageSubjectSelector"
                     ></i-input>
-                </my-search-form-item>
-
-                <my-search-form-item name="类型">
-                    <i-radio-group v-model="search.type">
-                        <i-radio v-for="(v,k) in TopContext.business.imageProject.type" :key="k" :label="k">{{ v }}</i-radio>
-                    </i-radio-group>
                 </my-search-form-item>
 
                 <my-search-form-item name="ID">
@@ -88,7 +88,7 @@
                     ref="table"
                     class="w-r-100"
                     border
-                    :height="TopContext.table.height"
+
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

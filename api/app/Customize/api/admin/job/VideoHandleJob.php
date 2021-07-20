@@ -383,6 +383,10 @@ class VideoHandleJob extends FileBaseJob implements ShouldQueue
                 // 删除源文件
                 ResourceRepository::delete($video->src);
                 ResourceRepository::create($transcoded_access_url , $transcoded_file , 'local' , 1 , 0);
+                // 更新原视频
+                VideoModel::updateById($video->id , [
+                    'src' => $transcoded_access_url ,
+                ]);
             } else {
                 // 删除原视频文件
                 ResourceRepository::delete($video->src);

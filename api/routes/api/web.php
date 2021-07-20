@@ -6,6 +6,7 @@ use App\Customize\api\web\middleware\UserAuthMiddleware;
 use App\Customize\api\web\middleware\UserMiddleware;
 use App\Http\Controllers\api\web\Category;
 use App\Http\Controllers\api\web\File;
+use App\Http\Controllers\api\web\Image;
 use App\Http\Controllers\api\web\ImageAtPosition;
 use App\Http\Controllers\api\web\ImageProject;
 use App\Http\Controllers\api\web\Misc;
@@ -136,7 +137,28 @@ Route::prefix('web')
              * 杂项图片
              * **********************
              */
+            // 图片 - 列表
             Route::get('image' , [Image::class , 'index']);
+            // 图片-最新
+            Route::get('image/newest' , [Image::class , 'newest']);
+            // 图片 - 热门
+            Route::get('image/hot'          , [Image::class , 'hot']);
+            // 图片 - 通过标签过滤
+            Route::get('image/get_by_tag_id'   , [Image::class , 'getByTagId']);
+            // 图片 - 热门标签
+            Route::get('image/hot_tags'             , [Image::class , 'hotTags']);
+            // 图片 - 热门标签 - 分页
+            Route::get('image/hot_tags_with_pager'  , [Image::class , 'hotTagsWithPager']);
+            // 图片 - 分类
+            Route::get('image/category'             , [Image::class , 'category']);
+            // 图片 - 详情
+            Route::get('image/{id}'     , [Image::class , 'show']);
+            // 图片 - 列表
+            Route::get('image'          , [Image::class , 'index']);
+            // 图片 - 增加浏览量
+            Route::post('image/{id}/increment_view_count' , [Image::class , 'incrementViewCount']);
+            // 图片 - 推荐
+            Route::get('image/{id}/recommend' , [Image::class , 'recommend']);
 
             /**
              * ************************************
@@ -174,10 +196,39 @@ Route::prefix('web')
             Route::get('video_company' , [VideoCompany::class , 'index']);
             // 视频专题 - 视频公司 - 详情
             Route::get('video_company/{id}' , [VideoCompany::class , 'show']);
-            // 视频专题 - 增加观看次数
+
+            // 视频专题/视频 - 增加观看次数
             Route::post('video/{id}/increment_view_count' , [Video::class , 'incrementViewCount']);
-            // 视频专题 - 增加播放次数
+            // 视频专题/视频 - 增加播放次数
             Route::post('video/{id}/increment_play_count' , [Video::class , 'incrementPlayCount']);
+
+            /**
+             * 杂项视频
+             */
+            // 视频 - 列表
+            Route::get('video' , [Video::class , 'index']);
+            // 视频 - 最新
+            Route::get('video/newest' , [Video::class , 'newest']);
+            // 视频 - 热门标签
+            Route::get('video/hot_tags' , [Video::class , 'hotTags']);
+            // 视频 - 热门
+            Route::get('video/hot' , [Video::class , 'hot']);
+            // 视频 - 通过标签过滤
+            Route::get('video/get_by_tag_id' , [Video::class , 'getByTagId']);
+            // 视频 - 通过标签过滤
+            Route::get('video/get_by_tag_ids' , [Video::class , 'getByTagIds']);
+            // 视频 - 通过标签过滤
+            Route::get('video/get_by_tag_id' , [Video::class , 'getByTagId']);
+            // 视频 - 通过标签过滤
+            Route::get('video/get_by_tag_ids' , [Video::class , 'getByTagIds']);
+            // 视频 - 热门标签 - 分页
+            Route::get('video/hot_tags_with_pager'  , [Video::class , 'hotTagsWithPager']);
+            // 视频-分类
+            Route::get('video/category'             , [Video::class , 'category']);
+            // 推荐视频
+            Route::get('video/{id}/recommend'        , [Video::class , 'recommend']);
+            // 视频 - 详情
+            Route::get('video/{id}'        , [Video::class , 'show']);
         });
 
         Route::middleware([
@@ -205,6 +256,8 @@ Route::prefix('web')
             Route::delete('user/destroy_collection' , [User::class , 'destroyCollection']);
             // 用户 - 删除历史记录
             Route::delete('user/destroy_history' , [User::class , 'destroyHistory']);
+            // 用户 - 删除点赞记录
+            Route::delete('user/destroy_my_praise' , [User::class , 'destroyMyPraise']);
             // 用户 - 收藏夹列表（带判断 某事物是否存在于此收藏夹）
             Route::get('user/collection_group_with_judge' , [User::class , 'collectionGroupWithJudge']);
             // 用户 - 收藏夹列表
@@ -215,6 +268,8 @@ Route::prefix('web')
             Route::get('less_history' , [User::class , 'lessHistory']);
             // 用户 - 历史记录 - 完整
             Route::get('history' , [User::class , 'histories']);
+            // 用户 - 我的点赞记录
+            Route::get('my_praise' , [User::class , 'myPraise']);
             // 用户 - 收藏夹（含收藏内容） - 简要
             Route::get('less_relation_in_collection' , [User::class , 'lessRelationInCollection']);
             // 用户 - 收藏夹（含收藏内容） - 简要
@@ -232,6 +287,12 @@ Route::prefix('web')
 
 
             /**
+             * 推按专题
+             */
+            // 视频专题 - 点赞（取消点赞）
+            Route::post('image/{id}/praise_handle' , [Image::class , 'praiseHandle']);
+
+            /**
              * 视频专题
              */
             // 视频专题 - 点赞（取消点赞）
@@ -242,6 +303,7 @@ Route::prefix('web')
              */
             // 视频专题 - 记录播放情况
             Route::post('video/{id}/record' , [Video::class , 'record']);
+
             // 视频 - 点赞（取消点赞）
             Route::post('video/{id}/praise_handle' , [Video::class , 'praiseHandle']);
         });

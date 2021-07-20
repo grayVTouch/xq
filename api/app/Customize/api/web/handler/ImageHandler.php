@@ -7,11 +7,13 @@ namespace App\Customize\api\web\handler;
 use App\Customize\api\web\model\CollectionModel;
 use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\PraiseModel;
+use App\Customize\api\web\model\RelationTagModel;
 use App\Customize\api\web\model\UserModel;
 use App\Customize\api\web\model\Model;
 use stdClass;
 use function api\web\user;
 use function core\convert_object;
+use function core\get_time_diff;
 
 class ImageHandler extends Handler
 {
@@ -20,9 +22,11 @@ class ImageHandler extends Handler
         if (empty($model)) {
             return null;
         }
-        $res = convert_object($model);
+        $model = convert_object($model);
 
-        return $res;
+        $model->format_time = get_time_diff($model->created_at);
+
+        return $model;
     }
 
     // 附加：是否收藏
@@ -73,5 +77,17 @@ class ImageHandler extends Handler
         $user = UserHandler::handle($user);
 
         $model->user = $user;
+    }
+
+
+    // 附加：标签
+    public static function tags($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $tags = RelationTagModel::getByRelationTypeAndRelationId('image_project' , $model->image_project_id);
+        $tags = RelationTagHandler::handleAll($tags);
+        $model->tags = $tags;
     }
 }

@@ -22,7 +22,7 @@
                                     <div class="type" :class="{show: val.navTypeList}"  @mouseenter="showNavTypeList" @mouseleave="hideNavTypeList">
                                         <div class="current">{{ val.mime.value }}<i class="iconfont run-iconfont run-iconfont-arrow"></i></div>
                                         <ul class="list hide" ref="nav-type-list" @click.stop>
-                                            <li v-for="(v,k) in mimeRange" :key="v" :ref="'mime-item-' + k" :data-mime="k" @click="switchSearchType(k,v)">{{ v }}</li>
+                                            <li v-for="(v,k) in TopContext.business.contentType" :key="v" :ref="'mime-item-' + k" :data-mime="k" @click="switchSearchType(k,v)">{{ v }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -31,7 +31,7 @@
                             <div class="action">
 
                                 <!-- 登录状态 -->
-                                <div class="logged-layer" v-if="$store.state.user">
+                                <div class="logged-layer" v-if="state().user">
 
                                     <div class="item history" @click.stop @mouseenter="showHistoryCtrl" @mouseleave="hideHistoryCtrl">
                                         <div class="action"><button v-ripple class="button history"><my-icon icon="lishijilu" mode="right" />记录</button></div>
@@ -51,10 +51,11 @@
                                                     <div class="title f-12">{{ v.name }}</div>
                                                     <div class="list">
                                                         <template v-for="v1 in v.data">
+
                                                             <a class="item image" v-if="v1.relation_type === 'image_project'" target="_blank" :href="`#/image_project/${v1.relation_id}/show`">
-                                                                <div class="thumb"><img :src="v1.relation.thumb ? v1.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
+                                                                <div class="thumb"><img :data-src="v1.relation.thumb ? v1.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
                                                                 <div class="info">
-                                                                    <div class="name f-14">{{ v1.relation.name ?  v1.relation.name : '' }}</div>
+                                                                    <div class="name f-14">【{{ v1.__relation_type__ }}】{{ v1.relation.name ?  v1.relation.name : '' }}</div>
                                                                     <div class="time f-12">
                                                                         <my-icon icon="shijian" mode="right" />{{ v1.created_at }}&nbsp;&nbsp;{{ v1.relation.user ? v1.relation.user.nickname : 'unknow' }}
                                                                     </div>
@@ -64,20 +65,48 @@
                                                             <a class="item video-project" v-if="v1.relation_type === 'video_project'" target="_blank" :href="`#/video_project/${v1.relation_id}/show`">
                                                                 <div class="thumb">
                                                                     <img
-                                                                        :src="v1.relation.user_play_record.video.__thumb__ ? v1.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
+                                                                        :data-src="v1.relation.user_play_record.video.__thumb__ ? v1.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
                                                                         v-judge-img-size
                                                                         class="image judge-img-size"
                                                                         alt="">
                                                                     <div class="progress-bar" :style="`width: ${v1.relation.user_play_record.ratio * 100}%`"></div>
                                                                 </div>
                                                                 <div class="info">
-                                                                    <div class="name f-14">{{ v1.relation.name ?  v1.relation.name : '' }}</div>
+                                                                    <div class="name f-14">【{{ v1.__relation_type__ }}】{{ v1.relation.name ?  v1.relation.name : '' }}</div>
                                                                     <div class="sub-name f-12">{{ v1.relation.user_play_record.video.name ? v1.relation.user_play_record.video.name : '' }}</div>
                                                                     <div class="time f-12">
                                                                         <my-icon icon="shijian" mode="right" />{{ v1.created_at }}&nbsp;&nbsp;{{ v1.relation.user ? v1.relation.user.nickname : 'unknow' }}
                                                                     </div>
                                                                 </div>
                                                             </a>
+
+                                                            <a class="item image" v-if="v1.relation_type === 'image'" target="_blank" :href="`#/image/${v1.relation_id}/show`">
+                                                                <div class="thumb"><img :data-src="v1.relation.src ? v1.relation.src : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
+                                                                <div class="info">
+                                                                    <div class="name f-14">【{{ v1.__relation_type__ }}】{{ v1.relation.name ?  v1.relation.name : '' }}</div>
+                                                                    <div class="time f-12">
+                                                                        <my-icon icon="shijian" mode="right" />{{ v1.created_at }}&nbsp;&nbsp;{{ v1.relation.user ? v1.relation.user.nickname : 'unknow' }}
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+
+                                                            <a class="item video" v-if="v1.relation_type === 'video'" target="_blank" :href="`#/video/${v1.relation_id}/show`">
+                                                                <div class="thumb">
+                                                                    <img
+                                                                            :data-src="v1.relation.user_play_record.video.__thumb__ ? v1.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
+                                                                            v-judge-img-size
+                                                                            class="image judge-img-size"
+                                                                            alt="">
+                                                                    <div class="progress-bar" :style="`width: ${v1.relation.user_play_record.ratio * 100}%`"></div>
+                                                                </div>
+                                                                <div class="info">
+                                                                    <div class="name f-14">【{{ v1.__relation_type__ }}】{{ v1.relation.name ?  v1.relation.name : '' }}</div>
+                                                                    <div class="time f-12">
+                                                                        <my-icon icon="shijian" mode="right" />{{ v1.created_at }}&nbsp;&nbsp;{{ v1.relation.user ? v1.relation.user.nickname : 'unknow' }}
+                                                                    </div>
+                                                                </div>
+                                                            </a>
+
                                                         </template>
                                                     </div>
                                                 </div>
@@ -102,26 +131,55 @@
                                             </div>
                                             <div class="list">
                                                 <template v-for="v in favorites.collection_group.collections">
+
                                                     <a v-if="v.relation_type === 'image_project'" class="item image-project" target="_blank" :href="`#/image_project/${v.relation_id}/show`">
-                                                        <div class="thumb"><img :src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
+                                                        <div class="thumb"><img :data-src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
                                                         <div class="info">
-                                                            <div class="name f-14">{{ v.relation.name }}</div>
+                                                            <div class="name f-14">【{{ v.__relation_type__}}】{{ v.relation.name }}</div>
                                                             <div class="time f-12">
                                                                 <my-icon icon="shijian" mode="right" />{{ v.created_at }} {{ v.relation.user.nickname }}
                                                             </div>
                                                         </div>
                                                     </a>
+
                                                     <a v-if="v.relation_type === 'video_project'" class="item video-project" target="_blank" :href="`#/video_project/${v.relation_id}/show`">
                                                         <div class="thumb">
                                                             <img
-                                                                    :src="v.relation.user_play_record.video.__thumb__ ? v.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
+                                                                    :data-src="v.relation.user_play_record.video.__thumb__ ? v.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
                                                                     v-judge-img-size
                                                                     class="image judge-img-size"
                                                                     alt="">
                                                             <div class="progress-bar" :style="`width: ${v.relation.user_play_record.ratio * 100}%`"></div>
                                                         </div>
                                                         <div class="info">
-                                                            <div class="name f-14">{{ v.relation.name }}</div>
+                                                            <div class="name f-14">【{{ v.__relation_type__}}】{{ v.relation.name }}</div>
+                                                            <div class="time f-12">
+                                                                <my-icon icon="shijian" mode="right" />{{ v.created_at }} {{ v.relation.user.nickname }}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+
+                                                    <a v-if="v.relation_type === 'video'" class="item video" target="_blank" :href="`#/video/${v.relation_id}/show`">
+                                                        <div class="thumb">
+                                                            <img
+                                                                    :data-src="v.relation.__thumb__ ? v.relation.__thumb__ : TopContext.res.notFound"
+                                                                    v-judge-img-size
+                                                                    class="image judge-img-size"
+                                                                    alt="">
+                                                            <div class="progress-bar" :style="`width: ${v.relation.user_play_record.ratio * 100}%`"></div>
+                                                        </div>
+                                                        <div class="info">
+                                                            <div class="name f-14">【{{ v.__relation_type__}}】{{ v.relation.name }}</div>
+                                                            <div class="time f-12">
+                                                                <my-icon icon="shijian" mode="right" />{{ v.created_at }} {{ v.relation.user.nickname }}
+                                                            </div>
+                                                        </div>
+                                                    </a>
+
+                                                    <a v-if="v.relation_type === 'image'" class="item image-project" target="_blank" :href="`#/image/${v.relation_id}/show`">
+                                                        <div class="thumb"><img :data-src="v.relation.src ? v.relation.src : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
+                                                        <div class="info">
+                                                            <div class="name f-14">【{{ v.__relation_type__}}】{{ v.relation.name }}</div>
                                                             <div class="time f-12">
                                                                 <my-icon icon="shijian" mode="right" />{{ v.created_at }} {{ v.relation.user.nickname }}
                                                             </div>
@@ -130,7 +188,7 @@
                                                 </template>
 
                                                 <div class="empty" v-if="favorites.collection_group.collections.length === 0">
-                                                    <span>尚无数据</span>
+                                                    <my-icon icon="empty" size="40"></my-icon>
                                                 </div>
 
                                                 <div class="loaded" v-if="favorites.collection_group.count !== 0 && favorites.collection_group.count === favorites.collection_group.collections.length"><span>到底了</span></div>
@@ -144,42 +202,51 @@
 
                                     <div class="item user" @click.stop @mouseenter="showUserCtrl" @mouseleave="hideUserCtrl">
                                         <div class="action">
-                                            <a class="link" v-ripple><img :src="$store.state.user.avatar ? $store.state.user.avatar : TopContext.res.avatar" v-judge-img-size class="image judge-img-size"></a>
+                                            <a class="link"
+                                               :href="genUrl('/user')"
+                                               v-ripple>
+                                                <img :data-src="state().user.avatar ? state().user.avatar : TopContext.res.avatar" v-judge-img-size class="image judge-img-size">
+                                            </a>
                                         </div>
                                         <div class="info hide" ref="info-for-user">
                                             <div class="transparent-block"></div>
                                             <div class="user m-b-10">
-                                                <a href="#/user/info" v-ripple target="_self" class="link" @click="hideUserCtrl">
+                                                <a :href="genUrl('/user/info')" v-ripple target="_self" class="link" @click="hideUserCtrl">
                                                     <div class="avatar">
                                                         <div class="mask">
-                                                            <img :src="$store.state.user.avatar ? $store.state.user.avatar : TopContext.res.avatar" v-judge-img-size class="image judge-img-size">
+                                                            <img :data-src="state().user.avatar ? state().user.avatar : TopContext.res.avatar" v-judge-img-size class="image judge-img-size">
                                                         </div>
                                                     </div>
                                                     <div class="info">
-                                                        <div class="name">{{ getUsername($store.state.user.username , $store.state.user.nickname) }}</div>
-                                                        <div class="desc">{{ $store.state.user.description }}</div>
+                                                        <div class="name">{{ getUsername(state().user.username , state().user.nickname) }}</div>
+                                                        <div class="desc">{{ state().user.description }}</div>
                                                     </div>
                                                 </a>
                                             </div>
                                             <div class="actions">
-                                                <a class="action" v-ripple :href="genUrl(`/channel/${$store.state.user.id}`)" @click="hideUserCtrl">
+                                                <a class="action" v-ripple :href="genUrl(`/channel/${state().user.id}`)" @click="hideUserCtrl">
                                                     <div class="ico"><my-icon icon="ronghepindao" size="16" /></div>
                                                     <div class="name">我的频道</div>
                                                 </a>
 
-                                                <a class="action" v-ripple href="#/user/password" @click="hideUserCtrl">
+                                                <a class="action" v-ripple :href="genUrl('/user/password')" @click="hideUserCtrl">
                                                     <div class="ico"><my-icon icon="privilege" size="16" /></div>
                                                     <div class="name">修改密码</div>
                                                 </a>
 
-                                                <a class="action" v-ripple href="#/user/history" @click="hideUserCtrl">
+                                                <a class="action" v-ripple :href="genUrl('/user/history')" @click="hideUserCtrl">
                                                     <div class="ico"><my-icon icon="lishijilu" size="16" /></div>
                                                     <div class="name">历史记录</div>
                                                 </a>
 
-                                                <a class="action" v-ripple href="#/user/favorites" @click="hideUserCtrl">
+                                                <a class="action" v-ripple :href="genUrl('/user/favorites')" @click="hideUserCtrl">
                                                     <div class="ico"><my-icon icon="shoucang6" size="16" /></div>
                                                     <div class="name">我的收藏</div>
+                                                </a>
+
+                                                <a class="action" v-ripple :href="genUrl('/user/praise')" @click="hideUserCtrl">
+                                                    <div class="ico"><my-icon icon="shoucang2" size="16" /></div>
+                                                    <div class="name">我的点赞</div>
                                                 </a>
 
                                                 <a class="action" v-ripple @click.prevent="logout">
@@ -235,13 +302,16 @@
 
         <!-- 尾部 -->
         <footer class="footer">
-            <p class="website">兴趣部落</p>
-            <p class="links">
-                友情链接：
-                <a href="https://awm.moe/">ACG萌图</a>
-                <a href="https://hanime.tv/">hanime</a>
-            </p>
-            <p class="copyright">{{ TopContext.os.name }} 版权所有</p>
+            <div class="inner">
+                <p class="website">兴趣部落</p>
+                <p class="links">
+                    友情链接：
+                    <a class="m-r-5" target="_blank" href="https://awm.moe/">ACG萌图</a>
+                    <a class="m-r-5" target="_blank" href="https://hanime.tv/">hanime</a>
+                    <a class="m-r-5" target="_blank" href="https://95mm.net/">mm</a>
+                </p>
+                <p class="copyright">{{ TopContext.os.name }} 版权所有</p>
+            </div>
         </footer>
 
         <!-- 登录/注册 -->

@@ -11,7 +11,10 @@ export default new Vuex.Store({
 
         business: TopContext.business ,
 
-        position: [] ,
+        position: {} ,
+
+        // 当前路径
+        positions: [] ,
 
         // 用户登录后需要处理的相关回调函数
         loggedCallback: [] ,
@@ -25,6 +28,10 @@ export default new Vuex.Store({
         position (state , payload) {
             state.position = payload;
         } ,
+
+        positions (state , payload) {
+            state.positions = payload;
+        } ,
     } ,
     actions: {
         user (context , payload) {
@@ -33,6 +40,10 @@ export default new Vuex.Store({
 
         position (state , payload) {
             state.commit('position' , payload);
+        } ,
+
+        positions (state , payload) {
+            state.commit('positions' , payload);
         } ,
     } ,
 });

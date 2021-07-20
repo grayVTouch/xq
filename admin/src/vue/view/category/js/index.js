@@ -1,7 +1,7 @@
 import myForm from '../form.vue';
 
 const search = {
-    // type: 'image_project' ,
+    type: 'image' ,
 };
 
 const current = {id: ''};
@@ -344,15 +344,6 @@ export default {
             this.edit(record);
         } ,
 
-        addNextLevelEvent (row) {
-            this.setValue('mode' , 'add');
-            this.setValue('addMode' , 'add_next');
-            this.current = row;
-            this.$nextTick(() => {
-                this.$refs.form.openFormModal();
-            });
-        } ,
-
         editEventByButton () {
             if (!this.checkOneSelection()) {
                 return ;
@@ -363,7 +354,16 @@ export default {
 
         addEvent () {
             this.setValue('mode' , 'add');
-            this.setValue('addMode' , 'add');
+            this.setValue('addMode' , '');
+            this.$nextTick(() => {
+                this.$refs.form.openFormModal();
+            });
+        } ,
+
+        addNextLevelEvent (row) {
+            this.setValue('mode' , 'add');
+            this.setValue('addMode' , 'add_next');
+            this.current = row;
             this.$nextTick(() => {
                 this.$refs.form.openFormModal();
             });

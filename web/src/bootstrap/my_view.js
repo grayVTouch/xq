@@ -16,6 +16,12 @@ import video from '../vue/view/public/common/video.vue';
 import collectionGroup from '@vue/view/public/system/collection_group.vue';
 import myPicPreview from '@vue/view/public/common/pic_preview.vue';
 
+
+import myImageProjectCardBox from '@vue/view/public/common/my_image_project_card_box.vue';
+import myVideoProjectCardBox from '@vue/view/public/common/my_video_project_card_box.vue';
+import myVideoCardBox from '@vue/view/public/common/my_video_card_box.vue';
+import myImageCardBox from '@vue/view/public/common/my_image_card_box.vue';
+
 Vue.component('my-loading' , loading);
 Vue.component('my-avatar' , avatar);
 Vue.component('my-switch' , mySwitch);
@@ -32,4 +38,8 @@ Vue.component('my-uploader' , uploader);
 Vue.component('my-video' , video);
 Vue.component('my-collection-group' , collectionGroup);
 Vue.component('my-pic-preview' , myPicPreview);
+Vue.component('my-image-project-card-box' , myImageProjectCardBox);
+Vue.component('my-video-project-card-box' , myVideoProjectCardBox);
+Vue.component('my-video-card-box' , myVideoCardBox);
+Vue.component('my-image-card-box' , myImageCardBox);
 

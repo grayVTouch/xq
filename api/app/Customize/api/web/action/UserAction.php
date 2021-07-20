@@ -7,8 +7,11 @@ use App\Customize\api\web\handler\CollectionGroupHandler;
 use App\Customize\api\web\handler\CollectionHandler;
 use App\Customize\api\web\handler\FocusUserHandler;
 use App\Customize\api\web\handler\HistoryHandler;
+use App\Customize\api\web\handler\ImageHandler;
 use App\Customize\api\web\handler\ImageProjectHandler;
+use App\Customize\api\web\handler\PraiseHandler;
 use App\Customize\api\web\handler\UserHandler;
+use App\Customize\api\web\handler\UserVideoPlayRecordHandler;
 use App\Customize\api\web\handler\UserVideoProjectPlayRecordHandler;
 use App\Customize\api\web\handler\VideoHandler;
 use App\Customize\api\web\handler\VideoProjectHandler;
@@ -17,11 +20,13 @@ use App\Customize\api\web\model\CollectionModel;
 use App\Customize\api\web\model\EmailCodeModel;
 use App\Customize\api\web\model\FocusUserModel;
 use App\Customize\api\web\model\HistoryModel;
+use App\Customize\api\web\model\ImageModel;
 use App\Customize\api\web\model\ImageProjectModel;
 use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\PraiseModel;
 use App\Customize\api\web\model\UserModel;
 use App\Customize\api\web\model\UserTokenModel;
+use App\Customize\api\web\model\VideoModel;
 use App\Customize\api\web\model\VideoProjectModel;
 use App\Customize\api\web\repository\CollectionGroupRepository;
 use App\Http\Controllers\api\web\Base;
@@ -289,8 +294,6 @@ class UserAction extends Action
         };
         foreach ($res as $v)
         {
-            // 附加：模块
-            HistoryHandler::module($v);
             // 附加：关联对象
             HistoryHandler::relation($v);
             switch ($v->relation_type)
@@ -304,6 +307,17 @@ class UserAction extends Action
                     VideoProjectHandler::userPlayRecord($v->relation);
                     if (!empty($v->relation)) {
                         UserVideoProjectPlayRecordHandler::video($v->relation->user_play_record);
+                    }
+                    break;
+                case 'image':
+                    ImageHandler::user($v->relation);
+                    break;
+                case 'video':
+                    VideoHandler::user($v->relation);
+                    // 记录历史
+                    VideoHandler::userPlayRecord($v->relation);
+                    if (!empty($v->relation)) {
+                        UserVideoPlayRecordHandler::video($v->relation->user_play_record);
                     }
                     break;
             }
@@ -333,13 +347,13 @@ class UserAction extends Action
 
     public static function histories(Base $context , array $param = []): array
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_history');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
-            'module_id'             => 'required|integer' ,
-            'relation_type' => ['sometimes' , Rule::in($relation_type_range)] ,
+            'module_id'         => 'required|integer' ,
+            'relation_type'     => ['sometimes' , Rule::in($relation_type_range)] ,
         ]);
         if ($validator->fails()) {
-            return self::error($validator->errors()->first());
+            return self::error($validator->errors()->first() , $validator->errors());
         }
         $module = ModuleModel::find($param['module_id']);
         if (empty($module)) {
@@ -365,8 +379,6 @@ class UserAction extends Action
         };
         foreach ($res->data as $v)
         {
-            // 附加：模块
-            HistoryHandler::module($v);
             // 附加：关联对象
             HistoryHandler::relation($v);
             // 附加：用户
@@ -381,6 +393,17 @@ class UserAction extends Action
                     VideoProjectHandler::userPlayRecord($v->relation);
                     if (!empty($v->relation)) {
                         UserVideoProjectPlayRecordHandler::video($v->relation->user_play_record);
+                    }
+                    break;
+                case 'image':
+                    ImageHandler::user($v->relation);
+                    break;
+                case 'video':
+                    VideoHandler::user($v->relation);
+                    // 记录历史
+                    VideoHandler::userPlayRecord($v->relation);
+                    if (!empty($v->relation)) {
+                        UserVideoPlayRecordHandler::video($v->relation->user_play_record);
                     }
                     break;
             }
@@ -413,10 +436,10 @@ class UserAction extends Action
 
     public static function collectionGroupWithJudge(Base $context , array $param = []): array
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required|integer' ,
-            'relation_type' => ['required' , Rule::in($relation_type_range)] ,
+            'relation_type' => ['required' , Rule::in($type_range)] ,
             'relation_id' => 'required|integer' ,
         ]);
         if ($validator->fails()) {
@@ -433,6 +456,12 @@ class UserAction extends Action
                 break;
             case 'video_project':
                 $relation = VideoProjectModel::find($param['relation_id']);
+                break;
+            case 'image':
+                $relation = ImageModel::find($param['relation_id']);
+                break;
+            case 'video':
+                $relation = VideoModel::find($param['relation_id']);
                 break;
             default:
                 $relation = null;
@@ -459,7 +488,7 @@ class UserAction extends Action
 
     public static function collectionGroup(Base $context , array $param = []): array
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required|integer' ,
             'relation_type' => ['sometimes' , Rule::in($relation_type_range)] ,
@@ -487,7 +516,7 @@ class UserAction extends Action
 
     public static function collectionHandle(Base $context , array $param = [])
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $relation_type_range = my_config_keys('business.content_type');
         $action_range = my_config_keys('business.bool_for_int');
         $validator = Validator::make($param , [
             'module_id'             => 'required|integer' ,
@@ -516,29 +545,71 @@ class UserAction extends Action
             case 'video_project':
                 $relation = VideoProjectModel::find($param['relation_id']);
                 break;
+            case 'image':
+                $relation = ImageModel::find($param['relation_id']);
+                break;
+            case 'video':
+                $relation = VideoModel::find($param['relation_id']);
             default:
         }
         if (empty($relation)) {
             return self::error('关联事物不存在');
         }
-        if ($param['action'] == 1) {
-            // 收藏
-            $res = CollectionModel::findByModuleIdAndUserIdAndCollectionGroupIdAndRelationTypeAndRelationId($module->id , $user->id , $collection_group->id , $param['relation_type'] , $relation->id);
-            if (empty($res)) {
-                CollectionModel::insertOrIgnore([
-                    'module_id' => $module->id ,
-                    'user_id' => $user->id ,
-                    'collection_group_id' => $collection_group->id ,
-                    'relation_type' => $param['relation_type'] ,
-                    'relation_id' => $relation->id ,
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
+        try {
+            DB::beginTransaction();
+            if ($param['action'] == 1) {
+                // 收藏
+                $res = CollectionModel::findByModuleIdAndUserIdAndCollectionGroupIdAndRelationTypeAndRelationId($module->id , $user->id , $collection_group->id , $param['relation_type'] , $relation->id);
+                if (empty($res)) {
+                    CollectionModel::insertOrIgnore([
+                        'module_id' => $module->id ,
+                        'user_id' => $user->id ,
+                        'collection_group_id' => $collection_group->id ,
+                        'relation_type' => $param['relation_type'] ,
+                        'relation_id' => $relation->id ,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+                switch ($param['relation_type'])
+                {
+                    case 'image_project':
+                        ImageProjectModel::incrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                        break;
+                    case 'video_project':
+                        VideoProjectModel::incrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                        break;
+                    case 'image':
+                        ImageModel::incrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                        break;
+                    case 'video':
+                        VideoModel::incrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                    default:
+                }
+            } else {
+                // 取消收藏
+                CollectionModel::delByModuleIdAndUserIdAndCollectionGroupIdAndRelationTypeAndRelationId($module->id , $user->id , $collection_group->id , $param['relation_type'] , $relation->id);
+                switch ($param['relation_type'])
+                {
+                    case 'image_project':
+                        ImageProjectModel::decrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                        break;
+                    case 'video_project':
+                        VideoProjectModel::decrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                        break;
+                    case 'image':
+                        ImageModel::decrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                        break;
+                    case 'video':
+                        VideoModel::decrementByIdAndColumnAndStep($relation->id , 'collect_count' , 1);
+                    default:
+                }
             }
-        } else {
-            // 取消收藏
-            CollectionModel::delByModuleIdAndUserIdAndCollectionGroupIdAndRelationTypeAndRelationId($module->id , $user->id , $collection_group->id , $param['relation_type'] , $relation->id);
+            DB::commit();
+            return self::success('操作成功');
+        } catch(Exception $e) {
+            DB::rollBack();
+            throw $e;
         }
-        return self::success('操作成功');
     }
 
     //
@@ -589,7 +660,7 @@ class UserAction extends Action
 
     public static function record(Base $context , array $param = [])
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_history');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id'             => 'required|integer' ,
             'relation_type' => ['required' , Rule::in($relation_type_range)] ,
@@ -609,6 +680,12 @@ class UserAction extends Action
                 break;
             case 'video_project':
                 $relation = VideoProjectModel::find($param['relation_id']);
+                break;
+            case 'image':
+                $relation = ImageModel::find($param['relation_id']);
+                break;
+            case 'video':
+                $relation = VideoModel::find($param['relation_id']);
                 break;
         }
         if (empty($relation)) {
@@ -635,7 +712,7 @@ class UserAction extends Action
 
     public static function createAndJoinCollectionGroup(Base $context , array $param = [])
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required|integer' ,
             'relation_type' => ['required' , Rule::in($relation_type_range)] ,
@@ -657,9 +734,16 @@ class UserAction extends Action
             case 'video_project':
                 $relation = VideoProjectModel::find($param['relation_id']);
                 break;
+            case 'image':
+                $relation = ImageModel::find($param['relation_id']);
+                break;
+            case 'video':
+                $relation = VideoModel::find($param['relation_id']);
+                break;
             default:
                 $relation = null;
         }
+        // https://static-hw.xvideos.com/v3
         if (empty($relation)) {
             return self::error('关联的事物不存在' , '' , 404);
         }
@@ -724,7 +808,7 @@ class UserAction extends Action
 
     public static function joinCollectionGroup(Base $context , array $param = [])
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required|integer' ,
             'relation_type' => ['required' , Rule::in($relation_type_range)] ,
@@ -830,28 +914,31 @@ class UserAction extends Action
                 {
                     case 'image_project':
                         ImageProjectHandler::user($v1->relation);
-                        ImageProjectHandler::images($v1->relation);
-                        ImageProjectHandler::tags($v1->relation);
-                        ImageProjectHandler::collectCount($v1->relation);
-                        ImageProjectHandler::isPraised($v1->relation);
-                        ImageProjectHandler::isCollected($v1->relation);
                         break;
                     case 'video_project':
                         VideoProjectHandler::user($v1->relation);
-                        VideoProjectHandler::isPraised($v1->relation);
-                        VideoProjectHandler::isCollected($v1->relation);
                         VideoProjectHandler::userPlayRecord($v1->relation);
                         if (!empty($v1->relation)) {
                             UserVideoProjectPlayRecordHandler::video($v1->relation->user_play_record);
                         }
+                        break;
+                    case 'video':
+                        VideoHandler::user($v1->relation);
+                        VideoHandler::userPlayRecord($v1->relation);
+                        if (!empty($v1->relation)) {
+                            UserVideoPlayRecordHandler::video($v1->relation->user_play_record);
+                        }
+                        break;
+                    case 'image':
+                        ImageHandler::user($v1->relation);
                         break;
                 }
             }
             $v->collections = $collections;
         }
         return self::success('' , [
-            'total_collection_group' => $total_collection_group ,
-            'collection_groups' => $collection_group ,
+            'total_collection_group'    => $total_collection_group ,
+            'collection_groups'         => $collection_group ,
         ]);
     }
 
@@ -935,7 +1022,7 @@ class UserAction extends Action
 
     public static function collections(Base $context , array $param = []): array
     {
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required' ,
             'collection_group_id' => 'required' ,
@@ -962,20 +1049,23 @@ class UserAction extends Action
             {
                 case 'image_project':
                     ImageProjectHandler::user($v->relation);
-                    ImageProjectHandler::images($v->relation);
-                    ImageProjectHandler::tags($v->relation);
-                    ImageProjectHandler::collectCount($v->relation);
-                    ImageProjectHandler::isPraised($v->relation);
-                    ImageProjectHandler::isCollected($v->relation);
                     break;
                 case 'video_project':
                     VideoProjectHandler::user($v->relation);
-                    VideoProjectHandler::isPraised($v->relation);
-                    VideoProjectHandler::isCollected($v->relation);
                     VideoProjectHandler::userPlayRecord($v->relation);
                     if (!empty($v->relation)) {
                         UserVideoProjectPlayRecordHandler::video($v->relation->user_play_record);
                     }
+                    break;
+                case 'video':
+                    VideoHandler::user($v->relation);
+                    VideoHandler::userPlayRecord($v->relation);
+                    if (!empty($v->relation)) {
+                        UserVideoPlayRecordHandler::video($v->relation->user_play_record);
+                    }
+                    break;
+                case 'image':
+                    ImageHandler::user($v->relation);
                     break;
             }
         }
@@ -1087,7 +1177,7 @@ class UserAction extends Action
         if (empty($user)) {
             return self::error('用户不存在' , '' , 404);
         }
-        $relation_type_range = my_config_keys('business.relation_type_for_collection');
+        $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required|integer' ,
             'relation_type' => ['sometimes' , Rule::in($relation_type_range)] ,
@@ -1160,5 +1250,120 @@ class UserAction extends Action
         CollectionGroupHandler::user($res);
         CollectionGroupHandler::thumb($res);
         return self::success('' , $res);
+    }
+
+    public static function myPraise(Base $context , array $param = []): array
+    {
+        $relation_type_range = my_config_keys('business.content_type');
+        $validator = Validator::make($param , [
+            'module_id'         => 'required|integer' ,
+            'relation_type'     => ['sometimes' , Rule::in($relation_type_range)] ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first() , $validator->errors());
+        }
+        $module = ModuleModel::find($param['module_id']);
+        if (empty($module)) {
+            return self::error('模块不存在');
+        }
+        $user = user();
+        $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
+        $res = PraiseModel::getByModuleIdAndUserIdAndRelationTypeAndValueAndSize($module->id , $user->id , $param['relation_type'] , $param['value'] ,$size);
+        $res = PraiseHandler::handlePaginator($res);
+        // 对时间进行分组
+        $date = date('Y-m-d');
+        $yesterday = date_create('yesterday')->format('Y-m-d');
+        $groups = [];
+        $findIndex = function($name) use(&$groups): int
+        {
+            foreach ($groups as $k => $v)
+            {
+                if ($v['name'] === $name) {
+                    return $k;
+                }
+            }
+            return -1;
+        };
+        foreach ($res->data as $v)
+        {
+            // 附加：关联对象
+            PraiseHandler::relation($v);
+            // 附加：用户
+            switch ($v->relation_type)
+            {
+                case 'image_project':
+                    ImageProjectHandler::user($v->relation);
+                    break;
+                case 'video_project':
+                    VideoProjectHandler::user($v->relation);
+                    // 记录历史
+                    VideoProjectHandler::userPlayRecord($v->relation);
+                    if (!empty($v->relation)) {
+                        UserVideoProjectPlayRecordHandler::video($v->relation->user_play_record);
+                    }
+                    break;
+                case 'image':
+                    ImageHandler::user($v->relation);
+                    break;
+                case 'video':
+                    VideoHandler::user($v->relation);
+                    // 记录历史
+                    VideoHandler::userPlayRecord($v->relation);
+                    if (!empty($v->relation)) {
+                        UserVideoPlayRecordHandler::video($v->relation->user_play_record);
+                    }
+                    break;
+            }
+
+            switch ($v->date)
+            {
+                case $date:
+                    $name = '今天';
+                    break;
+                case $yesterday:
+                    $name = '昨天';
+                    break;
+                default:
+                    $name = $v->date;
+            }
+            $index = $findIndex($name);
+            if ($index < 0) {
+                $groups[] = [
+                    'name' => $name ,
+                    'data' => [] ,
+                ];
+                $index = count($groups) - 1;
+            }
+            $groups[$index]['data'][] = $v;
+        }
+        $res->data = $groups;
+        return self::success('' , $res);
+    }
+
+    public static function destroyMyPraise(Base $context , array $param = []): array
+    {
+        $validator = Validator::make($param , [
+            'module_id' => 'required' ,
+            'praise_ids'      => 'required' ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first());
+        }
+        $module = ModuleModel::find($param['module_id']);
+        if (empty($module)) {
+            return self::error('模块不存在');
+        }
+        $praise_ids = empty($param['praise_ids']) ? [] : json_decode($param['praise_ids'] , true);
+        if (empty($praise_ids)) {
+            return self::error('请提供待删除的项');
+        }
+        $user = user();
+        $histories = PraiseModel::getByModuleIdAndUserIdAndIds($module->id , $user->id , $praise_ids);
+        if (count($praise_ids) !== count($histories)) {
+            return self::error('存在无效记录，请重新选择');
+        }
+        // 检查记录是否是当前登录用户
+        $count = PraiseModel::destroy($praise_ids);
+        return self::success('操作成功' , $count);
     }
 }

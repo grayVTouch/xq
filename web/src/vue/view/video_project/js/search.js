@@ -11,6 +11,7 @@ const tags = {
     data: [] ,
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 1 ,
     mode: 'strict' ,
     value: '' ,
@@ -23,6 +24,7 @@ const videoSeries = {
     data: [] ,
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 0 ,
     value: '' ,
 };
@@ -33,6 +35,7 @@ const videoCompanies = {
     data: [] ,
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 0 ,
     value: '' ,
 };
@@ -41,6 +44,7 @@ const videoProjects = {
     data: [] ,
     value: '' ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 0 ,
     page: 1 ,
     order: '' ,
@@ -291,7 +295,14 @@ export default {
             this.getData();
         } ,
 
-        toPageInImageProject (page) {
+        pageEventInVideoProject (page , size) {
+            this.videoProjects.page = page;
+            this.videoProjects.size = size;
+            this.getData();
+        } ,
+
+        sizeEventInVideoProject (size , page) {
+            this.videoProjects.size = size;
             this.videoProjects.page = page;
             this.getData();
         } ,
@@ -301,7 +312,14 @@ export default {
             this.getData();
         } ,
 
-        toPageInTag (page) {
+        pageEventInTag (page , size) {
+            this.tags.page = page;
+            this.tags.size = size;
+            this.getTags();
+        } ,
+
+        sizeEventInTag (size , page) {
+            this.tags.size = size;
             this.tags.page = page;
             this.getTags();
         } ,
@@ -452,7 +470,14 @@ export default {
             this.getData();
         } ,
 
-        toPageInVideoSeries (page) {
+        pageEventInVideoSeries (page , size) {
+            this.videoSeries.page = page;
+            this.videoSeries.size = size;
+            this.getVideoSeries();
+        } ,
+
+        sizeEventInVideoSeries (size , page) {
+            this.videoSeries.size = size;
             this.videoSeries.page = page;
             this.getVideoSeries();
         } ,
@@ -547,7 +572,14 @@ export default {
             this.getData();
         } ,
 
-        toPageInVideoCompany (page) {
+        pageEventInVideoCompany (page , size) {
+            this.videoCompanies.page = page;
+            this.videoCompanies.size = size;
+            this.getVideoCompany();
+        } ,
+
+        sizeEventInVideoCompany (size , page) {
+            this.videoCompanies.size = size;
             this.videoCompanies.page = page;
             this.getVideoCompany();
         } ,

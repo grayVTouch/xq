@@ -6,13 +6,16 @@ namespace App\Customize\api\web\handler;
 
 use App\Customize\api\web\model\CollectionGroupModel;
 use App\Customize\api\web\model\CollectionModel;
+use App\Customize\api\web\model\ImageModel;
 use App\Customize\api\web\model\ImageProjectModel;
 use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\UserModel;
+use App\Customize\api\web\model\VideoModel;
 use App\Customize\api\web\model\VideoProjectModel;
 use App\Customize\api\web\repository\CollectionGroupRepository;
 use App\Customize\api\web\model\Model;
 use stdClass;
+use function api\web\get_config_key_mapping_value;
 use function core\convert_object;
 
 class CollectionHandler extends Handler
@@ -23,6 +26,8 @@ class CollectionHandler extends Handler
             return null;
         }
         $model = convert_object($model);
+
+        $model->__relation_type__ = get_config_key_mapping_value('business.content_type' , $model->relation_type);
 
         return $model;
     }
@@ -76,6 +81,14 @@ class CollectionHandler extends Handler
             case 'video_project':
                 $relation = VideoProjectModel::find($model->relation_id);
                 $relation = VideoProjectHandler::handle($relation);
+                break;
+            case 'image':
+                $relation = ImageModel::find($model->relation_id);
+                $relation = ImageHandler::handle($relation);
+                break;
+            case 'video':
+                $relation = VideoModel::find($model->relation_id);
+                $relation = VideoHandler::handle($relation);
                 break;
             default:
                 $relation = null;

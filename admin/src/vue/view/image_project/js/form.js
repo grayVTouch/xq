@@ -155,34 +155,20 @@ export default {
             const maxPage = Math.ceil(this.imagesTableData.all.length / this.imagesTableData.size);
             const page = Math.max(1 , Math.min(maxPage , this.imagesTableData.page));
             this.toPageForImages(page);
-
-            // console.log('refresh page' , page , maxPage , this.imagesTableData.all.length , this.imagesTableData.size);
         } ,
 
-        refreshCategories () {
+        getCategories (callback) {
             if (!this.form.type) {
-                this.errorHandle('请选择类型');
                 return ;
             }
             if (this.form.module_id < 1) {
-                this.errorHandle('请选择模块');
-                return ;
-            }
-            this.getCategories(this.form.module_id , this.form.type);
-        } ,
-
-        getCategories (moduleId , type , callback) {
-            if (!type) {
-                return ;
-            }
-            if (moduleId < 1) {
                 return ;
             }
             this.pending('getCategories' , true);
             Api.category
                 .search({
-                    module_id: moduleId ,
-                    type: type === 'pro' ? 'image_project' : 'image' ,
+                    module_id: this.form.module_id ,
+                    type: this.form.type === 'pro' ? 'image_project' : 'image' ,
                 })
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {
@@ -215,11 +201,17 @@ export default {
             });
         } ,
 
-        getTopTags (moduleId) {
+        getTopTags () {
+            if (this.form.module_id <= 0) {
+                return ;
+            }
+            if (G.isEmptyString(this.form.type)) {
+                return ;
+            }
             Api.tag
                 .top({
-                    module_id: moduleId ,
-                    type: 'image_project' ,
+                    module_id: this.form.module_id ,
+                    type: this.form.type === 'pro' ? 'image_project' : 'image' ,
                     size: 10 ,
                 })
                 .then((res) => {
@@ -241,13 +233,14 @@ export default {
             this.form.image_subject_id = '';
             this.form.topTags = [];
             this.form.imageSubject = G.copy(imageSubject);
-            this.getTopTags(moduleId);
-            this.getCategories(moduleId , this.form.type);
+            this.getTopTags();
+            this.getCategories();
         } ,
 
         typeChangedEvent (type) {
             this.myValue.error.type = '';
-            this.getCategories(this.form.module_id , type);
+            this.getCategories();
+            this.getTopTags();
             if (type === 'misc') {
                 this.form.imageSubject = G.copy(imageSubject);
                 this.form.image_subject_id = '';
@@ -367,8 +360,8 @@ export default {
             if (this.mode === 'edit') {
                 this.findById(this.id)
                     .then((res) => {
-                        this.getTopTags(this.form.module_id);
-                        this.getCategories(this.form.module_id , this.form.type);
+                        this.getTopTags();
+                        this.getCategories();
 
                         this.ins.thumb.render(this.form.thumb);
                         this.imagesTableData.all = this.form.images;
@@ -577,6 +570,10 @@ export default {
                 this.message('error' , '请提供标签名称');
                 return ;
             }
+            if (this.form.user_id <= 0) {
+                this.errorHandle('请先选择用户');
+                return ;
+            }
             if (this.isExistTagByName(name)) {
                 this.message('error' , '标签已经存在');
                 return ;
@@ -587,7 +584,7 @@ export default {
                 .findOrCreateTag({
                     name ,
                     module_id: this.form.module_id ,
-                    type: 'image_project' ,
+                    type: form.type === 'pro' ? 'image_project' : 'image' ,
                     user_id: this.form.user_id ,
                 })
                 .then((res) => {

@@ -6,7 +6,7 @@ export default {
             data: {
                 user: {} ,
                 module: {} ,
-                subject: {} ,
+                image_subject: {} ,
                 images: [] ,
                 tags: [] ,
             } ,
@@ -95,91 +95,13 @@ export default {
         } ,
 
         showFavorites () {
-            this.dom.myFavorites.removeClass('hide');
-            this.dom.myFavorites.startTransition('show');
-            this.getFavorites();
+            this.$refs['my-collection-group'].show();
         } ,
 
-        hideFavorites () {
-            this.dom.myFavorites.endTransition('show' , () => {
-                this.dom.myFavorites.addClass('hide');
-            });
-        } ,
-
-        // 获取我的收藏夹
-        getFavorites () {
-            this.pending('getFavorites' , true);
-            Api.user
-                .collectionGroupWithJudge({
-                    relation_type: 'image_project' ,
-                    relation_id: this.id ,
-                })
-                .then((res) => {
-                    if (res.code !== TopContext.code.Success) {
-                        this.errorHandleAtHomeChildren(res.message , res.code , () => {
-                            this.getFavorites();
-                        });
-                        return ;
-                    }
-                    this.favorites = res.data;
-                })
-                .finally(() => {
-                    this.pending('getFavorites' , false);
-                });
-        } ,
-
-        // 创建并添加收藏夹
-        createAndJoinCollectionGroup () {
-            if (this.pending('createAndJoinCollectionGroup')) {
-                return ;
-            }
-            this.pending('createAndJoinCollectionGroup' , true);
-            Api.user
-                .createAndJoinCollectionGroup(null , this.collectionGroup)
-                .then((res) => {
-                    if (res.code !== TopContext.code.Success) {
-                        this.errorHandleAtHomeChildren(res.message , res.code , () => {
-                            this.createAndJoinCollectionGroup();
-                        });
-                        return ;
-                    }
-                    // 刷新列表
-                    this.getFavorites();
-                    this.getData();
-                })
-                .finally(() => {
-                    this.pending('createAndJoinCollectionGroup' , false);
-                });
-        } ,
-
-        collectionHandle (row) {
-            const pendingKey = 'collectionHandle_' + row.id;
-            if (this.pending(pendingKey)) {
-                return ;
-            }
-            this.pending(pendingKey , true);
-            const action = row.is_inside ? 0 : 1;
-            Api.user
-                .collectionHandle(null , {
-                    relation_type: 'image_project' ,
-                    relation_id: this.id ,
-                    action ,
-                    collection_group_id: row.id ,
-                })
-                .then((res) => {
-                    if (res.code !== TopContext.code.Success) {
-                        this.errorHandleAtHomeChildren(res.message , res.code , () => {
-                            this.collectionHandle(row);
-                        });
-                        return ;
-                    }
-                    row.is_inside = action;
-                    action ? row.count++ : row.count--;
-                    this.getData();
-                })
-                .finally(() => {
-                    this.pending(pendingKey , false);
-                });
+        collectionHandle (action) {
+            action = Number(action);
+            action === 1 ? this.data.collect_count++ : this.data.collect_count--;
+            this.data.is_collected = this.data.collect_count > 0;
         } ,
 
         getData () {
@@ -287,12 +209,23 @@ export default {
         } ,
 
         scrollWithMiscEvent () {
-            const scrollTop = this.dom.newest.getWindowOffsetVal('top');
-            // const scrollTop = this.dom.misc.getWindowOffsetVal('top');
-            if (scrollTop >= TopContext.val.fixedTop) {
-                this._val('fixed' , false);
+            const scrollH = document.documentElement.scrollHeight;
+            const clientH = document.documentElement.clientHeight;
+            const scrollTop = document.documentElement.scrollTop;
+            const fixedTopJudgeH = this.dom.newest.getDocOffsetVal('top');
+            const fixedBtmJudgeH = scrollH - TopContext.val.footerH;
+            const fixedTopScrollH = scrollTop + TopContext.val.fixedTop;
+            const fixedBtmScrollH = clientH + scrollTop;
+
+            if (fixedBtmScrollH >= fixedBtmJudgeH) {
+                this._val('fixedTop' , false);
+                this._val('fixedBtm' , true);
+            } else if (fixedTopScrollH >= fixedTopJudgeH) {
+                this._val('fixedTop' , true);
+                this._val('fixedBtm' , false);
             } else {
-                this._val('fixed' , true);
+                this._val('fixedTop' , false);
+                this._val('fixedBtm' , false);
             }
         } ,
 

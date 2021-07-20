@@ -17,8 +17,7 @@ const api = config.apiUrl;
 const resUrl = config.resUrl;
 
 window.TopContext = {
-    // 调试模式
-    debug: config.debug ,
+    ...config ,
     api: api + '/api/admin' ,
     resUrl ,
     // 图片上传 api
@@ -48,7 +47,6 @@ window.TopContext = {
     // 每页显示记录数
     size: 8 ,
     sizes: [8 , 20 , 50 , 100 , 200] ,
-    config ,
     // 系统信息
     os: {
         name: '兴趣部落' ,
@@ -62,6 +60,4 @@ window.TopContext = {
         asc: 'asc' ,
         desc: 'desc' ,
     } ,
-    // 登录时长
-    userCredentialsEffectDuration: 8 * 3600 ,
 };

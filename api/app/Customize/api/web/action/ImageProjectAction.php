@@ -45,16 +45,12 @@ class ImageProjectAction extends Action
         {
             // 附加：用户
             ImageProjectHandler::user($v);
-            // 附加：图片
-            ImageProjectHandler::images($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
             // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -85,16 +81,12 @@ class ImageProjectAction extends Action
         {
             // 附加：用户
             ImageProjectHandler::user($v);
-            // 附加：图片
-            ImageProjectHandler::images($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
             // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -128,16 +120,12 @@ class ImageProjectAction extends Action
         {
             // 附加：用户
             ImageProjectHandler::user($v);
-            // 附加：图片
-            ImageProjectHandler::images($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
             // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -173,8 +161,6 @@ class ImageProjectAction extends Action
         ImageProjectHandler::isCollected($image_project);
         // 附加：是否点赞
         ImageProjectHandler::isPraised($image_project);
-        // 附加：收藏数量
-        ImageProjectHandler::collectCount($image_project);
         return self::success('' , $image_project);
     }
 
@@ -196,16 +182,12 @@ class ImageProjectAction extends Action
         {
             // 附加：用户
             ImageProjectHandler::user($v);
-            // 附加：图片
-            ImageProjectHandler::images($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
             // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -252,16 +234,12 @@ class ImageProjectAction extends Action
         {
             // 附加：用户
             ImageProjectHandler::user($v);
-            // 附加：图片
-            ImageProjectHandler::images($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
             // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -291,8 +269,6 @@ class ImageProjectAction extends Action
         {
             // 附加：关联数据
             RelationTagHandler::relation($v);
-            // 附加：模块
-            RelationTagHandler::module($v);
         }
         return self::success('' , $res);
     }
@@ -338,14 +314,10 @@ class ImageProjectAction extends Action
             ImageProjectHandler::user($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-            // 附加：图片
-            ImageProjectHandler::images($v);
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
             // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -384,15 +356,6 @@ class ImageProjectAction extends Action
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
         $res = ImageSubjectModel::getWithPagerInImageProjectByModuleIdAndValueAndSize($module->id , $param['value'] , $size);
         $res = ImageSubjectHandler::handlePaginator($res);
-        foreach ($res->data as $v)
-        {
-            // 附加：是否收藏
-            ImageProjectHandler::isCollected($v);
-            // 附加：是否点赞
-            ImageProjectHandler::isPraised($v);
-            // 附加：收藏数量
-            ImageProjectHandler::collectCount($v);
-        }
         return self::success('' , $res);
     }
 
@@ -443,11 +406,14 @@ class ImageProjectAction extends Action
         $res = ImageProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
+            // 附加：用户
             ImageProjectHandler::user($v);
-            ImageProjectHandler::images($v);
+            // 附加：标签
             ImageProjectHandler::tags($v);
-            ImageProjectHandler::collectCount($v);
+            // 附加：是否点赞
             ImageProjectHandler::isPraised($v);
+            // 附加：图片数
+            ImageProjectHandler::imageCount($v);
         }
         return self::success('' , $res);
     }
@@ -463,32 +429,26 @@ class ImageProjectAction extends Action
     }
 
     // 推荐数据
-    public static function recommend(Base $context , int $image_project_id , array $param = [])
+    public static function recommend(Base $context , int $id , array $param = [])
     {
         $type_range = my_config_keys('business.type_for_image_project');
 
         $validator = Validator::make($param , [
             'type'      => ['required' , Rule::in($type_range)] ,
         ]);
-
         if ($validator->fails()) {
             return self::error($validator->errors()->first());
         }
-
-        $image_project = ImageProjectModel::find($image_project_id);
+        $image_project = ImageProjectModel::find($id);
         if (empty($image_project)) {
             return self::error('图片专题未找到' , null , 404);
         }
-
         $param['module_id']     = $image_project->module_id ?? '';
         $param['category_id']   = $image_project->category_id ?? '';
-        $param['image_project_id']    = $image_project->image_project_id ?? '';
-
+        $param['image_subject_id']    = $image_project->image_subject_id ?? '';
         $size = $param['size'] ? $param['size'] : my_config('app.limit');
-
         $res = ImageProjectModel::recommendExcludeSelfByFilterAndSize($image_project->id , $param , $size);
         $res = ImageProjectHandler::handleAll($res);
-
         return self::success('' , $res);
     }
 }

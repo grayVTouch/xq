@@ -10,24 +10,20 @@ const videoProjects = {
     type: 'pro' ,
 };
 
+const videos = {
+    size: 10 ,
+    data: [] ,
+};
+
+const images = {
+    size: 12 ,
+    data: [] ,
+};
+
 export default {
     name: "index" ,
     data () {
         return {
-            listData: [
-                'http://res.xq.test/g_resource/专题图片/萌奈子/萌奈子【1】【预览图】.webp' ,
-                'http://res.xq.test/upload/专题图片/日向雏田/日向雏田【1】.jpg' ,
-                'http://res.xq.test/g_resource/专题图片/萌奈子/萌奈子【3】【预览图】.webp' ,
-                'http://res.xq.test/g_resource/专题图片/姗姗 01/姗姗 01【44】【预览图】.webp' ,
-                'http://res.xq.test/g_resource/专题图片/萌奈子 2/萌奈子 2【1】【预览图】.webp' ,
-                'http://res.xq.test/upload/专题图片/测试专题/测试专题【1】.jpg' ,
-
-                'http://res.xq.test/g_resource/专题图片/萌奈子 2/萌奈子 2【2】【预览图】.webp' ,
-                'http://res.xq.test/upload/系统资源/20210612/20210612075948pcAevU.jpg' ,
-                'http://res.xq.test/upload/系统资源/20210614/20210614080130rUAKir.jpg' ,
-                'http://res.xq.test/g_resource/专题图片/萌奈子/萌奈子【37】【预览图】.webp' ,
-                'http://res.xq.test/g_resource/专题图片/萌奈子/萌奈子【43】【预览图】.webp' ,
-            ] ,
             dom: {} ,
             ins: {} ,
             val: {
@@ -38,6 +34,10 @@ export default {
             imageProjects: G.copy(imageProjects) ,
 
             videoProjects: G.copy(videoProjects) ,
+
+            images: G.copy(images) ,
+
+            videos: G.copy(videos) ,
 
             homeSlideshow: [] ,
 
@@ -84,6 +84,22 @@ export default {
                         size: 5 ,
                     } ,
                 } ,
+
+                image: {
+                    curTag: 'newest' ,
+                    tag: {
+                        data: [] ,
+                        size: 5 ,
+                    } ,
+                } ,
+
+                video: {
+                    curTag: 'newest' ,
+                    tag: {
+                        data: [] ,
+                        size: 5 ,
+                    } ,
+                } ,
             } ,
 
         };
@@ -102,18 +118,27 @@ export default {
         this.initDom();
         // 首页轮播图
         this.getHomeSlideshow();
-        // 最新图片专题
-        this.newestInImageProject();
         // 热点图片专题
         this.hotInImageProject()
             .then((data) => {
                 this.hotImages = data;
             });
 
-        this.newestInVideoProject();
-        // 图片标签
+        // 最新图片专题
+        this.newestInImageProject();
         this.hotTagsInImageProject();
+
+        // 视频专题
+        this.newestInVideoProject();
         this.hotTagsInVideoProject();
+
+        // 杂项图片
+        this.newestInImage();
+        this.hotTagsInImage();
+
+        // 杂项视频
+        this.newestInVideo();
+        this.hotTagsInVideo();
     } ,
 
     methods: {
@@ -144,6 +169,33 @@ export default {
                 })
                 .finally(() => {
                     this.pending('praiseImageProject' , false);
+                });
+        } ,
+
+        // 图片点赞
+        praiseImage (row) {
+            if (this.pending('praiseImage')) {
+                return ;
+            }
+            const self = this;
+            const praised = row.is_praised ? 0 : 1;
+            this.pending('praiseImage' , true);
+            Api.image
+                .praiseHandle(row.id , null , {
+                    action: praised ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandleAtHomeChildren(res.message , res.code , () => {
+                            this.praiseImage(row)
+                        });
+                        return ;
+                    }
+                    row.is_praised = praised;
+                    praised ? row.praise_count++ : row.praise_count--;
+                })
+                .finally(() => {
+                    this.pending('praiseImage' , false);
                 });
         } ,
 
@@ -195,29 +247,74 @@ export default {
         } ,
 
         // 图片专题-最新图片
-        newestInImageProject () {
-            this.pending('imageProject' , true);
-            this.group.imageProject.curTag = 'newest';
-            Api.imageProject
+        newestInImage () {
+            this.pending('image' , true);
+            this.group.image.curTag = 'newest';
+            Api.image
                 .newest({
-                    size: this.imageProjects.size ,
-                    type: this.imageProjects.type ,
+                    size: this.images.size ,
                 })
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {
                         this.errorHandleAtHomeChildren(res.message , res.code);
                         return ;
                     }
-                    this.newestImages = res.data;
-                    this.imageProjects.data = res.data;
-                    this.$nextTick(() => {
-                        this.initContentGroupContainerWidthByGroup('imageProject');
-                    });
+                    this.images.data = res.data;
+
                 })
                 .finally(() => {
-                    this.pending('imageProject' , false);
+                    this.pending('image' , false);
                 });
         } ,
+
+        newestInVideo () {
+            this.pending('video' , true);
+            this.group.video.curTag = 'newest';
+            Api.video
+                .newest({
+                    size: this.videos.size ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandleAtHomeChildren(res.message , res.code);
+                        return ;
+                    }
+                    this.videos.data = res.data;
+                })
+                .finally(() => {
+                    this.pending('video' , false);
+                });
+        } ,
+
+        // 图片专题-最新图片
+        newestInImageProject () {
+            return new Promise((resolve , reject) => {
+                this.pending('imageProject' , true);
+                this.group.imageProject.curTag = 'newest';
+                Api.imageProject
+                    .newest({
+                        size: this.imageProjects.size ,
+                        type: this.imageProjects.type ,
+                    })
+                    .then((res) => {
+                        if (res.code !== TopContext.code.Success) {
+                            this.errorHandleAtHomeChildren(res.message , res.code);
+                            reject();
+                            return ;
+                        }
+                        this.newestImages = res.data;
+                        this.imageProjects.data = res.data;
+                        this.$nextTick(() => {
+                            this.initContentGroupContainerWidthByGroup('imageProject');
+                        });
+                        resolve();
+                    })
+                    .finally(() => {
+                        this.pending('imageProject' , false);
+                    });
+            });
+        } ,
+
 
         // 图片-最热门的图片
         hotInImageProject () {
@@ -241,6 +338,25 @@ export default {
             });
         } ,
 
+        hotInImage () {
+            this.group.image.curTag = 'hot';
+            this.pending('image' , true);
+            Api.image
+                .hot({
+                    size: this.images.size ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandleAtHomeChildren(res.message , res.code);
+                        return ;
+                    }
+                    this.images.data = res.data;
+                })
+                .finally(() => {
+                    this.pending('image' , false);
+                });
+        } ,
+
         getHotImageProject () {
             this.group.imageProject.curTag = 'hot';
             this.hotInImageProject()
@@ -253,7 +369,7 @@ export default {
         } ,
 
         // 图片-按标签分类获取的图片
-        getImageByTagId (tagId) {
+        getImageProjectsByTagId (tagId) {
             this.pending('imageProject' , true);
             this.group.imageProject.curTag = 'tag_' + tagId;
             Api.imageProject
@@ -278,25 +394,67 @@ export default {
 
         // 图片-按标签分类获取的图片
         hotTagsInImageProject () {
-            this.pending('hotTagsInImageProject' , true);
-            Api.imageProject
+            return new Promise((resolve , reject) => {
+                this.pending('hotTagsInImageProject' , true);
+                Api.imageProject
+                    .hotTags({
+                        type: this.group.imageProject.tag.type ,
+                        size: this.group.imageProject.tag.size ,
+                    })
+                    .then((res) => {
+                        if (res.code !== TopContext.code.Success) {
+                            this.errorHandleAtHomeChildren(res.message , res.code);
+                            reject();
+                            return ;
+                        }
+                        this.group.imageProject.tag.data = res.data;
+                        resolve();
+                    })
+                    .finally(() => {
+                        this.pending('hotTagsInImageProject' , false);
+                    });
+            });
+        } ,
+
+        // 图片-按标签分类获取的图片
+        hotTagsInImage () {
+            this.pending('hotTagsInImage' , true);
+            Api.image
                 .hotTags({
-                    type: this.group.imageProject.tag.type ,
-                    size: this.group.imageProject.tag.size ,
+                    type: this.group.image.tag.type ,
+                    size: this.group.image.tag.size ,
                 })
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {
                         this.errorHandleAtHomeChildren(res.message , res.code);
                         return ;
                     }
-                    this.group.imageProject.tag.data = res.data;
+                    this.group.image.tag.data = res.data;
                 })
                 .finally(() => {
-                    this.pending('hotTagsInImageProject' , false);
+                    this.pending('hotTagsInImage' , false);
                 });
         } ,
 
-        // 图片专题-最新图片
+        hotTagsInVideo () {
+            this.pending('hotTagsInVideo' , true);
+            Api.video
+                .hotTags({
+                    type: this.group.video.tag.type ,
+                    size: this.group.video.tag.size ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandleAtHomeChildren(res.message , res.code);
+                        return ;
+                    }
+                    this.group.video.tag.data = res.data;
+                })
+                .finally(() => {
+                    this.pending('hotTagsInVideo' , false);
+                });
+        } ,
+
         newestInVideoProject () {
             this.pending('videoProject' , true);
             this.group.videoProject.curTag = 'newest';
@@ -340,6 +498,26 @@ export default {
                 });
         } ,
 
+        hotInVideo () {
+            this.group.video.curTag = 'hot';
+            this.pending('video' , true);
+            Api.video
+                .hot({
+                    size: this.videos.size ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandle(res.message);
+                        return ;
+                    }
+                    this.handleVideosData(res.data);
+                    this.videos.data = res.data;
+                })
+                .finally(() => {
+                    this.pending('video' , false);
+                })
+        } ,
+
         getVideoProjectsByTagId (tagId) {
             this.group.videoProject.curTag = 'tag_' + tagId;
             this.pending('videoProject' , true);
@@ -359,6 +537,45 @@ export default {
                         this.initContentGroupContainerWidthByGroup('videoProject');
                     });
                 });
+        } ,
+
+        getVideosByTagId (tagId) {
+            this.group.video.curTag = 'tag_' + tagId;
+            this.pending('video' , true);
+            Api.video
+                .getByTagId({
+                    size: this.videos.size ,
+                    tag_id: tagId ,
+                })
+                .then((res) => {
+                    this.pending('video' , false);
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandle(res.message);
+                        return ;
+                    }
+                    this.handleVideosData(res.data);
+                    this.videos.data = res.data;
+                });
+        } ,
+
+        getImagesByTagId (tagId) {
+            this.group.image.curTag = 'tag_' + tagId;
+            this.pending('image' , true);
+            Api.image
+                .getByTagId({
+                    size: this.images.size ,
+                    tag_id: tagId ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.message('error' , res.message);
+                        return ;
+                    }
+                    this.images.data = res.data;
+                })
+                .finally(() => {
+                    this.pending('image' , false);
+                })
         } ,
 
         // 标签-视频专题

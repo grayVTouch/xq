@@ -6,6 +6,9 @@ namespace App\Customize\api\web\handler;
 
 use App\Customize\api\web\model\CollectionModel;
 use App\Customize\api\web\model\PraiseModel;
+use App\Customize\api\web\model\RelationTagModel;
+use App\Customize\api\web\model\UserModel;
+use App\Customize\api\web\model\UserVideoPlayRecordModel;
 use App\Customize\api\web\model\UserVideoProjectPlayRecordModel;
 use App\Customize\api\web\model\VideoSubtitleModel;
 use App\Customize\api\web\model\VideoSrcModel;
@@ -16,6 +19,7 @@ use stdClass;
 use function api\web\user;
 use function core\convert_object;
 use function core\format_time;
+use function core\get_time_diff;
 
 class VideoHandler extends Handler
 {
@@ -43,6 +47,8 @@ class VideoHandler extends Handler
             (empty($model->name) ? sprintf("%'04s" , $model->index) : $model->name)
             :
             $model->name;
+
+        $model->format_time = get_time_diff($model->created_at);
 
         return $model;
     }
@@ -72,4 +78,41 @@ class VideoHandler extends Handler
             $model->is_praised = PraiseModel::findByModuleIdAndUserIdAndRelationTypeAndRelationId($model->module_id , user()->id , 'video' , $model->id) ? 1 : 0;
         }
     }
+
+    // 附加：标签
+    public static function tags($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $tags = RelationTagModel::getByRelationTypeAndRelationId('video' , $model->id);
+        $tags = RelationTagHandler::handleAll($tags);
+        $model->tags = $tags;
+    }
+
+    public static function user($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $user = UserModel::find($model->user_id);
+        $user = UserHandler::handle($user);
+
+        $model->user = $user;
+    }
+
+    // 附加：用户播放记录
+    public static function userPlayRecord($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $user = user();
+        $user_play_record = null;
+        if (!empty($user)) {
+            $user_play_record = UserVideoPlayRecordModel::findByModuleIdAndUserIdAndVideoId($model->module_id , $user->id , $model->id);
+        }
+        $model->user_play_record = $user_play_record;
+    }
+
 }

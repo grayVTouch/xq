@@ -12,6 +12,7 @@ const form = {
     status: 1 ,
     merge_video_subtitle: 0 ,
     index: 1 ,
+    tags: [] ,
 };
 
 // 所属用户
@@ -151,6 +152,8 @@ export default {
             videoSelection: [] ,
 
             videoSubtitleSelection: [] ,
+
+            topTags: [] ,
         };
     } ,
     props: {
@@ -167,7 +170,6 @@ export default {
     mounted () {
         this.initDom();
         this.initIns();
-
     } ,
 
     methods: {
@@ -185,7 +187,7 @@ export default {
             };
         } ,
 
-        getCategories (moduleId , callback) {
+        getCategories (callback) {
             this.pending('getCategories' , true);
             Api.category
                 .search({
@@ -229,12 +231,14 @@ export default {
         } ,
 
 
-        moduleChangedEvent (moduleId) {
+        moduleChangedEvent () {
             this.error({module_id: ''} , false);
             this.form.category_id = '';
             this.form.video_project_id = '';
             this.videoProject = G.copy(videoProject);
-            this.getCategories(moduleId);
+            this.getCategories();
+            // 获取标签
+            this.getTopTags();
         } ,
 
         typeChangedEvent (type) {
@@ -338,7 +342,8 @@ export default {
                         this.videos.data            = this.form.videos;
                         this.videoSubtitles.data    = this.form.video_subtitles;
 
-                        this.getCategories(this.form.module_id);
+                        this.getCategories();
+                        this.getTopTags();
                     });
             }
         } ,
@@ -518,7 +523,7 @@ export default {
 
         addVideoSubtitleEvent () {
             if (this.form.merge_video_subtitle) {
-                if (this.uVideoSubtitles.length > 1) {
+                if (this.uVideoSubtitles.length >= 1) {
                     this.errorHandle('合并字幕只能合成单个字幕');
                     return ;
                 }
@@ -601,6 +606,10 @@ export default {
                     src: v.src ,
                 };
             });
+            form.tags = this.tags.map((v) => {
+                return v.id;
+            });
+            form.tags = G.jsonEncode(form.tags);
             const filterRes = this.filter(form);
             if (!filterRes.status) {
                 this.error(filterRes.error , true);
@@ -664,6 +673,147 @@ export default {
 
         showVideoProjectSelector () {
             this.$refs['video-project-selector'].show();
+        } ,
+
+
+        isExistTagByTagId (tagId) {
+            for (let i = 0; i < this.form.tags.length; ++i)
+            {
+                const cur = this.form.tags[i];
+                if (tagId === cur.tag_id) {
+                    return true;
+                }
+            }
+            for (let i = 0; i < this.tags.length; ++i)
+            {
+                const cur = this.tags[i];
+                if (tagId === cur.id) {
+                    return true;
+                }
+            }
+            return false;
+        } ,
+
+        isExistTagByName (name) {
+            const tags = this.form.tags.concat(this.tags);
+            for (let i = 0; i < tags.length; ++i)
+            {
+                const cur = tags[i];
+                if (name === cur.name) {
+                    return true;
+                }
+            }
+            return false;
+        } ,
+
+        appendTag (v) {
+            if (this.isExistTagByTagId(v.id)) {
+                this.message('error' , '标签已经存在');
+                return ;
+            }
+            this.tags.push(v);
+        } ,
+
+        destroyTag (tagId , direct = true) {
+            if (direct) {
+                for (let i = 0; i < this.tags.length; ++i)
+                {
+                    const tag = this.tags[i];
+                    if (tag.id === tagId) {
+                        this.tags.splice(i , 1);
+                        i--;
+                    }
+                }
+                return ;
+            }
+            const pendingKey = 'destroy_tag_' + tagId;
+            // 编辑模式
+            this.pending(pendingKey , true);
+            Api.video
+                .destroyTag({
+                    video_id: this.form.id ,
+                    tag_id: tagId ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.error({tags: res.data});
+                        return ;
+                    }
+                    for (let i = 0; i < this.form.tags.length; ++i)
+                    {
+                        const tag = this.form.tags[i];
+                        if (tag.tag_id === tagId) {
+                            this.form.tags.splice(i , 1);
+                            i--;
+                        }
+                    }
+                })
+                .finally(() => {
+                    this.pending(pendingKey , false);
+                });
+        } ,
+
+        createOrAppendTag () {
+            this.myValue.error.tags = '';
+            const name = this.dom.tagInput.text().replace(/\s/g , '');
+            this.dom.tagInput.html(name);
+            if (!G.isValid(name)) {
+                this.message('error' , '请提供标签名称');
+                return ;
+            }
+            if (this.form.user_id <= 0) {
+                this.errorHandle('请先选择用户');
+                return ;
+            }
+            if (this.isExistTagByName(name)) {
+                this.message('error' , '标签已经存在');
+                return ;
+            }
+            this.dom.tagInput.origin('blur');
+            this.dom.tagInputOuter.addClass('disabled');
+            Api.tag
+                .findOrCreateTag({
+                    name ,
+                    module_id: this.form.module_id ,
+                    type: 'video' ,
+                    user_id: this.form.user_id ,
+                })
+                .then((res) => {
+                    this.dom.tagInputOuter.removeClass('disabled');
+                    if (res.code !== TopContext.code.Success) {
+                        this.error({tags: res.message} , false);
+                        return ;
+                    }
+                    this.tags.push(res.data);
+                    this.dom.tagInput.html('');
+                    this.dom.tagInput.origin('focus');
+                })
+                .finally(() => {
+
+                });
+        } ,
+
+        getTopTags () {
+            if (this.form.module_id <= 0) {
+                return ;
+            }
+            this.pending('getTopTags' , true);
+            Api.tag
+                .top({
+                    module_id: this.form.module_id ,
+                    type: 'video' ,
+                    size: 10 ,
+                })
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        this.errorHandle(res.message);
+                        return ;
+                    }
+                    this.topTags = res.data;
+                })
+                .finally(() => {
+                    this.pending('getTopTags' , false);
+                });
         } ,
     } ,
 

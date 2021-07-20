@@ -19,4 +19,9 @@ class ImageModel extends Model
     {
         return self::where('image_project_id' , $image_project_id)->get();
     }
+
+    public static function updateByImageProjectId(int $image_project_id , array $data): int
+    {
+        return self::where('image_project_id' , $image_project_id)->update($data);
+    }
 }

@@ -66,16 +66,18 @@ return [
         'loose' ,
     ] ,
 
-    'relation_type_for_history' => [
+    'content_type' => [
         'image_project' => '图片专题' ,
         'video_project' => '视频专题' ,
-        'article_subject' => '文章专题' ,
+        'image' => '独立图片' ,
+        'video' => '独立视频' ,
     ] ,
 
-    'relation_type_for_collection' => [
+    'content_type' => [
         'image_project' => '图片专题' ,
         'video_project' => '视频专题' ,
-        'article_subject' => '文章专题' ,
+        'image' => '独立图片' ,
+        'video' => '独立视频' ,
     ] ,
 
     'relation_type_for_praise' => [
@@ -114,5 +116,12 @@ return [
         'fix' ,
         'fix-width' ,
         'fix-height' ,
+    ] ,
+
+    'content_type' => [
+        'image_project' => '图片专题' ,
+        'video_project' => '视频专题' ,
+        'image' => '图片' ,
+        'video' => '视频' ,
     ] ,
 ];

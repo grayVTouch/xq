@@ -1,15 +1,24 @@
 <template>
-    <div class="run-page">
-        <div class="info">共 {{ total }} 条记录</div>
-        <div class="links">
-            <a class="link home" v-ripple :class="{'run-cursor-not-allow': page === 1}" @click="toPage(1)">首页</a>
-            <a class="link" :class="{'run-cursor-not-allow': page === 1}" v-ripple @click="prev">上一页</a>
-            <a class="link" v-ripple v-for="v in pages" :class="{cur: pageCopy === v , 'run-cursor-not-allow': page === v}" :key="v" @click="toPage(v)">{{ v }}</a>
-            <a class="link" :class="{'run-cursor-not-allow': page === maxPage}" v-ripple @click="next">下一页</a>
-            <a class="link end" :class="{'run-cursor-not-allow': page === maxPage}" v-ripple @click="toPage(maxPage)">尾页</a>
-        </div>
-        <div class="go-to">共 {{ maxPage }} 页 跳至 <input type="text" class="step" ref="input" @keyup.enter="inputEvent"> 页
-            <!--            <button type="button" class="confirm" @click="toPage($refs.input.value)">确定</button>-->
+    <div class="run-page" v-if="total > 0">
+        <div class="inner">
+            <div class="info">共 {{ total }} 条记录</div>
+            <div class="sizes" v-show="showSizes">
+                <span class="m-r-5">每页</span>
+                <select class="selector m-r-5" v-model="sizeCopy" @change="sizeChangeEvent">
+                    <option v-for="v in sizes" :key="v" :value="v">{{ v }}</option>
+                </select>
+                <span>条</span>
+            </div>
+            <div class="links">
+                <a class="link home" v-ripple :class="{'run-cursor-not-allow': page === 1}" @click="toPage(1)">首页</a>
+                <a class="link" :class="{'run-cursor-not-allow': page === 1}" v-ripple @click="toPage(pageCopy - 1)">上一页</a>
+                <a class="link" v-ripple v-for="v in pages" :class="{cur: pageCopy === v , 'run-cursor-not-allow': page === v}" :key="v" @click="toPage(v)">{{ v }}</a>
+                <a class="link" :class="{'run-cursor-not-allow': page === maxPage}" v-ripple @click="toPage(pageCopy + 1)">下一页</a>
+                <a class="link end" :class="{'run-cursor-not-allow': page === maxPage}" v-ripple @click="toPage(maxPage)">尾页</a>
+            </div>
+            <div class="go-to">共 {{ maxPage }} 页 跳至 <input type="text" class="step" ref="input" @keyup.enter="inputEvent"> 页
+                <!--            <button type="button" class="confirm" @click="toPage($refs.input.value)">确定</button>-->
+            </div>
         </div>
     </div>
 </template>
@@ -19,11 +28,6 @@
         name: "page" ,
 
         props: {
-            size: {
-                type: Number ,
-                default: 20 ,
-            } ,
-
             total: {
                 type: Number ,
                 default: 0 ,
@@ -34,8 +38,34 @@
                 default: 1 ,
             } ,
 
-            'on-change': {
+            sizes: {
+                type: Array ,
+                default () {
+                    return [
+                        20 ,
+                        50 ,
+                        100 ,
+                        200 ,
+                    ];
+                } ,
+            } ,
+
+            size: {
+                type: Number ,
+                default: 20 ,
+            } ,
+
+            onPageChange: {
                 type: Function ,
+            } ,
+
+            onSizeChange: {
+                type: Function ,
+            } ,
+
+            showSizes: {
+                type: Boolean ,
+                default: true ,
             } ,
         } ,
 
@@ -49,6 +79,7 @@
                 before: 3 ,
                 after: 4 ,
                 pageCopy: 1 ,
+                sizeCopy: 1 ,
                 showPage: 8 ,
             };
         } ,
@@ -60,7 +91,7 @@
         methods: {
             toPage (page) {
                 if (!G.isValid(page)) {
-                    this.message('请提供有效的页数');
+                    this.message('error' , '请提供有效的页数');
                     return ;
                 }
                 page = parseInt(page);
@@ -69,11 +100,11 @@
                     return ;
                 }
                 this.pageCopy = page;
-                this.$emit('on-change' , this.pageCopy);
+                this.$emit('on-page-change' , this.pageCopy , this.sizeCopy);
             } ,
 
             initPage () {
-                this.maxPage = Math.ceil(this.total / this.size);
+                this.maxPage = Math.ceil(this.total / this.sizeCopy);
                 // 当前页数
                 if (this.page < this.showPage) {
                     this.startPage = 1;
@@ -100,23 +131,23 @@
                 let value = tar.val();
                 const numberReg = /^\d+$/;
                 if (!numberReg.test(value)) {
-                    this.message('请提供数字');
+                    this.message('error' , '请提供数字');
                     return ;
                 }
                 value = parseInt(value);
                 if (value < 1) {
-                    this.message('请提供有效数字');
+                    this.message('error' , '请提供有效数字');
                     return ;
                 }
                 this.toPage(value);
+                tar.origin('focus');
+                tar.origin('select');
             } ,
 
-            next () {
-                this.toPage(this.pageCopy + 1);
-            } ,
-
-            prev () {
-                this.toPage(this.pageCopy - 1);
+            sizeChangeEvent () {
+                this.pageCopy = 1;
+                this.initPage();
+                this.$emit('on-size-change' , this.sizeCopy , this.pageCopy)
             } ,
         } ,
 
@@ -125,6 +156,14 @@
                 immediate: true ,
                 handler (newVal , oldVal) {
                     this.pageCopy = newVal;
+                    this.initPage();
+                } ,
+            } ,
+
+            size: {
+                immediate: true ,
+                handler (newVal , oldVal) {
+                    this.sizeCopy = newVal;
                     this.initPage();
                 } ,
             } ,

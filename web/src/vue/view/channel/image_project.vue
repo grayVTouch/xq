@@ -2,10 +2,10 @@
     <div class="channel-item-view">
 
         <div class="list">
-            <a class="item" v-for="v in data" target="_blank" :href="genUrl(`/collection_group/${v.id}/image`)">
+            <a class="item" v-for="v in data" target="_blank" :href="genUrl(`/collection_group/${v.id}/image_project`)">
                 <div class="thumb">
                     <div class="image-mask">
-                        <img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image judge-img-size" v-judge-img-size>
+                        <img :data-src="v.thumb ? v.thumb : TopContext.res.notFound" class="image judge-img-size" v-judge-img-size>
                     </div>
                     <div class="info">
                         <span class="m-r-5">{{ v.count_for_image_project }}</span>
@@ -20,7 +20,9 @@
                 <my-loading></my-loading>
             </div>
 
-            <div class="empty" v-if="!val.pending.getData && data.length < 1">暂无相关数据</div>
+            <div class="empty" v-if="!val.pending.getData && data.length < 1">
+                <my-icon icon="empty" size="40"></my-icon>
+            </div>
 
         </div>
 
@@ -29,7 +31,7 @@
 
 <script>
     export default {
-        name: "my-image" ,
+        name: "my-image-project" ,
 
         data () {
             return {
@@ -75,4 +77,4 @@
 </script>
 
 <style scoped src="./css/index.css"></style>
-<style scoped src="./css/image.css"></style>
+<style scoped src="./css/image_project.css"></style>

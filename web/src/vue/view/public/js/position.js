@@ -1,6 +1,8 @@
 
 let id              = 1;
 const indexId         = id++;
+const imageId         = id++;
+const videoId         = id++;
 const videoProjectId  = id++;
 const imageProjectId  = id++;
 const userId          = id++;
@@ -13,9 +15,65 @@ export default [
         name: '首页' ,
         route: '/index' ,
         hidden: false ,
-        isBuiltIn: true ,
+
         parentId: 0 ,
         children: [] ,
+    } ,
+    {
+        id: imageId,
+        key: 'image',
+        name: '图片',
+        route: '/image/search',
+        hidden: false,
+        parentId: 0,
+        children: [
+            {
+                id: id++ ,
+                key: 'image_detail' ,
+                name: '图片详情' ,
+                route: '/image/:id/show' ,
+                hidden: true ,
+                parentId: imageId ,
+                children: [] ,
+            } ,
+            {
+                id: id++ ,
+                key: 'image_search' ,
+                name: '搜索' ,
+                route: '/image/search' ,
+                hidden: true ,
+                parentId: imageId ,
+                children: [] ,
+            } ,
+        ]
+    } ,
+    {
+        id: videoId,
+        key: 'image',
+        name: '视频',
+        route: '/video/search',
+        hidden: false,
+        parentId: 0,
+        children: [
+            {
+                id: id++ ,
+                key: 'video_detail' ,
+                name: '视频详情' ,
+                route: '/video/:id/show' ,
+                hidden: true ,
+                parentId: videoId ,
+                children: [] ,
+            } ,
+            {
+                id: id++ ,
+                key: 'video_search' ,
+                name: '搜索' ,
+                route: '/video/search' ,
+                hidden: true ,
+                parentId: videoId ,
+                children: [] ,
+            } ,
+        ]
     } ,
     {
         id: videoProjectId ,
@@ -23,7 +81,7 @@ export default [
         name: '视频专题' ,
         route: '/video_project' ,
         hidden: false ,
-        isBuiltIn: true ,
+
         parentId: 0 ,
         children: [
             {
@@ -32,7 +90,6 @@ export default [
                 name: '视频专题详情' ,
                 route: '/video_project/:id/show' ,
                 hidden: true ,
-                isBuiltIn: true ,
                 parentId: videoProjectId ,
                 children: [] ,
             } ,
@@ -42,7 +99,7 @@ export default [
                 name: '搜索' ,
                 route: '/video_project/search' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: videoProjectId ,
                 children: [] ,
             } ,
@@ -54,7 +111,7 @@ export default [
         name: '图片专题' ,
         route: '/image_project' ,
         hidden: false ,
-        isBuiltIn: true ,
+
         parentId: 0 ,
         children: [
             {
@@ -63,7 +120,7 @@ export default [
                 name: '图片专题详情' ,
                 route: '/image_project/:id/show' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: imageProjectId ,
                 children: [] ,
             } ,
@@ -73,7 +130,7 @@ export default [
                 name: '搜索' ,
                 route: '/image_project/search' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: imageProjectId ,
                 children: [] ,
             } ,
@@ -85,7 +142,7 @@ export default [
         name: '用户中心' ,
         route: '/user' ,
         hidden: false ,
-        isBuiltIn: true ,
+
         parentId: 0 ,
         children: [
             {
@@ -94,7 +151,7 @@ export default [
                 name: '用户信息' ,
                 route: '/user/info' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: userId ,
                 children: [] ,
             } ,
@@ -104,7 +161,7 @@ export default [
                 name: '修改密码' ,
                 route: '/user/password' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: userId ,
                 children: [] ,
             } ,
@@ -114,7 +171,7 @@ export default [
                 name: '历史记录' ,
                 route: '/user/history' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: userId ,
                 children: [] ,
             } ,
@@ -124,7 +181,15 @@ export default [
                 name: '我的收藏' ,
                 route: '/user/favorites' ,
                 hidden: true ,
-                isBuiltIn: true ,
+                parentId: userId ,
+                children: [] ,
+            } ,
+            {
+                id: id++ ,
+                key: 'my_praise' ,
+                name: '我的点赞' ,
+                route: '/user/praise' ,
+                hidden: true ,
                 parentId: userId ,
                 children: [] ,
             } ,
@@ -136,18 +201,26 @@ export default [
         name: '频道' ,
         route: '/channel' ,
         hidden: true ,
-        isBuiltIn: true ,
         parentId: 0 ,
         children: [
             {
                 id: id++ ,
                 key: 'channel_image_project' ,
                 name: '图片专题' ,
-                route: '/channel/:id/image' ,
+                route: '/channel/:id/image_project' ,
                 hidden: true ,
-                isBuiltIn: true ,
                 parentId: channelId ,
-                children: [] ,
+                children: [
+                    {
+                        id: id++ ,
+                        key: 'collection_group_image_project' ,
+                        name: '图片专题' ,
+                        route: '/collection_group/:id/image_project' ,
+                        hidden: true ,
+                        parentId: id - 2 ,
+                        children: [] ,
+                    } ,
+                ] ,
             } ,
             {
                 id: id++ ,
@@ -155,7 +228,6 @@ export default [
                 name: '关注我的人' ,
                 route: '/channel/:id/focus_me_user' ,
                 hidden: true ,
-                isBuiltIn: true ,
                 parentId: channelId ,
                 children: [] ,
             } ,
@@ -165,7 +237,7 @@ export default [
                 name: '我关注的人' ,
                 route: '/channel/:id/my_focus_user' ,
                 hidden: true ,
-                isBuiltIn: true ,
+
                 parentId: channelId ,
                 children: [] ,
             } ,

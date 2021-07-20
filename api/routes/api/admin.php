@@ -277,6 +277,7 @@ Route::prefix('admin')
             Route::delete('destroy_all_video'   , [Video::class , 'destroyAll']);
             Route::delete('destroy_videos'      , [Video::class , 'destroyVideos']);
             Route::post('retry_process_video'   , [Video::class , 'retry']);
+            Route::delete('destroy_video_tag'   , [Video::class , 'destroyTag']);
 
             /**
              * ******************

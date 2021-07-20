@@ -16,6 +16,7 @@ class TagModel extends Model
     {
         $filter['id']           = $filter['id'] ?? '';
         $filter['name']         = $filter['name'] ?? '';
+        $filter['type']         = $filter['type'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
 
         $order['field'] = $order['field'] ?? 'id';
@@ -33,6 +34,10 @@ class TagModel extends Model
 
         if ($filter['name'] !== '') {
             $where[] = ['name' , 'like' , "%{$filter['name']}%"];
+        }
+
+        if ($filter['type'] !== '') {
+            $where[] = ['type' , '=' , $filter['type']];
         }
 
         return self::where($where)

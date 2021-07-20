@@ -21,6 +21,7 @@ use function api\web\get_config_key_mapping_value;
 use function api\web\get_value;
 use function api\web\user;
 use function core\convert_object;
+use function core\get_time_diff;
 
 class ImageProjectHandler extends Handler
 {
@@ -34,15 +35,14 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return null;
         }
-        $res = convert_object($model);
+        $model = convert_object($model);
 
-        $res->__type__      = get_config_key_mapping_value('business.type_for_image_project', $res->type);
-        $res->__status__    = get_config_key_mapping_value('business.status_for_image_project' , $res->status);
+        $model->__type__      = get_config_key_mapping_value('business.type_for_image_project', $model->type);
+        $model->__status__    = get_config_key_mapping_value('business.status_for_image_project' , $model->status);
 
+        $model->format_time = get_time_diff($model->created_at);
 
-        $res->format_time = date('Y-m-d H:i' , strtotime($res->created_at));
-
-        return $res;
+        return $model;
     }
 
     // 附加：收藏数量
@@ -156,5 +156,12 @@ class ImageProjectHandler extends Handler
         $model->tags = $tags;
     }
 
+    public static function imageCount($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $model->image_count = ImageModel::countByImageProjectId($model->id);
+    }
 
 }

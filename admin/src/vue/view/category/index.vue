@@ -37,7 +37,6 @@
                     ref="table"
                     class="w-r-100"
                     border
-                    :height="TopContext.table.height + 150"
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

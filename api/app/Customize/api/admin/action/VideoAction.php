@@ -7,6 +7,8 @@ use App\Customize\api\admin\handler\VideoHandler;
 use App\Customize\api\admin\job\VideoHandleJob;
 use App\Customize\api\admin\job\VideoResourceHandleJob;
 use App\Customize\api\admin\model\CategoryModel;
+use App\Customize\api\admin\model\RelationTagModel;
+use App\Customize\api\admin\model\TagModel;
 use App\Customize\api\admin\model\VideoModel;
 use App\Customize\api\admin\model\ModuleModel;
 use App\Customize\api\admin\model\VideoSrcModel;
@@ -141,6 +143,7 @@ class VideoAction extends Action
             return self::error('请提供失败原因');
         }
         $datetime               = current_datetime();
+        $tags                   = empty($param['tags']) ? [] : json_decode($param['tags'] , true);
         $param['weight']        = $param['weight'] === '' ? $video->weight : $param['weight'];
         $param['view_count']    = $param['view_count'] === '' ? 0 : $param['view_count'];
         $param['play_count']    = $param['play_count'] === '' ? 0 : $param['play_count'];
@@ -204,6 +207,37 @@ class VideoAction extends Action
             if ($video->src !== $param['src'] ) {
                 // 视频源发生变动
                 ResourceRepository::delete($video->src);
+            }
+            $my_tags = RelationTagModel::getByRelationTypeAndRelationId('image' , $video->id);
+            foreach ($tags as $v)
+            {
+                foreach ($my_tags as $v1)
+                {
+                    if ($v1->tag_id === $v) {
+                        DB::rollBack();
+                        return self::error('', [
+                            'tags' => '存在重复标签: name: ' . $v1->name . '; id: ' . $v1->tag_id,
+                        ]);
+                    }
+                }
+                $tag = TagModel::find($v);
+                if (empty($tag)) {
+                    DB::rollBack();
+                    return self::error('存在不存在的标签', '', 404);
+                }
+                RelationTagModel::insertGetId([
+                    'relation_type' => 'video',
+                    'relation_id' => $video->id,
+                    'tag_id' => $tag->id,
+                    'name' => $tag->name,
+                    'module_id' => $tag->module_id,
+                    'updated_at' => $datetime,
+                    'created_at' => $datetime,
+                ]);
+                // 针对该标签的计数要增加
+                TagModel::updateById($tag->id, [
+                    'count' => ++$tag->count
+                ]);
             }
             DB::commit();
             if ($is_video_need_handle) {
@@ -283,6 +317,7 @@ class VideoAction extends Action
             return self::error('请提供失败原因');
         }
         $datetime               = date('Y-m-d H:i:s');
+        $tags                   = empty($param['tags']) ? [] : json_decode($param['tags'] , true);
         $param['weight']        = $param['weight'] === '' ? 0 : $param['weight'];
         $param['view_count']    = $param['view_count'] === '' ? 0 : $param['view_count'];
         $param['play_count']    = $param['play_count'] === '' ? 0 : $param['play_count'];
@@ -295,7 +330,7 @@ class VideoAction extends Action
         $param['file_process_status']   = 0;
         try {
             DB::beginTransaction();
-            $id = VideoModel::insertGetId(array_unit($param , [
+            $video_id = VideoModel::insertGetId(array_unit($param , [
                 'name' ,
                 'user_id' ,
                 'module_id' ,
@@ -325,7 +360,7 @@ class VideoAction extends Action
             foreach ($video_subtitles as $v)
             {
                 VideoSubtitleModel::insertGetId([
-                    'video_id'      => $id ,
+                    'video_id'      => $video_id ,
                     'name'          => $v['name'] ,
                     'src'           => $v['src'] ,
                     'updated_at'   => $datetime ,
@@ -333,11 +368,42 @@ class VideoAction extends Action
                 ]);
                 ResourceRepository::used($v['src']);
             }
+            $my_tags = RelationTagModel::getByRelationTypeAndRelationId('image' , $video_id);
+            foreach ($tags as $v)
+            {
+                foreach ($my_tags as $v1)
+                {
+                    if ($v1->tag_id === $v) {
+                        DB::rollBack();
+                        return self::error('', [
+                            'tags' => '存在重复标签: name: ' . $v1->name . '; id: ' . $v1->tag_id,
+                        ]);
+                    }
+                }
+                $tag = TagModel::find($v);
+                if (empty($tag)) {
+                    DB::rollBack();
+                    return self::error('存在不存在的标签', '', 404);
+                }
+                RelationTagModel::insertGetId([
+                    'relation_type' => 'video',
+                    'relation_id' => $video_id ,
+                    'tag_id' => $tag->id,
+                    'name' => $tag->name,
+                    'module_id' => $tag->module_id,
+                    'updated_at' => $datetime,
+                    'created_at' => $datetime,
+                ]);
+                // 针对该标签的计数要增加
+                TagModel::updateById($tag->id, [
+                    'count' => ++$tag->count
+                ]);
+            }
             DB::commit();
             VideoHandleJob::withChain([
-                new VideoResourceHandleJob($id) ,
-            ])->dispatch($id);
-            return self::success('操作成功' , $id);
+                new VideoResourceHandleJob($video_id) ,
+            ])->dispatch($video_id);
+            return self::success('操作成功' , $video_id);
         } catch(Exception $e) {
             throw $e;
         }
@@ -363,6 +429,8 @@ class VideoAction extends Action
         VideoHandler::videos($res);
         // 附加：视频字幕
         VideoHandler::videoSubtitles($res);
+        // 附加：标签
+        VideoHandler::tags($res);
 
         return self::success('' , $res);
     }
@@ -428,8 +496,8 @@ class VideoAction extends Action
                 return self::error('包含无效记录' , '' , 404);
             }
             $video = VideoHandler::handle($video);
-            if ($video->video_process_status !== -1) {
-                return self::error('包含无效处理状态视频' , '' , 403);
+            if ($video->video_process_status == 2 && $video->file_process_status == 2) {
+                return self::error('包含无效处理状态视频【视频处理状态：已完成】【文件处理状态：已完成】' , '' , 403);
             }
             VideoHandler::videoProject($video);
             if ($video->type === 'pro' && empty($video->video_project)) {
@@ -449,4 +517,21 @@ class VideoAction extends Action
         }
         return self::success('操作成功');
     }
+
+    // 删除单个标签
+    public static function destroyTag(Base $context , array $param = []): array
+    {
+        $validator = Validator::make($param , [
+            'video_id'  => 'required|integer' ,
+            'tag_id'    => 'required|integer' ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first() , $validator->errors());
+        }
+        $count = RelationTagModel::delByRelationTypeAndRelationIdAndTagId('video' , $param['video_id'] , $param['tag_id']);
+        return self::success('操作成功' , $count);
+    }
+
+
+
 }

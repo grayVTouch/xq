@@ -8,6 +8,12 @@
                     <my-loading v-if="myValue.pending.getModules"></my-loading>
                 </my-search-form-item>
 
+                <my-search-form-item name="分类">
+                    <my-deep-select :data="categories" v-model="search.category_id" :has="false" empty=""></my-deep-select>
+                    <my-loading v-if="myValue.pending.getCategories"></my-loading>
+                    <span class="msg">请选择模块后操作</span>
+                </my-search-form-item>
+
                 <my-search-form-item name="ID">
                     <input type="text" class="form-text" v-model="search.id" />
                 </my-search-form-item>
@@ -67,7 +73,7 @@
                     ref="table"
                     class="w-r-100"
                     border
-                    :height="TopContext.table.height"
+
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

@@ -287,10 +287,14 @@
     width: inherit;
 }
 
-.view > .content .misc > .inner.fixed {
-    /*position: fixed;*/
-    /*top: 62px;*/
-    /*top: var(--fixed-top);*/
+.view > .content .misc > .inner.fixed-top {
+    position: fixed;
+    top: var(--fixed-top);
+}
+
+.view > .content .misc > .inner.fixed-btm {
+    position: fixed;
+    bottom: var(--fixed-btm);
 }
 
 .misc > .inner .user {
@@ -307,11 +311,6 @@
     box-sizing: border-box;
     z-index: 1;
 
-}
-
-.misc > .inner .user > .inner.fixed {
-    position: fixed;
-    top: var(--fixed-top);
 }
 
 .misc > .inner .user > .inner > div {
@@ -542,12 +541,6 @@
     padding: 20px 0;
     width: inherit;
     box-sizing: border-box;
-}
-
-.newest > .inner.fixed {
-    position: fixed;
-    /*top: var(--fixed-top);*/
-    top: 358px;
 }
 
 .newest > .inner > .title {

@@ -76,23 +76,6 @@ class VideoProject extends Base
         return success($res['message'] , $res['data']);
     }
 
-    // 标签对应内容
-    public function getWithPagerByTagIds()
-    {
-        $param = $this->request->query();
-
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['tag_ids']   = $param['tag_ids'] ?? '';
-        $param['mode']      = $param['mode'] ?? '';
-        $param['size']     = $param['size'] ?? '';
-
-        $res = VideoProjectAction::getWithPagerByTagIds($this , $param);
-        if ($res['code'] !== 0) {
-            return error($res['message'] , $res['data'] , $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
-
     // 最火图片标签
     public function hotTags()
     {
@@ -134,7 +117,6 @@ class VideoProject extends Base
         return success($res['message'] , $res['data']);
     }
 
-    // 图片专区分类
     public function category()
     {
         $param = $this->request->query();
@@ -145,20 +127,6 @@ class VideoProject extends Base
         }
         return success($res['message'] , $res['data']);
     }
-
-    // 图片专区分类
-    public function subject()
-    {
-        $param = $this->request->query();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['value'] = $param['value'] ?? '';
-        $res = VideoProjectAction::subject($this , $param);
-        if ($res['code'] !== 0) {
-            return error($res['message'] , $res['data'], $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
-
 
     public function index()
     {

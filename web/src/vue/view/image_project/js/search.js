@@ -11,6 +11,7 @@ const tags = {
     data: [] ,
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 1 ,
     mode: 'strict' ,
     value: '' ,
@@ -23,6 +24,7 @@ const imageSubjects = {
     data: [] ,
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 0 ,
     value: '' ,
 };
@@ -31,6 +33,7 @@ const images = {
     data: [] ,
     value: '' ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     total: 0 ,
     page: 1 ,
     order: '' ,
@@ -233,12 +236,26 @@ export default {
             this.getWithPager();
         } ,
 
-        toPageInImageProject (page) {
+        pageEventInImageProject (page , size) {
+            this.images.page = page;
+            this.images.size = size;
+            this.getWithPager();
+        } ,
+
+        sizeEventInImageProject (size , page) {
+            this.images.size = size;
             this.images.page = page;
             this.getWithPager();
         } ,
 
-        toPageInImageSubject (page) {
+        pageEventInImageSubject (page , size) {
+            this.imageSubjects.page = page;
+            this.imageSubjects.size = size;
+            this.getImageSubjects();
+        } ,
+
+        sizeEventInImageSubject (size , page) {
+            this.imageSubjects.size = size;
             this.imageSubjects.page = page;
             this.getImageSubjects();
         } ,
@@ -248,7 +265,14 @@ export default {
             this.getWithPager();
         } ,
 
-        toPageInTag (page) {
+        pageEventInTag (page , size) {
+            this.tags.page = page;
+            this.tags.size = size;
+            this.getTags();
+        } ,
+
+        sizeEventInTag (size , page) {
+            this.tags.size = size;
             this.tags.page = page;
             this.getTags();
         } ,

@@ -22,6 +22,8 @@ class CreatePraiseTable extends Migration
             $table->string('relation_type' , 255)->default('')->comment('关联类型: 比如 image_subject-图片专题');
             $table->unsignedBigInteger('relation_id')->default(0)->comment('关联表id');
             $table->unsignedBigInteger('module_id')->default(0)->comment('xq_module.id');
+            $table->date('date')->nullable(true)->comment('日期');
+            $table->time('time')->nullable(true)->comment('时间');
 
             $table->timestamps();
 

@@ -9,16 +9,16 @@
                     <my-loading v-if="myValue.pending.getModules"></my-loading>
                 </my-search-form-item>
 
-                <my-search-form-item name="分类">
-                    <my-deep-select :data="categories" v-model="search.category_id" :has="false" empty=""></my-deep-select>
-                    <my-loading v-if="myValue.pending.getCategories"></my-loading>
-                    <span class="msg">请选择模块后操作</span>
-                </my-search-form-item>
-
                 <my-search-form-item name="类型">
                     <i-radio-group v-model="search.type">
                         <i-radio v-for="(v,k) in TopContext.business.video.type" :key="k" :label="k">{{ v }}</i-radio>
                     </i-radio-group>
+                </my-search-form-item>
+
+                <my-search-form-item name="分类" v-if="search.type === 'misc'">
+                    <my-deep-select :data="categories" v-model="search.category_id" :has="false" empty=""></my-deep-select>
+                    <my-loading v-if="myValue.pending.getCategories"></my-loading>
+                    <span class="msg">请选择模块后操作</span>
                 </my-search-form-item>
 
                 <my-search-form-item name="ID">
@@ -87,7 +87,7 @@
                     ref="table"
                     class="w-r-100"
                     border
-                    :height="TopContext.table.height"
+
                     :columns="table.field"
                     :data="table.data"
                     :loading="myValue.pending.getData"

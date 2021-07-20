@@ -150,9 +150,10 @@ export default {
         } ,
 
         collectionHandle (action) {
-            console.log('collection handle handler');
+            action = Number(action);
             this.videoProject.is_collected = action;
-            action == 1 ? this.videoProject.collect_count++ : this.videoProject.collect_count--;
+            action === 1 ? this.videoProject.collect_count++ : this.videoProject.collect_count--;
+            this.videoProject.is_collected = this.videoProject.collect_count > 0;
         } ,
 
         praiseHandle () {

@@ -201,4 +201,48 @@ class RelationTagModel extends Model
             ->orderBy('rt.id' , 'asc')
             ->paginate($size);
     }
+
+    // 热门标签-视频专题-分页
+    public static function hotTagsWithPagerInVideoByValueAndFilterAndSize(string $value , array $filter = [] , int $size = 20): Paginator
+    {
+        $filter['module_id'] = $filter['module_id'] ?? '';
+        $where = [
+            ['rt.relation_type' , '=' , 'video'] ,
+        ];
+        if ($filter['module_id'] !== '') {
+            $where[] = ['rt.module_id' , '=' , $filter['module_id']];
+        }
+        if ($filter['value'] !== '') {
+            $where[] = ['rt.name' , 'like' , "%{$value}%"];
+        }
+
+        return self::from('xq_relation_tag as rt')
+            ->select('rt.*' , DB::raw('count(rt.id) as total'))
+            ->where($where)
+            ->groupBy('rt.tag_id')
+            ->orderBy('total' , 'desc')
+            ->orderBy('rt.id' , 'asc')
+            ->paginate($size);
+    }
+
+    public static function hotTagsInVideoByFilterAndSize(array $filter = [] , int $size = 20): Collection
+    {
+        $filter['module_id'] = $filter['module_id'] ?? '';
+
+        $where = [
+            ['relation_type' , '=' , 'video'] ,
+        ];
+
+        if ($filter['module_id'] !== '') {
+            $where[] = ['module_id' , '=' , $filter['module_id']];
+        }
+
+        return self::select('*' , DB::raw('count(id) as total'))
+            ->where($where)
+            ->groupBy('tag_id')
+            ->orderBy('total' , 'desc')
+            ->orderBy('id' , 'asc')
+            ->limit($size)
+            ->get();
+    }
 }

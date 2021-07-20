@@ -3,6 +3,7 @@ import mixin from './mixin.js';
 const history = {
     page: 1 ,
     size: TopContext.size ,
+    sizes: TopContext.sizes ,
     data: [] ,
     total: 0 ,
 };
@@ -16,13 +17,6 @@ export default {
             search: {
                 relation_type: '' ,
                 value: '' ,
-            } ,
-
-            relationType: {
-                image_project: '图片专题' ,
-                video_project: '视频专题' ,
-                // article_subject: '文章专题' ,
-                // bbs_subject: '论坛帖子' ,
             } ,
 
             history: G.copy(history , true),
@@ -81,13 +75,16 @@ export default {
                     data.data.forEach((group) => {
                         group.data.forEach((v) => {
                             v.relation = v.relation ? v.relation : {};
+                            v.relation.user = v.relation.user ? v.relation.user : {};
+
                             switch (v.relation_type)
                             {
                                 case 'image_project':
-                                    this.handleImageProject(v.relation);
                                     break;
+                                case 'image':
+                                    break;
+                                case 'video':
                                 case 'video_project':
-                                    v.relation.user = v.relation.user ? v.relation.user : {};
                                     v.relation.user_play_record = v.relation.user_play_record ? v.relation.user_play_record : {};
                                     v.relation.user_play_record.video = v.relation.user_play_record.video ? v.relation.user_play_record.video : {};
                                     break;
@@ -96,6 +93,7 @@ export default {
                         });
                     });
                     this.history.total = data.total;
+                    this.history.size = data.per_page;
                     this.history.page = data.current_page;
                     this.history.data = data.data;
                 })
@@ -135,7 +133,14 @@ export default {
             this.getHistory();
         } ,
 
-        toPage (page) {
+        pageEvent (page , size) {
+            this.history.page = page;
+            this.history.size = size;
+            this.getHistory();
+        } ,
+
+        sizeEvent (size , page) {
+            this.history.size = size;
             this.history.page = page;
             this.getHistory();
         } ,

@@ -6,7 +6,8 @@
                 <a v-ripple :href="genUrl('/user/password')" class="link" :class="{cur: current === 'password'}"><my-icon icon="privilege" mode="right" />修改密码</a>
                 <a v-ripple :href="genUrl('/user/history')" class="link" :class="{cur: current === 'history'}"><my-icon icon="lishijilu" mode="right" />历史记录</a>
                 <a v-ripple :href="genUrl('/user/favorites')" class="link" :class="{cur: current === 'favorites'}"><my-icon icon="shoucang6" mode="right" />我的收藏</a>
-                <a v-ripple v-if="$store.state.user" :href="genUrl(`/channel/${$store.state.user.id}`)" class="link" :class="{cur: current === 'channel'}"><my-icon icon="ronghepindao" mode="right" />我的频道</a>
+                <a v-ripple :href="genUrl('/user/praise')" class="link" :class="{cur: current === 'praise'}"><my-icon icon="shoucang2" mode="right" />我的点赞</a>
+                <a v-ripple v-if="state().user" :href="genUrl(`/channel/${state().user.id}`)" class="link" :class="{cur: current === 'channel'}"><my-icon icon="ronghepindao" mode="right" />我的频道</a>
             </div>
         </div>
 
@@ -36,7 +37,6 @@
         },
 
         beforeRouteUpdate (to , from , next) {
-            console.log('update');
             next();
         } ,
 

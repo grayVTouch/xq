@@ -36,7 +36,16 @@ module.exports = {
         new HtmlWebpackPlugin({
             title: '兴趣部落' ,
             filename: 'index.html' ,
-            template: 'template.html'
+            template: 'template.html' ,
+
+            meta: {
+                // 'viewport': 'width=device-width, initial-scale=1' ,
+            } ,
+            inject: true ,
+            favicon: __dirname + '/src/asset/res/logo.png' ,
+            templateParameters: {
+                // resUrl: 'http://res.xq.test'
+            } ,
         }) ,
         new VueLoaderPlugin() ,
         // new MiniCssExtractPlugin({

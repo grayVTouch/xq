@@ -51,8 +51,9 @@ class VideoProjectAction extends Action
         $res = VideoProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
-            VideoProjectHandler::isCollected($v);
             VideoProjectHandler::isPraised($v);
+            VideoProjectHandler::tags($v);
+            VideoProjectHandler::user($v);
         }
         return self::success('' , $res);
     }
@@ -72,8 +73,9 @@ class VideoProjectAction extends Action
         $res = VideoProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
-            VideoProjectHandler::isCollected($v);
             VideoProjectHandler::isPraised($v);
+            VideoProjectHandler::tags($v);
+            VideoProjectHandler::user($v);
         }
         return self::success('' , $res);
     }
@@ -91,6 +93,12 @@ class VideoProjectAction extends Action
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
         $res = VideoProjectModel::getHotWithPagerByFilterAndSize($param , $size);
         $res = VideoProjectHandler::handlePaginator($res);
+        foreach ($res->data as $v)
+        {
+            VideoProjectHandler::isPraised($v);
+            VideoProjectHandler::tags($v);
+            VideoProjectHandler::user($v);
+        }
         return self::success('' , $res);
     }
 
@@ -113,59 +121,12 @@ class VideoProjectAction extends Action
         $res = VideoProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
-            VideoProjectHandler::isCollected($v);
             VideoProjectHandler::isPraised($v);
+            VideoProjectHandler::tags($v);
+            VideoProjectHandler::user($v);
         }
         return self::success('' , $res);
     }
-
-    public static function getWithPagerByTagIds(Base $context , array $param = [])
-    {
-        $mode_range = my_config('business.mode_for_video_project');
-
-        $validator = Validator::make($param , [
-            'module_id' => 'required|integer' ,
-            'tag_ids'   => 'required' ,
-            'mode'      => ['required' , Rule::in($mode_range)] ,
-        ]);
-
-        if ($validator->fails()) {
-            return self::error($validator->errors()->first() , $validator->errors());
-        }
-
-        $module = ModuleModel::find($param['module_id']);
-        if (empty($module)) {
-            return self::error('模块不存在' , '' , 404);
-        }
-
-        $tag_ids = empty($param['tag_ids']) ? [] : json_decode($param['tag_ids'] , true);
-        if (empty($tag_ids)) {
-            return self::error('请提供过滤的标签');
-        }
-
-        $tags = TagModel::find($tag_ids);
-        if (count($tags) !== count($tag_ids)) {
-            return self::error('部分或全部标签未找到');
-        }
-
-        $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-
-        switch ($param['mode'])
-        {
-            case 'strict':
-                $res = VideoProjectModel::getInStrictByTagIdsAndFilterAndSize($tag_ids , $param , $size);
-                break;
-            case 'loose':
-                $res = VideoProjectModel::getByTagIdsAndFilterAndSize($tag_ids , $param , $size);
-                break;
-            default:
-                return self::error('不支持的 mode ，当前受支持的 mode 有：' . implode(' , ' , $mode_range));
-        }
-
-        $res = VideoProjectHandler::handlePaginator($res);
-        return self::success('' , $res);
-    }
-
 
     public static function hotTags(Base $context , array $param = [])
     {
@@ -224,6 +185,12 @@ class VideoProjectAction extends Action
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
         $res = VideoProjectModel::getNewestWithPagerByFilterAndSize($param , $size);
         $res = VideoProjectHandler::handlePaginator($res);
+        foreach ($res->data as $v)
+        {
+            VideoProjectHandler::isPraised($v);
+            VideoProjectHandler::tags($v);
+            VideoProjectHandler::user($v);
+        }
         return self::success('' , $res);
     }
 
@@ -241,13 +208,18 @@ class VideoProjectAction extends Action
         }
         $video_project = VideoProjectModel::find($id);
         if (empty($video_project)) {
-            return self::error('图片专题不存在' , '' , 404);
+            return self::error('视频专题不存在' , '' , 404);
         }
         $video_project = VideoProjectHandler::handle($video_project);
         // 附加：视频专题播放记录
         VideoProjectHandler::userPlayRecord($video_project);
         VideoProjectHandler::isPraised($video_project);
         VideoProjectHandler::isCollected($video_project);
+        VideoProjectHandler::tags($video_project);
+        VideoProjectHandler::user($video_project);
+        VideoProjectHandler::videos($video_project);
+        VideoProjectHandler::videoSeries($video_project);
+        VideoProjectHandler::videoCompany($video_project);
 
         return self::success('' , $video_project);
     }
@@ -270,24 +242,6 @@ class VideoProjectAction extends Action
         return self::success('' , $categories);
     }
 
-    public static function subject(Base $context , array $param = [])
-    {
-        $validator = Validator::make($param , [
-            'module_id' => 'required|integer' ,
-        ]);
-        if ($validator->fails()) {
-            return self::error($validator->errors()->first());
-        }
-        $module = ModuleModel::find($param['module_id']);
-        if (empty($module)) {
-            return self::error('模块不存在' , '' , 404);
-        }
-        $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageSubjectModel::getWithPagerInImageProjectByModuleIdAndValueAndSize($module->id , $param['value'] , $size);
-        $res = ImageSubjectHandler::handlePaginator($res);
-        return self::success('' , $res);
-    }
-
     public static function index(Base $context , array $param = [])
     {
         $type_range = my_config_keys('business.type_for_video_project');
@@ -298,21 +252,17 @@ class VideoProjectAction extends Action
             'mode'      => ['required' , Rule::in($mode_range)] ,
             'type'      => ['required' , Rule::in($type_range)] ,
         ]);
-
         if ($validator->fails()) {
             return self::error($validator->errors()->first());
         }
-
         $module = ModuleModel::find($param['module_id']);
         if (empty($module)) {
             return self::error('模块不存在' , '' , 404);
         }
-
         $param['category_ids']   = $param['category_ids'] === '' ? [] : json_decode($param['category_ids'] , true);
         $param['video_series_ids']    = $param['video_series_ids'] === '' ? [] : json_decode($param['video_series_ids'] , true);
         $param['video_company_ids']    = $param['video_company_ids'] === '' ? [] : json_decode($param['video_company_ids'] , true);
         $param['tag_ids']        = $param['tag_ids'] === '' ? [] : json_decode($param['tag_ids'] , true);
-
         $order                   = $param['order'] === '' ? null : parse_order($param['order']);
         $size                   = $param['size'] === '' ? my_config('app.limit') : $param['size'];
 
@@ -345,7 +295,8 @@ class VideoProjectAction extends Action
         foreach ($res->data as $v)
         {
             VideoProjectHandler::isCollected($v);
-            VideoProjectHandler::isPraised($v);
+            VideoProjectHandler::tags($v);
+            VideoProjectHandler::user($v);
         }
         return self::success('' , $res);
     }
@@ -448,7 +399,10 @@ class VideoProjectAction extends Action
         }
         $relation_type = 'video_project';
         $relation_id = $video_project->id;
-        $datetime = date('Y-m-d H:i:s');
+        $timestamp = time();
+        $date = date('Y-m-d' , $timestamp);
+        $time = date('H:i:s' , $timestamp);
+        $datetime = date('Y-m-d H:i:s' , $timestamp);
         $user = user();
         try {
             DB::beginTransaction();
@@ -461,6 +415,8 @@ class VideoProjectAction extends Action
                         'user_id' => $user->id ,
                         'relation_type' => $relation_type ,
                         'relation_id' => $relation_id ,
+                        'date' => $date ,
+                        'time' => $time ,
                         'created_at' => $datetime
                     ]);
                 }

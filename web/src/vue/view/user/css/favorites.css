@@ -509,6 +509,7 @@
 
 .content-mask > .filter > .inner {
     width: 160px;
+    margin-left: 20px;
 }
 
 .content-mask > .filter > .inner > * {

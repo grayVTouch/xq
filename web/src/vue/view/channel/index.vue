@@ -2,7 +2,7 @@
     <div class="view">
 
         <div class="thumb">
-            <div class="image-mask"><img :src="user.channel_thumb ? user.channel_thumb : TopContext.res.notFound" alt="" class="image judge-img-size" v-judge-img-size></div>
+            <div class="image-mask"><img :data-src="user.channel_thumb ? user.channel_thumb : TopContext.res.notFound" alt="" class="image judge-img-size" v-judge-img-size></div>
             <div class="name">
                 <!-- 仅在编辑模式下展示 -->
                 <div class="image-editor" v-if="val.mode === 'edit'">
@@ -11,7 +11,7 @@
                 <div class="introduction">{{ getUsername(user.username , user.nickname) }} 的频道</div>
             </div>
 
-            <div class="action" v-if="$store.state.user ? user.id === $store.state.user.id : false">
+            <div class="action" v-if="state().user ? user.id === state().user.id : false">
                 <a class="link my-button" v-if="val.mode !== 'preview'" v-ripple @click="val.mode = 'preview'">预览</a>
                 <a class="link my-button" v-if="val.mode !== 'edit'" v-ripple @click="val.mode = 'edit'">编辑</a>
             </div>
@@ -21,7 +21,7 @@
         <div class="user">
             <div class="avatar">
                 <div class="image-mask">
-                    <img :src="user.avatar ? user.avatar : TopContext.res.notFound" alt="" class="image judge-img-size" v-judge-img-size>
+                    <img :data-src="user.avatar ? user.avatar : TopContext.res.notFound" alt="" class="image judge-img-size" v-judge-img-size>
                     <!-- 仅在编辑模式下展示 -->
                     <div class="image-editor" v-if="val.mode === 'edit'">
 <!--                    <div class="image-editor">-->
@@ -69,9 +69,10 @@
                 <nav class="navs m-b-20" ref="navs">
                     <div class="line" ref="line-in-nav"></div>
                     <div class="nav-menu">
-                        <a class="nav" ref="nav-image" v-ripple :class="{cur: val.nav === 'image'}" @click="switchNavMappingItemById ('image')">图片</a>
-                        <a class="nav" ref="nav-my_focus_user" v-ripple :class="{cur: val.nav === 'my_focus_user'}" @click="switchNavMappingItemById ('my_focus_user')">我关注的人</a>
-                        <a class="nav"  ref="nav-focus_me_user"v-ripple :class="{cur: val.nav === 'focus_me_user'}" @click="switchNavMappingItemById ('focus_me_user')">关注我的人</a>
+<!--                        <a class="nav" ref="nav-image" v-ripple :class="{cur: val.nav === 'image'}" @click="switchNavMappingItemById('image')">图片</a>-->
+                        <a class="nav" ref="nav-image_project" v-ripple :class="{cur: val.nav === 'image_project'}" @click="switchNavMappingItemById('image_project')">图片专题</a>
+                        <a class="nav" ref="nav-my_focus_user" v-ripple :class="{cur: val.nav === 'my_focus_user'}" @click="switchNavMappingItemById('my_focus_user')">我关注的人</a>
+                        <a class="nav"  ref="nav-focus_me_user"v-ripple :class="{cur: val.nav === 'focus_me_user'}" @click="switchNavMappingItemById('focus_me_user')">关注我的人</a>
                     </div>
                 </nav>
 

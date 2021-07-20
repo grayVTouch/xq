@@ -41,21 +41,21 @@ export default [
                 props: true ,
                 children: [
                     {
-                        path: 'image' ,
-                        component: () => import('@vue/view/collection_group/image.vue')
+                        path: 'image_project' ,
+                        component: () => import('@vue/view/collection_group/image_project.vue')
                     }
                 ] ,
             } ,
             {
                 name: 'channel' ,
                 path: 'channel/:id' ,
-                redirect: 'channel/:id/image' ,
+                redirect: 'channel/:id/image_project' ,
                 component: () => import('@vue/view/channel/index.vue') ,
                 props: true ,
                 children: [
                     {
-                        path: 'image' ,
-                        component:  () => import('@vue/view/channel/image.vue') ,
+                        path: 'image_project' ,
+                        component:  () => import('@vue/view/channel/image_project.vue') ,
                     } ,
                     {
                         path: 'my_focus_user' ,
@@ -88,6 +88,10 @@ export default [
                         path: 'favorites' ,
                         component: () => import('@vue/view/user/favorites.vue')
                     } ,
+                    {
+                        path: 'praise' ,
+                        component: () => import('@vue/view/user/praise.vue')
+                    } ,
                 ] ,
             } ,
             {
@@ -98,6 +102,26 @@ export default [
             {
                 path: 'video_project/:id/show' ,
                 component: () => import('@vue/view/video_project/show.vue') ,
+                props: true ,
+            } ,
+            {
+                path: 'image/:id/show' ,
+                component: () => import('@vue/view/image/show.vue') ,
+                props: true ,
+            } ,
+            {
+                path: 'image/search' ,
+                component: () => import('@vue/view/image/search.vue') ,
+                props: true ,
+            } ,
+            {
+                path: 'video/:id/show' ,
+                component: () => import('@vue/view/video/show.vue') ,
+                props: true ,
+            } ,
+            {
+                path: 'video/search' ,
+                component: () => import('@vue/view/video/search.vue') ,
                 props: true ,
             } ,
         ] ,

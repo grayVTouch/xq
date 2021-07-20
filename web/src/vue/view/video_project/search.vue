@@ -82,57 +82,36 @@
                     <my-loading width="50" height="50"></my-loading>
                 </div>
 
-                <div class="empty" v-if="!val.pending.getData && videoProjects.data.length === 0">暂无数据</div>
+                <div class="empty" v-if="!val.pending.getData && videoProjects.data.length === 0">
+                    <my-icon icon="empty" size="40"></my-icon>
+                </div>
 
                 <div class="list">
 
-
-                    <div class="item card-box" v-for="v in videoProjects.data" :key="v.id">
-                        <!-- 封面 -->
-                        <div class="thumb">
-                            <a class="link" target="_blank" :href="genUrl(`/video_project/${v.id}/show`)">
-                                <img :src="v.thumb ? v.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size">
-                                <div class="mask">
-                                    <div class="top">
-                                        <div class="type"><my-icon icon="zhuanyerenzheng" size="35" /></div>
-                                        <div class="praise" v-ripple @click.prevent="praiseHandle(v)">
-                                            <my-loading size="16" v-if="val.pending.praiseHandle"></my-loading>
-                                            <my-icon icon="shoucang2" :class="{'run-red': v.is_praised }" /> 喜欢
-                                        </div>
-                                    </div>
-                                    <div class="btm">
-                                        <div class="count">{{ v.count }}</div>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
-
-                        <div class="introduction">
-                            <!-- 标签 -->
-                            <div class="tags">
-                                <span class="ico"><my-icon icon="icontag" size="18" /></span>
-                                <a class="tag" target="_blank" v-for="tag in v.tags" :href="genUrl(`/video_project/search?tag_id=${tag.tag_id}`)">{{ tag.name }}</a>
-                            </div>
-                            <!-- 标题 -->
-                            <div class="title"><a target="_blank" :href="genUrl(`/video_project/${v.id}/show`)">{{ v.name }}</a></div>
-                            <!-- 统计信息 -->
-                            <div class="info">
-                                <div class="left"><my-icon icon="shijian" class="ico" mode="right" /> {{ v.created_at }}</div>
-                                <div class="right">
-                                    <span class="view-count"><my-icon icon="chakan" mode="right" />{{ v.view_count }}</span>
-                                    <span class="praise-count"><my-icon icon="shoucang2" mode="right" />{{ v.praise_count }}</span>
-                                    <span class="collect-count" v-if="$store.state.user"><my-icon icon="shoucang6" mode="right" />{{ v.collect_count }}</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <my-video-project-card-box
+                            class="item"
+                            v-for="v in videoProjects.data"
+                            :key="v.id"
+                            :row="v"
+                            @on-praise="praiseHandle"
+                            :is-praise-pending="val.pending.praiseHandle"
+                    ></my-video-project-card-box>
 
                 </div>
 
             </div>
 
             <div class="pager">
-                <my-page :total="videoProjects.total" :limit="videoProjects.size" :page="videoProjects.page" @on-change="toPageInImageProject"></my-page>
+                <my-page
+                        class="run-page-center"
+                        :total="videoProjects.total"
+                        :size="videoProjects.size"
+                        :sizes="videoProjects.sizes"
+                        :show-sizes="false"
+                        :page="videoProjects.page"
+                        @on-page-change="pageEventInVideoProject"
+                        @on-size-change="sizeEventInVideoProject"
+                ></my-page>
             </div>
 
         </div>
@@ -246,7 +225,7 @@
                     <div class="title">当前选中项</div>
                     <div class="list">
                         <div class="item"  v-for="v in videoSeries.selected" @click="delVideoSeries(v)">
-                            <div class="thumb" v-if="false"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image" alt=""></div>
+                            <div class="thumb"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image" alt=""></div>
                             <div class="name">{{ v.name }}</div>
                         </div>
                     </div>
@@ -262,14 +241,25 @@
 
                     <div class="list">
                         <div class="loading" v-if="val.pending.getVideoSeries"><my-loading size="30"></my-loading></div>
-                        <div class="empty" v-if="!val.pending.getVideoSeries && videoSeries.data.length === 0">暂无相关数据</div>
+                        <div class="empty" v-if="!val.pending.getVideoSeries && videoSeries.data.length === 0">
+                            <my-icon icon="empty" size="40"></my-icon>
+                        </div>
                         <div class="item" v-ripple v-for="v in videoSeries.data" :class="{cur: videoSeries.selectedIds.indexOf(v.id) >= 0}" @click="filterByVideoSeries(v)">
-                            <div class="thumb" v-if="false"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image" alt=""></div>
+                            <div class="thumb"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image" alt=""></div>
                             <div class="name">{{ v.name }}</div>
                         </div>
                     </div>
                     <div class="pager">
-                        <my-page :total="videoSeries.total" :limit="videoSeries.size" :page="videoSeries.page" @on-change="toPageInVideoSeries"></my-page>
+                        <my-page
+                                class="run-page-center"
+                                :total="videoSeries.total"
+                                :size="videoSeries.size"
+                                :sizes="videoSeries.sizes"
+                                :show-sizes="false"
+                                :page="videoSeries.page"
+                                @on-page-change="pageEventInVideoSeries"
+                                @on-size-change="sizeEventInVideoSeries"
+                        ></my-page>
                     </div>
                 </div>
             </div>
@@ -307,14 +297,25 @@
 
                     <div class="list">
                         <div class="loading" v-if="val.pending.getVideoCompany"><my-loading size="30"></my-loading></div>
-                        <div class="empty" v-if="!val.pending.getVideoCompany && videoCompanies.data.length === 0">暂无相关数据</div>
+                        <div class="empty" v-if="!val.pending.getVideoCompany && videoCompanies.data.length === 0">
+                            <my-icon icon="empty" size="40"></my-icon>
+                        </div>
                         <div class="item" v-ripple v-for="v in videoCompanies.data" :class="{cur: videoCompanies.selectedIds.indexOf(v.id) >= 0}" @click="filterByVideoCompany(v)">
                             <div class="thumb"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="image" alt=""></div>
                             <div class="name">{{ v.name }}</div>
                         </div>
                     </div>
                     <div class="pager">
-                        <my-page :total="videoCompanies.total" :limit="videoCompanies.size" :page="videoCompanies.page" @on-change="toPageInVideoCompany"></my-page>
+                        <my-page
+                                class="run-page-center"
+                                :total="videoCompanies.total"
+                                :size="videoCompanies.size"
+                                :sizes="videoCompanies.sizes"
+                                :page="videoCompanies.page"
+                                @on-page-change="pageEventInVideoCompany"
+                                @on-size-change="sizeEventInVideoCompany"
+                        ></my-page>
+
                     </div>
                 </div>
             </div>
@@ -362,11 +363,21 @@
                         </div>
                         <div class="list run-tags horizontal" :class="{loading: val.pending.getTags}">
                             <div class="mask" v-if="val.pending.getTags"><my-loading></my-loading></div>
-                            <div class="empty" v-if="!val.pending.getTags && tags.total <= 0">暂无相关记录</div>
+                            <div class="empty" v-if="!val.pending.getTags && tags.total <= 0">
+                                <my-icon icon="empty" size="40"></my-icon>
+                            </div>
                             <my-button class="tag" v-for="v in tags.data" :class="{selected: tags.selectedIds.indexOf(v.tag_id) >= 0}" :key="v.id" @click="filterByTag(v)">{{ v.name }}</my-button>
                         </div>
                         <div class="pager" v-if="tags.total > 0">
-                            <my-page :total="tags.total" :limit="tags.size" :page="tags.page" @on-change="toPageInTag"></my-page>
+                            <my-page
+                                    class="run-page-center"
+                                    :total="tags.total"
+                                    :size="tags.size"
+                                    :sizes="tags.sizes"
+                                    :page="tags.page"
+                                    @on-page-change="pageEventInTag"
+                                    @on-size-change="sizeEventInTag"
+                            ></my-page>
                         </div>
                     </div>
                 </div>

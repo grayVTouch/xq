@@ -18,6 +18,10 @@ class CreateImageTable extends Migration
     {
         Schema::create($this->table , function (Blueprint $table) {
             $table->id();
+
+            $table->unsignedBigInteger('module_id')->default(0)->comment('xq_module.id，缓存字段');
+            $table->unsignedBigInteger('user_id')->default(0)->comment('xq_user.id，缓存字段');
+            $table->unsignedBigInteger('category_id')->default(0)->comment('xq_category.id，缓存字段');
             $table->unsignedBigInteger('image_project_id')->default(0)->comment('xq_image_project.id');
             $table->string('src' , 500)->default('')->comment('图片源 - 压缩图');
             $table->string('original_src' , 500)->default('')->comment('图片源 - 原图');

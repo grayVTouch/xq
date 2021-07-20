@@ -5,7 +5,7 @@
 
             <a class="item" v-for="v in data.data" target="_blank" :href="genUrl(`/channel/${v.user_id}/image`)">
                 <div class="avatar">
-                    <div class="image-mask"><img :src="v.user.avatar ? v.user.avatar : TopContext.res.notFound" class="image judge-img-size" v-judge-img-size></div>
+                    <div class="image-mask"><img :data-src="v.user.avatar ? v.user.avatar : TopContext.res.notFound" class="image judge-img-size" v-judge-img-size></div>
                     <div class="info">
                         <div class="name">{{ getUsername(v.user.username , v.user.nickname) }}</div>
                         <div class="desc">{{ v.user.description }}</div>
@@ -24,12 +24,21 @@
                 <my-loading></my-loading>
             </div>
 
-            <div class="empty" v-if="!val.pending.getData && data.total < 1">暂无相关数据</div>
+            <div class="empty" v-if="!val.pending.getData && data.total < 1">
+                <my-icon icon="empty" size="40"></my-icon>
+            </div>
 
         </div>
 
         <div class="pager">
-            <my-page :total="data.total" :page="data.page" :limit="data.size" @on-change="toPage"></my-page>
+            <my-page
+                    :total="data.total"
+                    :page="data.page"
+                    :size="data.size"
+                    :sizes="data.sizes"
+                    @on-page-change="pageEvent"
+                    @on-size-change="sizeEvent"
+            ></my-page>
         </div>
 
     </div>
@@ -46,6 +55,7 @@
                     page: 1 ,
                     total: 0 ,
                     size: TopContext.size ,
+                    sizes: TopContext.sizes ,
                 } ,
             };
         } ,
@@ -77,7 +87,14 @@
                     });
             } ,
 
-            toPage (page) {
+            pageEvent (page , size) {
+                this.data.page = page;
+                this.data.size = size;
+                this.getData();
+            } ,
+
+            sizeEvent (page , size) {
+                this.data.size = size;
                 this.data.page = page;
                 this.getData();
             } ,

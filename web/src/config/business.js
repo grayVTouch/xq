@@ -36,7 +36,14 @@ export default {
     relationType: {
         image_project: '图片专题' ,
         video_project: '视频专题' ,
-        // article_subject: '文章专题' ,
-        // bbs_subject: '论坛帖子' ,
+        image: '图片' ,
+        video: '视频' ,
+    } ,
+
+    contentType: {
+        image_project: '图片专题' ,
+        video_project: '视频专题' ,
+        image: '图片' ,
+        video: '视频' ,
     } ,
 };

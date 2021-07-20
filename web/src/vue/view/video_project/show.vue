@@ -29,7 +29,7 @@
             </div>
 
             <div class="video-project">
-                <div class="thumb"><img :src="videoProject.thumb ? videoProject.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
+                <div class="thumb"><img :data-src="videoProject.thumb ? videoProject.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
                 <div class="info">
 
                     <div class="two-column-layout core">
@@ -107,7 +107,7 @@
 
                     <div class="item" v-for="v in indexRange.videos" :class="{cur: v.id === videoProject.current.id}" :key="v.id" @mouseenter="showVideo(v)" @mouseleave="hideVideo(v)" @click="ins.videoPlayer.index(v.index)">
                         <div class="thumb">
-                            <div class="image-mask" v-show="v.show_type === 'image' || !v.video_loaded"><img :src="v.__thumb__" v-judge-img-size class="image judge-img-size" alt=""></div>
+                            <div class="image-mask" v-show="v.show_type === 'image' || !v.video_loaded"><img :data-src="v.__thumb__" v-judge-img-size class="image judge-img-size" alt=""></div>
                             <div class="video-mask" :ref="'video-mask-' + v.id" v-show="v.show_type === 'video' && v.video_loaded">
                                 <video :ref="'video-' + v.id" loop="loop" autoplay="autoplay" muted="muted"></video>
                             </div>
@@ -134,7 +134,7 @@
                 <div class="list">
 
                     <div class="video-project" v-for="v in videoProjectsInSeries" :key="v.id" @click="linkAndRefresh(`/video_project/${v.id}/show`)">
-                        <div class="thumb"><img :src="v.thumb ? v.thumb : TopContext.res.notFound" class="judge-img-size" v-judge-img-size alt=""></div>
+                        <div class="thumb"><img :data-src="v.thumb ? v.thumb : TopContext.res.notFound" class="judge-img-size" v-judge-img-size alt=""></div>
                         <div class="info">
                             <div class="name">{{ v.name }}</div>
                             <div class="statistics">

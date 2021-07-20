@@ -32,7 +32,7 @@
 
         beforeRouteEnter (to , from , next) {
             next((vm) => {
-                vm.scrollEvent();
+                // vm.scrollEvent();
             });
         },
 

@@ -175,4 +175,9 @@ return [
         'image_project' => '图片专题' ,
         'image' => '图片' ,
     ] ,
+
+    'disk' => [
+        'local' => '本地存储' ,
+        'cloud' => '云存储' ,
+    ] ,
 ];

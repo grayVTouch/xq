@@ -1,5 +1,8 @@
+import MyFormButton from '../my_form_button.vue';
 
-const systemSettings = {};
+const systemSettings = {
+    disk: 'local' ,
+};
 const webRouteMappings = [];
 
 export default {
@@ -9,7 +12,7 @@ export default {
     data () {
         return {
             myValue: {
-                tab: 'web_settings',
+                tab: 'admin_settings',
                 error: {},
             },
             dom: {},

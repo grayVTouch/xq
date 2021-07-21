@@ -83,14 +83,14 @@ class File extends Base
         $param = $this->request->post();
         $u_file = $this->request->file('file');
 
-        // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录https://ram.console.aliyun.com创建RAM账号。
-        $accessKeyId = "LTAI7F0gAA1b6YXI";
-        $accessKeySecret = "XqWmTvjPm0adiaE1e1s3M61bHn22Yd";
-        // Endpoint以杭州为例，其它Region请按实际情况填写。
-        $endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+        $bucket = 'running-xinqu';
+        $file = "D:\image\\0016.jpg";
+        $res = AliyunOss::upload($bucket , '测试图片.png' , $file , []);
 
-        $bucket = '';
-        AliyunOss::upload($bucket);
-//        AliyunOss::upload();
+        if ($res['code'] > 0) {
+            return error($res['message'] , $res['data']);
+        }
+        return success($res['message'] , $res['data']);
+
     }
 }

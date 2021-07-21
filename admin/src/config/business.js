@@ -151,4 +151,11 @@ export default {
             video_project: '视频专题' ,
         } ,
     } ,
+
+    settings: {
+        disk: {
+            local: '本地存储' ,
+            cloud: '云存储' ,
+        } ,
+    } ,
 };

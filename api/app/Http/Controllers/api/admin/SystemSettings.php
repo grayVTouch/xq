@@ -27,6 +27,10 @@ class SystemSettings extends Base
         $param['web_url'] = $param['web_url'] ?? '';
         $param['is_enable_grapha_verify_code_for_login'] = $param['is_enable_grapha_verify_code_for_login'] ?? '';
         $param['web_route_mappings'] = $param['web_route_mappings'] ?? '';
+        $param['disk'] = $param['disk'] ?? '';
+        $param['aliyun_key'] = $param['aliyun_key'] ?? '';
+        $param['aliyun_secret'] = $param['aliyun_secret'] ?? '';
+        $param['aliyun_endpoint'] = $param['aliyun_endpoint'] ?? '';
         $res = SystemSettingsAction::update($this , $param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);

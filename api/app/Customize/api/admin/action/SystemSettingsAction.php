@@ -28,8 +28,10 @@ class SystemSettingsAction extends Action
     public static function update(Base $context , array $param = []): array
     {
         $bool_range = my_config_keys('business.bool_for_int');
+        $disk_range = my_config_keys('business.disk');
         $validator = Validator::make($param , [
             'is_enable_grapha_verify_code_for_login' => ['required' , Rule::in($bool_range)] ,
+            'disk' => ['required' , Rule::in($disk_range)] ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
@@ -50,6 +52,10 @@ class SystemSettingsAction extends Action
             SystemSettingsModel::updateById($system_settings->id , [
                 'web_url' => $param['web_url'] ,
                 'is_enable_grapha_verify_code_for_login' => $param['is_enable_grapha_verify_code_for_login'] ,
+                'disk' => $param['disk'] ,
+                'aliyun_key' => $param['aliyun_key'] ,
+                'aliyun_secret' => $param['aliyun_secret'] ,
+                'aliyun_endpoint' => $param['aliyun_endpoint'] ,
             ]);
             foreach ($web_route_mappings as $v)
             {

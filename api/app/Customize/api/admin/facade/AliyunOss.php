@@ -3,6 +3,7 @@
 namespace App\Customize\api\admin\facade;
 
 use App\Customize\api\admin\lib\AliyunOss as AliyunOssLib;
+use App\Customize\api\admin\model\SystemSettingsModel;
 
 /**
  * Class AliyunOss
@@ -15,13 +16,17 @@ use App\Customize\api\admin\lib\AliyunOss as AliyunOssLib;
 class AliyunOss
 {
 
+    /**
+     * @var \App\Customize\api\admin\lib\AliyunOss
+     */
     private static $instance;
 
     public static function __callStatic($method , $args)
     {
         if (!(self::$instance instanceof AliyunOssLib)) {
-            self::$instance = new AliyunOssLib('LTAI7F0gAA1b6YXI' , 'XqWmTvjPm0adiaE1e1s3M61bHn22Yd' , 'http://oss-cn-hangzhou.aliyuncs.com');
+            $settings = SystemSettingsModel::first();
+            self::$instance = new AliyunOssLib($settings->aliyun_key , $settings->aliyun_secret , $settings->aliyun_endpoint);
         }
-        call_user_func_array([self::$instance , $method] , $args);
+        return call_user_func_array([self::$instance , $method] , $args);
     }
 }

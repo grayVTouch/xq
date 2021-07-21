@@ -5,7 +5,10 @@ namespace App\Http\Controllers\api\admin;
 
 
 use App\Customize\api\admin\action\FileAction;
+use App\Customize\api\admin\facade\AliyunOss;
 use Illuminate\Http\Request;
+use OSS\Core\OssException;
+use OSS\OssClient;
 use function api\admin\error;
 use function api\admin\success;
 
@@ -73,5 +76,21 @@ class File extends Base
             return error($res['message'] , $res['data'] , $res['code']);
         }
         return success($res['message'] , $res['data']);
+    }
+
+    public function test()
+    {
+        $param = $this->request->post();
+        $u_file = $this->request->file('file');
+
+        // 阿里云主账号AccessKey拥有所有API的访问权限，风险很高。强烈建议您创建并使用RAM账号进行API访问或日常运维，请登录https://ram.console.aliyun.com创建RAM账号。
+        $accessKeyId = "LTAI7F0gAA1b6YXI";
+        $accessKeySecret = "XqWmTvjPm0adiaE1e1s3M61bHn22Yd";
+        // Endpoint以杭州为例，其它Region请按实际情况填写。
+        $endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
+
+//        AliyunOss::upload();
+        $bucket = '';
+        AliyunOss::upload();
     }
 }

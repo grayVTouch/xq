@@ -370,6 +370,9 @@ export default {
 
                         this.toPageForImages(1);
                     });
+            } else {
+                this.getTopTags();
+                this.getCategories();
             }
         } ,
 

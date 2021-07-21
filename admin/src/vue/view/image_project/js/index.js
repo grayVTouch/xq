@@ -514,5 +514,32 @@ export default {
             this.search.user_id = row.id;
             this.searchEvent();
         } ,
+
+        // 批量：事件：重新处理视频
+        retryProcessEvent () {
+            const ids = this.selection.map((v) => {
+                return v.id;
+            });
+            this.retryProcess(ids);
+        } ,
+
+        // 批量：重新处理视频
+        retryProcess (ids , callback) {
+            this.pending('retryProcess' , true);
+            Api.imageProject
+                .retryProcess(ids)
+                .then((res) => {
+                    if (res.code !== TopContext.code.Success) {
+                        G.invoke(callback , null , false);
+                        this.errorHandle(res.message);
+                        return ;
+                    }
+                    this.getData();
+                    G.invoke(callback , null , true);
+                })
+                .finally(() => {
+                    this.pending('retryProcess' , false);
+                });
+        } ,
     } ,
 }

@@ -70,6 +70,7 @@
             <my-table-button class="m-r-10" @click="addEvent"><my-icon icon="add" />添加</my-table-button>
             <my-table-button class="m-r-10" @click="editEventByButton"><my-icon icon="edit" />编辑</my-table-button>
             <my-table-button class="m-r-10" type="error" @click="destroyAllEvent" :loading="myValue.pending.destroyAll"><my-icon icon="shanchu" />删除选中项 <span v-if="selection.length > 0">（{{ selection.length }}）</span></my-table-button>
+            <my-table-button @click="retryProcessEvent" :loading="myValue.pending.retryProcess"><my-icon icon="reset" />重新处理 <span v-if="selection.length > 0">（{{ selection.length }}）</span></my-table-button>
         </template>
 
         <template slot="page">

@@ -188,6 +188,12 @@ export default {
         } ,
 
         getCategories (callback) {
+            if (this.form.module_id <= 0) {
+                return ;
+            }
+            if (G.isEmptyString(this.form.type)) {
+                return ;
+            }
             this.pending('getCategories' , true);
             Api.category
                 .search({
@@ -236,9 +242,11 @@ export default {
             this.form.category_id = '';
             this.form.video_project_id = '';
             this.videoProject = G.copy(videoProject);
-            this.getCategories();
-            // 获取标签
-            this.getTopTags();
+            if (this.form.type === 'misc') {
+                this.getCategories();
+                // 获取标签
+                this.getTopTags();
+            }
         } ,
 
         typeChangedEvent (type) {
@@ -246,6 +254,7 @@ export default {
                 // 杂项
                 this.videoProject  = G.copy(videoProject);
                 this.form.video_project_id  = '';
+                this.getTopTags();
             } else {
                 // 专题
                 this.form.category_id = 0;
@@ -342,9 +351,16 @@ export default {
                         this.videos.data            = this.form.videos;
                         this.videoSubtitles.data    = this.form.video_subtitles;
 
-                        this.getCategories();
-                        this.getTopTags();
+                        if (this.form.type === 'misc') {
+                            this.getCategories();
+                            this.getTopTags();
+                        }
                     });
+            } else {
+                if (this.form.type === 'misc') {
+                    this.getCategories();
+                    this.getTopTags();
+                }
             }
         } ,
 
@@ -386,6 +402,8 @@ export default {
 
             this.images             = [];
             this.tags               = [];
+            this.topTags            = [];
+            this.categories         = [];
             this.uVideoSubtitles    = [];
             this.owner              = G.copy(owner);
             this.videoProject       = G.copy(videoProject);

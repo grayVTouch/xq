@@ -45,6 +45,8 @@ Route::prefix('admin')
                 Route::any('test' , [Test::class , 'index']);
                 Route::any('test' , [Test::class , 'index']);
 
+                Route::any('test_file' , [File::class , 'test']);
+
 
                 // 不用登录的相关接口
                 Route::get('captcha'    , [Misc::class , 'captcha'])->name('captcha');
@@ -213,6 +215,7 @@ Route::prefix('admin')
             Route::delete('image_project/{id}'          , [ImageProject::class , 'destroy']);
             Route::delete('destroy_all_image_for_image_project' , [ImageProject::class , 'destroyImages']);
             Route::delete('destroy_image_project_tag'           , [ImageProject::class , 'destroyTag']);
+            Route::post('retry_process_image_project'   , [ImageProject::class , 'retry']);
 
             /**
              * ******************

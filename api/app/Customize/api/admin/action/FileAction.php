@@ -63,8 +63,9 @@ class FileAction extends Action
         }
         $mime_range = ['jpg','jpeg','png','gif','webp','bmp'];
         $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($extension);
         if (!in_array($extension , $mime_range)) {
-            return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
+            return self::error("不支持的格式【{$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
         }
         try {
             Util::systemPowerUp();
@@ -154,9 +155,10 @@ class FileAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $extension = $file->getClientOriginalExtension();
+        $extension = strtolower($extension);
         $mime_range = ['ass' , 'idx' , 'sub' , 'srt' , 'vtt' , 'ssa'];
         if (!in_array($extension , $mime_range)) {
-            return self::error("不支持的格式【${$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
+            return self::error("不支持的格式【{$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
         }
         try {
             Util::systemPowerUp();
@@ -196,5 +198,6 @@ class FileAction extends Action
             return self::error($e->getMessage() , $e->getTraceAsString());
         }
     }
+
 
 }

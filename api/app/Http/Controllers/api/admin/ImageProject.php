@@ -137,4 +137,16 @@ class ImageProject extends Base
         }
         return success($res['message'] , $res['data']);
     }
+
+    // 重新运行队列
+    public function retry()
+    {
+        $ids = $this->request->post('ids' , []);
+        $ids = json_decode($ids , true);
+        $res = ImageProjectAction::retry($this , $ids);
+        if ($res['code'] != 0) {
+            return error($res['message'] , $res['data'] , $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
 }

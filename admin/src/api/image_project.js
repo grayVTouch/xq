@@ -48,5 +48,10 @@ export default {
         return Http.delete(destroyTag , null , data)
     } ,
 
+    retryProcess (ids) {
+        return Http.post(`${TopContext.api}/retry_process_image_project` , null , {
+            ids: G.jsonEncode(ids) ,
+        });
+    } ,
 
 };

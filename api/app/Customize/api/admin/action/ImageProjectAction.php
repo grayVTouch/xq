@@ -416,4 +416,34 @@ class ImageProjectAction extends Action
         $count = RelationTagModel::delByRelationTypeAndRelationIdAndTagId('image_project' , $param['image_project_id'] , $param['tag_id']);
         return self::success('操作成功' , $count);
     }
+
+
+    // 重新运行队列
+    public static function retry(Base $context , array $ids = [] , array $param = []): array
+    {
+        if (empty($ids)) {
+            return self::error('请提供需要重试的视频列表');
+        }
+        $image_projects = [];
+        foreach ($ids as $id)
+        {
+            $image_project = ImageProjectModel::find($id);
+            if (empty($image_project)) {
+                return self::error('包含无效记录' , '' , 404);
+            }
+            $image_project = ImageProjectHandler::handle($image_project);
+            if ($image_project->process_status == 2) {
+                return self::error('包含无效处理状态视频【视频处理状态：已完成】【文件处理状态：已完成】' , '' , 403);
+            }
+            $image_projects[] = $image_project;
+        }
+        foreach ($image_projects as $image_project)
+        {
+            ImageProjectModel::updateById($image_project->id , [
+                'process_status' => 0 ,
+            ]);
+            ImageProjectResourceHandleJob::dispatch($image_project->id);
+        }
+        return self::success('操作成功');
+    }
 }

@@ -412,20 +412,6 @@ export default {
             this.retryProcessVideos(ids);
         } ,
 
-        // 单个：事件：重新处理视频
-        retryProcessVideoEvent (record) {
-            const pending = 'retry_' + record.id;
-            this.pending(pending , true);
-            this.retryProcessVideo(record.id , () => {
-                this.pending(pending , false);
-            });
-        } ,
-
-        // 单个：重新处理视频
-        retryProcessVideo (id , callback) {
-            this.retryProcessVideos([id] , callback)
-        } ,
-
         // 批量：重新处理视频
         retryProcessVideos (ids , callback) {
             this.pending('retryProcessVideos' , true);
@@ -443,6 +429,20 @@ export default {
                 .finally(() => {
                     this.pending('retryProcessVideos' , false);
                 });
+        } ,
+
+        // 单个：事件：重新处理视频
+        retryProcessVideoEvent (record) {
+            const pending = 'retry_' + record.id;
+            this.pending(pending , true);
+            this.retryProcessVideo(record.id , () => {
+                this.pending(pending , false);
+            });
+        } ,
+
+        // 单个：重新处理视频
+        retryProcessVideo (id , callback) {
+            this.retryProcessVideos([id] , callback)
         } ,
 
         selectionChangeEvent (selection) {

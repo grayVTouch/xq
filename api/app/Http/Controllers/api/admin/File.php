@@ -89,8 +89,8 @@ class File extends Base
         // Endpoint以杭州为例，其它Region请按实际情况填写。
         $endpoint = "http://oss-cn-hangzhou.aliyuncs.com";
 
-//        AliyunOss::upload();
         $bucket = '';
+        AliyunOss::upload($bucket);
 //        AliyunOss::upload();
     }
 }

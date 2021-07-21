@@ -91,6 +91,6 @@ class File extends Base
 
 //        AliyunOss::upload();
         $bucket = '';
-        AliyunOss::upload();
+//        AliyunOss::upload();
     }
 }

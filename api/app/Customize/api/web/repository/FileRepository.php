@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Customize\api\web\util;
+namespace App\Customize\api\web\repository;
 
 
 use App\Customize\api\web\handler\DiskHandler;
@@ -12,9 +12,10 @@ use Illuminate\Http\UploadedFile;
 use stdClass;
 use function api\web\my_config;
 use function core\format_path;
+use function core\get_extension;
 use function core\random;
 
-class FileUtil
+class FileRepository
 {
     private static $disk = null;
 

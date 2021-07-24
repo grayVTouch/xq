@@ -37,6 +37,8 @@ class File extends Base
         $param['w'] = $param['w'] ?? '';
         $param['h'] = $param['h'] ?? '';
         $param['r'] = $param['r'] ?? '';
+        // 仅在 disk = cloud 的时候有效
+        $param['is_upload_to_cloud'] = $param['is_upload_to_cloud'] ?? '';
         $param['file'] = $this->request->file('file');
         $res = FileAction::uploadImage($this , $param['file'] , $param);
         if ($res['code'] != 0) {
@@ -85,12 +87,14 @@ class File extends Base
 
         $bucket = 'running-xinqu';
         $file = "D:\image\\0016.jpg";
-        $res = AliyunOss::upload($bucket , '测试图片.png' , $file , []);
 
+        $url = 'http://running-xinqu.oss-cn-hangzhou.aliyuncs.com/20210724/20210724015524Hb5tG7.jpg';
+
+//        $res = AliyunOss::upload($bucket , 'hello.png' , $file);
+        $res = AliyunOss::delete($bucket , $url);
         if ($res['code'] > 0) {
             return error($res['message'] , $res['data']);
         }
         return success($res['message'] , $res['data']);
-
     }
 }

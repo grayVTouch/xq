@@ -56,6 +56,7 @@ class SystemSettingsAction extends Action
                 'aliyun_key' => $param['aliyun_key'] ,
                 'aliyun_secret' => $param['aliyun_secret'] ,
                 'aliyun_endpoint' => $param['aliyun_endpoint'] ,
+                'aliyun_bucket' => $param['aliyun_bucket'] ,
             ]);
             foreach ($web_route_mappings as $v)
             {

@@ -19,11 +19,8 @@ class ResourceRepository
      * @param int $is_deleted
      * @return void
      */
-    public static function create(string $url , string $path , string $disk , int $is_used = 0 , int $is_deleted = 0): void
+    public static function create(string $url , string $path , string $disk , int $is_used = 0 , int $is_deleted = 0 , string $aliyun_bucket = ''): void
     {
-        if (empty($path)) {
-            return ;
-        }
         $datetime = current_datetime();
         $res = null;
         if (empty($url)) {
@@ -38,17 +35,24 @@ class ResourceRepository
                 'disk'          => $disk ,
                 'is_used'       => $is_used ,
                 'is_deleted'    => $is_deleted ,
+                'aliyun_bucket'    => $aliyun_bucket ,
                 'created_at'    => $datetime ,
             ]);
             return ;
         }
-        ResourceModel::updateByUrlOrPath($url , [
+        ResourceModel::updateById($res->id , [
             'path'          => $path ,
             'disk'          => $disk ,
             'is_used'       => $is_used ,
             'is_deleted'    => $is_deleted ,
+            'aliyun_bucket'    => $aliyun_bucket ,
             'updated_at'    => $datetime ,
         ]);
+    }
+
+    public static function createAliyun(string $url , string $aliyun_bucket , int $is_used = 0 , int $is_deleted = 0): void
+    {
+        self::create($url , '' , 'aliyun' , $is_used , $is_deleted , $aliyun_bucket);
     }
 
     /**

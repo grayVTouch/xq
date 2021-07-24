@@ -275,7 +275,7 @@ export default {
             });
 
             this.ins.images = new Uploader(this.dom.images.get(0) , {
-                api: this.imageApi() ,
+                api: this.imageApi(false , false) ,
                 mode: 'append' ,
                 multiple: true ,
                 clear: true ,

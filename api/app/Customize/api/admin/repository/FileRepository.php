@@ -1,7 +1,7 @@
 <?php
 
 
-namespace App\Customize\api\admin\util;
+namespace App\Customize\api\admin\repository;
 
 
 use App\Customize\api\admin\handler\DiskHandler;
@@ -15,7 +15,7 @@ use function core\format_path;
 use function core\get_extension;
 use function core\random;
 
-class FileUtil
+class FileRepository
 {
     private static $disk = null;
 

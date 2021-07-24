@@ -153,7 +153,7 @@
                                             v-model="systemSettings.aliyun_secret"
                                             @input="myValue.error.aliyun_secret = ''"
                                             class="form-text"
-                                            placeholder="阿里云 key"
+                                            placeholder="阿里云 secret"
                                     >
                                     <span class="need"></span>
                                     <div class="msg"></div>
@@ -169,11 +169,27 @@
                                             v-model="systemSettings.aliyun_endpoint"
                                             @input="myValue.error.aliyun_endpoint = ''"
                                             class="form-text"
-                                            placeholder="阿里云 key"
+                                            placeholder="阿里云 endpoint"
                                     >
                                     <span class="need"></span>
                                     <div class="msg"></div>
                                     <div class="e-msg">{{ myValue.error.aliyun_endpoint }}</div>
+                                </td>
+                            </tr>
+
+                            <tr :class="{error: myValue.error.aliyun_bucket}">
+                                <td>阿里云 bucket</td>
+                                <td>
+                                    <input
+                                            type="text"
+                                            v-model="systemSettings.aliyun_bucket"
+                                            @input="myValue.error.aliyun_bucket = ''"
+                                            class="form-text"
+                                            placeholder="阿里云 bucket"
+                                    >
+                                    <span class="need"></span>
+                                    <div class="msg"></div>
+                                    <div class="e-msg">{{ myValue.error.aliyun_bucket }}</div>
                                 </td>
                             </tr>
 

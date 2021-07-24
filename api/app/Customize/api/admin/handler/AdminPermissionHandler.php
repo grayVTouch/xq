@@ -6,7 +6,7 @@ namespace App\Customize\api\admin\handler;
 
 use App\Customize\api\admin\model\AdminPermissionModel;
 use App\Customize\api\admin\model\Model;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use stdClass;
 use Traversable;
 use function core\convert_object;

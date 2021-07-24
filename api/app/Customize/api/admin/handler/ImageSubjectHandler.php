@@ -7,7 +7,7 @@ namespace App\Customize\api\admin\handler;
 use App\Customize\api\admin\model\ModuleModel;
 use App\Customize\api\admin\model\ImageSubjectModel;
 use App\Customize\api\admin\model\UserModel;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\model\Model;
 use stdClass;
 use function api\admin\get_config_key_mapping_value;

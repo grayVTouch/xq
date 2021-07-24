@@ -13,7 +13,7 @@ use App\Customize\api\web\model\ImageProjectModel;
 use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\ImageSubjectModel;
 use App\Customize\api\web\model\UserModel;
-use App\Customize\api\web\util\FileUtil;
+use App\Customize\api\web\repository\FileRepository;
 use App\Customize\api\web\model\Model;
 use Exception;
 use stdClass;

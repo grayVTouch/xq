@@ -8,6 +8,7 @@ use App\Customize\api\admin\job\VideoProjectResourceHandleJob;
 use App\Customize\api\admin\model\CategoryModel;
 use App\Customize\api\admin\model\ModuleModel;
 use App\Customize\api\admin\model\RelationTagModel;
+use App\Customize\api\admin\model\SystemSettingsModel;
 use App\Customize\api\admin\model\TagModel;
 use App\Customize\api\admin\model\UserModel;
 use App\Customize\api\admin\model\VideoCompanyModel;
@@ -256,6 +257,7 @@ class VideoProjectAction extends Action
         $param['updated_at']    = $datetime;
         $param['created_at']    = $datetime;
         $tags                   = $param['tags'] === '' ? [] : json_decode($param['tags'] , true);
+        $param['disk'] = SystemSettingsModel::getValueByKey('disk');
         try {
             DB::beginTransaction();
             $id = VideoProjectModel::insertGetId(array_unit($param, [
@@ -279,6 +281,7 @@ class VideoProjectAction extends Action
                 'weight',
                 'min_index' ,
                 'max_index' ,
+                'disk' ,
                 'updated_at',
                 'created_at',
             ]));

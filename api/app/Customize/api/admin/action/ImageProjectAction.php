@@ -13,9 +13,10 @@ use App\Customize\api\admin\model\ImageProjectModel;
 use App\Customize\api\admin\model\ModuleModel;
 use App\Customize\api\admin\model\RelationTagModel;
 use App\Customize\api\admin\model\ImageSubjectModel;
+use App\Customize\api\admin\model\SystemSettingsModel;
 use App\Customize\api\admin\model\TagModel;
 use App\Customize\api\admin\model\UserModel;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\repository\ImageProjectRepository;
 use App\Customize\api\admin\repository\ResourceRepository;
 use App\Http\Controllers\api\admin\Base;
@@ -262,6 +263,7 @@ class ImageProjectAction extends Action
         $images                 = $param['images'] === '' ? [] : json_decode($param['images'] , true);
         $tags                   = $param['tags'] === '' ? [] : json_decode($param['tags'] , true);
         $param['process_status'] = 0;
+        $param['disk'] = SystemSettingsModel::getValueByKey('disk');
         try {
             DB::beginTransaction();
             $id = ImageProjectModel::insertGetId(array_unit($param , [
@@ -277,6 +279,7 @@ class ImageProjectAction extends Action
                 'view_count' ,
                 'praise_count' ,
                 'status' ,
+                'disk' ,
                 'fail_reason' ,
                 'process_status' ,
                 'updated_at' ,
@@ -394,6 +397,7 @@ class ImageProjectAction extends Action
                 }
                 ImageModel::destroy($res->id);
                 ResourceRepository::delete($res->src);
+                ResourceRepository::delete($res->original_src);
             }
             DB::commit();
             return self::success('操作成功');

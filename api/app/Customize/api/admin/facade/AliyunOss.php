@@ -8,8 +8,12 @@ use App\Customize\api\admin\model\SystemSettingsModel;
 /**
  * Class AliyunOss
  *
- * @method array upload(string $bucket , string $filename , string $file , array $options = [])
- * @method array delete(string $bucket , string $url)
+ * @method static string generateFilename(string $extension)
+ * @method static array upload(string $bucket , string $filename , string $file , array $options = [])
+ * @method static array delete(string $bucket , string $url)
+ * @method static array copy(string $from_bucket , string $from_name , string $to_bucket , string $to_name , array $options = [])
+ * @method static string getPathname(string $url)
+ * @method static bool isRepeat(string $from_bucket , string $from_name , string $to_bucket , string $to_name)
  *
  * @see \App\Customize\api\admin\lib\AliyunOss
  */

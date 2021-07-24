@@ -11,7 +11,7 @@ use App\Customize\api\admin\model\ResourceModel;
 use App\Customize\api\admin\model\VideoProjectModel;
 use App\Customize\api\admin\model\VideoSrcModel;
 use App\Customize\api\admin\model\VideoSubtitleModel;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\repository\ResourceRepository;
 use Core\Lib\File;
 use Core\Wrapper\FFmpeg;
@@ -88,7 +88,7 @@ class VideoProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                 'file_process_status' => 1 ,
             ]);
             $dir_prefix = my_config('app.dir')['video_project'];
-            $target_save_dir = FileUtil::generateRealPathByWithoutPrefixRelativePath($video_project->module->name . '/' . $dir_prefix . '/' . $video_project->name);
+            $target_save_dir = FileRepository::generateRealPathByWithoutPrefixRelativePath($video_project->module->name . '/' . $dir_prefix . '/' . $video_project->name);
             if (empty($this->originalName)) {
                 // 添加动作 - 仅创建目录即可
                 if (!File::exists($target_save_dir)) {
@@ -102,7 +102,7 @@ class VideoProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                 return ;
             }
             // 保存目录
-            $origin_save_dir = FileUtil::generateRealPathByWithoutPrefixRelativePath($video_project->module->name . '/' . $dir_prefix . '/' . $this->originalName);
+            $origin_save_dir = FileRepository::generateRealPathByWithoutPrefixRelativePath($video_project->module->name . '/' . $dir_prefix . '/' . $this->originalName);
             if (!File::isDir($origin_save_dir)) {
                 // 源目录不存在则创建
                 File::mkdir($origin_save_dir , 0777 , true);
@@ -135,11 +135,11 @@ class VideoProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                 $video_name = $get_video_name($video->name , $video->index);
                 // 第一帧图片 + 预览图片 + 预览视频
                 $video_first_frame_file         = $this->generateRealPath($save_dir , $this->generateMediaSuffix($video_name . '【第一帧】' , 'jpeg'));
-                $video_first_frame_url          = FileUtil::generateUrlByRealPath($video_first_frame_file);
+                $video_first_frame_url          = FileRepository::generateUrlByRealPath($video_first_frame_file);
                 $video_simple_preview_file      = $this->generateRealPath($save_dir , $this->generateMediaSuffix($video_name . '【预览】' , 'mp4'));
-                $video_simple_preview_url       = FileUtil::generateUrlByRealPath($video_simple_preview_file);
+                $video_simple_preview_url       = FileRepository::generateUrlByRealPath($video_simple_preview_file);
                 $preview_file                   = $this->generateRealPath($save_dir , $this->generateMediaSuffix($video_name . '【预览】' ,'jpeg'));
-                $preview_url                    = FileUtil::generateUrlByRealPath($preview_file);
+                $preview_url                    = FileRepository::generateUrlByRealPath($preview_file);
                 if (!File::exists($video_first_frame_file)) {
                     // 移动文件
                     $resource = ResourceModel::findByUrlOrPath($video->thumb_for_program);
@@ -206,7 +206,7 @@ class VideoProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                                 // 文件已经存在，删除
                                 File::dFile($target_file);
                             }
-                            $target_url = FileUtil::generateUrlByRealPath($target_file);
+                            $target_url = FileRepository::generateUrlByRealPath($target_file);
                             // 移动文件
                             File::move($source_file , $target_file);
                             VideoSrcModel::updateById($v->id , [
@@ -256,7 +256,7 @@ class VideoProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                                 // 移动文件
                                 File::move($source_file , $target_file);
                             }
-                            $target_url = FileUtil::generateUrlByRealPath($target_file);
+                            $target_url = FileRepository::generateUrlByRealPath($target_file);
                             VideoSubtitleModel::updateById($v->id , [
                                 'src' => $target_url
                             ]);

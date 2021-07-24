@@ -5,7 +5,7 @@ namespace App\Customize\api\admin\handler;
 
 
 use App\Customize\api\admin\model\DiskModel;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\model\Model;
 use stdClass;
 

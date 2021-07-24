@@ -178,6 +178,6 @@ return [
 
     'disk' => [
         'local' => '本地存储' ,
-        'cloud' => '云存储' ,
+        'aliyun' => '阿里云' ,
     ] ,
 ];

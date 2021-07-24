@@ -2,6 +2,7 @@
 
 namespace App\Console\Commands;
 
+use App\Customize\api\admin\facade\AliyunOss;
 use App\Model\DiskModel;
 use App\Model\ResourceModel;
 use App\Model\TimerTaskLogModel;
@@ -40,7 +41,7 @@ class ResourceHandle extends Command
     public $interval = 100 * 1000;
 
     // 未删除但也未被使用的记录保存多长时间，单位: s
-    public $duration = 24 * 3600;
+    public $duration = 2 * 24 * 3600;
 
     /**
      * Execute the console command.
@@ -54,6 +55,8 @@ class ResourceHandle extends Command
         $time = time();
         $loop_count = 0;
         echo $timer_task_log . PHP_EOL;
+        $total_count = 0;
+        $failed_count = 0;
         $deleted_count = 0;
         $datetime = date('Y-m-d H:i:s' , $time);
         while (!$res->isEmpty())
@@ -78,8 +81,19 @@ class ResourceHandle extends Command
                         continue ;
                     }
                 }
-                if (File::exists($v->path)) {
-                    File::delete($v->path);
+                $total_count++;
+                if ($v->disk === 'local') {
+                    if (File::exists($v->path)) {
+                        File::delete($v->path);
+                    }
+                } else if ($v->disk === 'aliyun') {
+                    $cloud_delete_res = AliyunOss::delete($v->aliyun_bucket , $v->url);
+                    if ($cloud_delete_res['code'] > 0) {
+                        $failed_count++;
+                        continue ;
+                    }
+                } else {
+                    // todo 预留
                 }
                 ResourceModel::updateById($v->id , [
                     'is_deleted'    => 1 ,
@@ -94,7 +108,7 @@ class ResourceHandle extends Command
         }
         $end_time = date('Y-m-d H:i:s');
         $duration = strtotime($end_time) - strtotime($start_time);
-        $end_log = "【end: {$end_time}】，删除完毕。耗费时间：{$duration}s；实际删除：{$deleted_count}";
+        $end_log = "【end: {$end_time}】，删除完毕。耗费时间：{$duration}s；总待删除数：{$total_count}；实际删除：{$deleted_count}；失败数：{$failed_count}";
         $timer_task_log .= $end_log;
         echo PHP_EOL . $end_log . PHP_EOL;
         TimerTaskLogModel::log($this->signature , $timer_task_log , date('Y-m-d H:i:s'));

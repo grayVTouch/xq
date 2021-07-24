@@ -32,8 +32,12 @@ class CreateImageProjectTable extends Migration
             $table->unsignedBigInteger('collect_count')->default(0)->comment('收藏次数');
             $table->tinyInteger('status')->default(0)->comment('审核状态：-1-审核失败 0-待审核 1-审核通过');
             $table->string('fail_reason' , 1000)->default('')->comment('失败原因，当 status=-1 时，必须提供');
-            $table->tinyInteger('process_status')->default(0)->comment('处理状态：-1-处理失败 0-待处理 1-处理中 2-处理完毕');
             $table->string('directory' , 1024)->default('')->comment('目录');
+
+            $table->tinyInteger('process_status')->default(0)->comment('处理状态：-1-处理失败 0-待处理 1-处理中 2-处理完毕');
+            $table->text('process_message')->nullable(true)->comment('处理结果：信息');
+            $table->text('process_data')->nullable(true)->comment('处理结果：数据');
+            $table->string('disk' , 255)->default('')->comment('system_settings.disk；存储介质：local-本地存储 aliyun-阿里云 等');
 
             $table->timestamps();
 

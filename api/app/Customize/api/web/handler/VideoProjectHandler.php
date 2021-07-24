@@ -15,7 +15,7 @@ use App\Customize\api\web\model\CategoryModel;
 use App\Customize\api\web\model\VideoModel;
 use App\Customize\api\web\model\VideoProjectModel;
 use App\Customize\api\web\model\ModuleModel;
-use App\Customize\api\web\util\FileUtil;
+use App\Customize\api\web\repository\FileRepository;
 use App\Customize\api\web\model\Model;
 use stdClass;
 use function api\web\get_config_key_mapping_value;

@@ -4,7 +4,7 @@
 namespace App\Customize\api\web\action;
 
 
-use App\Customize\api\web\util\FileUtil;
+use App\Customize\api\web\repository\FileRepository;
 use App\Customize\api\web\repository\ResourceRepository;
 use App\Customize\api\web\util\Util;
 use App\Http\Controllers\api\web\Base;
@@ -30,9 +30,9 @@ class FileAction extends Action
         try {
             Util::systemPowerUp();
             $dir        = date('Ymd');
-            $path       = FileUtil::upload($file , $dir);
-            $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
-            $url        = FileUtil::generateUrlByRelativePath($path);
+            $path       = FileRepository::upload($file , $dir);
+            $real_path  = FileRepository::generateRealPathByWithPrefixRelativePath($path);
+            $url        = FileRepository::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
             Util::systemPowerDown();
             return self::success('' , $url);
@@ -69,9 +69,9 @@ class FileAction extends Action
         try {
             Util::systemPowerUp();
             $dir        = date('Ymd');
-            $path       = FileUtil::upload($file , $dir);
-            $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
-            $url        = FileUtil::generateUrlByRelativePath($path);
+            $path       = FileRepository::upload($file , $dir);
+            $real_path  = FileRepository::generateRealPathByWithPrefixRelativePath($path);
+            $url        = FileRepository::generateUrlByRelativePath($path);
             if (empty($param['m'])) {
                 if (!empty($param['w'])) {
                     $mode = 'fix-width';
@@ -88,8 +88,8 @@ class FileAction extends Action
             }
             if (in_array($mode , $mode_range)) {
                 $o_real_path        = $real_path;
-                $real_path          = FileUtil::generateRealPathByWithPrefixRelativePath($path);
-                $save_dir           = FileUtil::dir('system' , $dir);
+                $real_path          = FileRepository::generateRealPathByWithPrefixRelativePath($path);
+                $save_dir           = FileRepository::dir('system' , $dir);
                 if (!file_exists($save_dir)) {
                     // 目录不存在则创建
                     mkdir($save_dir , 0755 , true);
@@ -103,7 +103,7 @@ class FileAction extends Action
                 ] , false);
                 // 删除源文件
                 unlink($o_real_path);
-                $url = FileUtil::generateUrlByRealPath($real_path);
+                $url = FileRepository::generateUrlByRealPath($real_path);
             }
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
             Util::systemPowerDown();
@@ -131,9 +131,9 @@ class FileAction extends Action
         try {
             Util::systemPowerUp();
             $dir        = date('Ymd');
-            $path       = FileUtil::upload($file , $dir);
-            $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
-            $url        = FileUtil::generateUrlByRelativePath($path);
+            $path       = FileRepository::upload($file , $dir);
+            $real_path  = FileRepository::generateRealPathByWithPrefixRelativePath($path);
+            $url        = FileRepository::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
             Util::systemPowerDown();
             return self::success('' , $url);
@@ -160,9 +160,9 @@ class FileAction extends Action
         try {
             Util::systemPowerUp();
             $dir        = date('Ymd');
-            $path       = FileUtil::upload($file , $dir);
-            $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
-            $url        = FileUtil::generateUrlByRelativePath($path);
+            $path       = FileRepository::upload($file , $dir);
+            $real_path  = FileRepository::generateRealPathByWithPrefixRelativePath($path);
+            $url        = FileRepository::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
             Util::systemPowerDown();
             return self::success('' , $url);
@@ -184,9 +184,9 @@ class FileAction extends Action
         try {
             Util::systemPowerUp();
             $dir        = date('Ymd');
-            $path       = FileUtil::upload($file , $dir);
-            $real_path  = FileUtil::generateRealPathByWithPrefixRelativePath($path);
-            $url        = FileUtil::generateUrlByRelativePath($path);
+            $path       = FileRepository::upload($file , $dir);
+            $real_path  = FileRepository::generateRealPathByWithPrefixRelativePath($path);
+            $url        = FileRepository::generateUrlByRelativePath($path);
             ResourceRepository::create($url , $real_path , 'local' , 1 , 0);
             Util::systemPowerDown();
             return self::success('' , $url);

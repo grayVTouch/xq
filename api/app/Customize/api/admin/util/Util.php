@@ -6,9 +6,9 @@ namespace App\Customize\api\admin\util;
 
 class Util
 {
-    private static $maxExecutionTime;
+    private static $maxExecutionTime = 30;
 
-    private static $memoryLimit;
+    private static $memoryLimit = '128M';
 
     public static function systemPowerUp()
     {

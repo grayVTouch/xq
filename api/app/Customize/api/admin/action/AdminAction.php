@@ -17,7 +17,6 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
-use function api\admin\get_form_error;
 use function api\admin\my_config;
 use function api\admin\my_config_keys;
 use function api\admin\parse_order;
@@ -28,13 +27,14 @@ class AdminAction extends Action
 {
     public static function info(Base $context , array $param = []): array
     {
-
         $disk_count = DiskModel::countByIsDefault();
+        $settings = SystemSettingsModel::first();
         return self::success('' , [
             'user' => user() ,
             'settings' => [
                 'is_init_disk' => $disk_count > 0 ? 1 : 0 ,
-                'web_url' => SystemSettingsModel::getValueByKey('web_url') ,
+                'web_url' => $settings->web_url ,
+                'disk' => $settings->disk ,
                 'show_for_image_project_at_web' => WebRouteMappingModel::findBySymbol('ImageProject::show')->url ,
                 'show_for_video_project_at_web' => WebRouteMappingModel::findBySymbol('VideoProject::show')->url ,
                 'show_for_video_at_web' => WebRouteMappingModel::findBySymbol('Video::show')->url ,

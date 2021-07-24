@@ -18,6 +18,7 @@ use function api\admin\my_config_keys;
 use function api\admin\parse_order;
 use function core\array_unit;
 use function core\current_datetime;
+use function core\format_path;
 
 class DiskAction extends Action
 {
@@ -122,6 +123,7 @@ class DiskAction extends Action
         if (!empty(DiskModel::findByExcludeIdAndPath($res->id , $param['path']))) {
             return self::error('路径已经存在，请重新提供');
         }
+        $param['path'] = format_path($param['path']);
         try {
             DB::beginTransaction();
             DiskModel::updateById($res->id , array_unit($param , [
@@ -166,6 +168,7 @@ class DiskAction extends Action
         if (!empty(DiskModel::findByPath($param['path']))) {
             return self::error('路径已经存在，请重新提供');
         }
+        $param['path'] = format_path($param['path']);
         $param['created_at'] = current_datetime();
         try {
             DB::beginTransaction();

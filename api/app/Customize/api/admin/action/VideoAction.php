@@ -8,6 +8,7 @@ use App\Customize\api\admin\job\VideoHandleJob;
 use App\Customize\api\admin\job\VideoResourceHandleJob;
 use App\Customize\api\admin\model\CategoryModel;
 use App\Customize\api\admin\model\RelationTagModel;
+use App\Customize\api\admin\model\SystemSettingsModel;
 use App\Customize\api\admin\model\TagModel;
 use App\Customize\api\admin\model\VideoModel;
 use App\Customize\api\admin\model\ModuleModel;
@@ -15,7 +16,7 @@ use App\Customize\api\admin\model\VideoSrcModel;
 use App\Customize\api\admin\model\VideoProjectModel;
 use App\Customize\api\admin\model\UserModel;
 use App\Customize\api\admin\model\VideoSubtitleModel;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\repository\ResourceRepository;
 use App\Customize\api\admin\repository\VideoRepository;
 use App\Http\Controllers\api\admin\Base;
@@ -294,6 +295,7 @@ class VideoAction extends Action
                 return self::error('索引已经存在');
             }
             $param['category_id'] = 0;
+            $param['disk'] = $video_project->disk;
         } else {
             if ($param['name'] === '') {
                 return self::error('名称尚未提供');
@@ -308,6 +310,7 @@ class VideoAction extends Action
             }
             $param['video_project_id']  = 0;
             $param['index']             = 0;
+            $param['disk'] = SystemSettingsModel::getValueByKey('disk');
         }
         $user = UserModel::find($param['user_id']);
         if (empty($user)) {
@@ -353,6 +356,7 @@ class VideoAction extends Action
                 'file_process_status' ,
                 'updated_at' ,
                 'created_at' ,
+                'disk' ,
             ]));
             ResourceRepository::used($param['thumb']);
             ResourceRepository::used($param['src']);

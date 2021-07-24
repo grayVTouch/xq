@@ -8,7 +8,7 @@ use App\Customize\api\admin\model\ModuleModel;
 use App\Customize\api\admin\model\RegionModel;
 use App\Customize\api\admin\model\UserModel;
 use App\Customize\api\admin\model\VideoCompanyModel;
-use App\Customize\api\admin\util\FileUtil;
+use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\model\Model;
 use stdClass;
 use function api\admin\get_config_key_mapping_value;

@@ -639,18 +639,21 @@ class UserAction extends Action
             $user = user();
             if ($param['action'] == 1) {
                 // 点赞
-                PraiseModel::insertOrIgnore([
-                    'module_id' => $module->id ,
-                    'user_id' => $user->id ,
-                    'relation_type' => $param['relation_type'] ,
-                    'relation_id' => $relation->id ,
-                    'created_at' => date('Y-m-d H:i:s')
-                ]);
-                ImageProjectModel::countHandle($relation->id , 'praise_count' , 'increment');
+                $praise = PraiseModel::findByModuleIdAndUserIdAndRelationTypeAndRelationId($module->id , $user->id , $param['relation_type'] , $relation->id);
+                if (empty($praise)) {
+                    PraiseModel::insertOrIgnore([
+                        'module_id' => $module->id ,
+                        'user_id' => $user->id ,
+                        'relation_type' => $param['relation_type'] ,
+                        'relation_id' => $relation->id ,
+                        'created_at' => date('Y-m-d H:i:s')
+                    ]);
+                }
+                ImageProjectModel::incrementByIdAndColumnAndStep($relation->id , 'praise_count' , 1);
             } else {
                 // 取消收藏
                 PraiseModel::delByModuleIdAndUserIdAndRelationTypeAndRelationId($module->id , $user->id , 'image_project' , $relation->id);
-                ImageProjectModel::countHandle($relation->id , 'praise_count' , 'decrement');
+                ImageProjectModel::decrementByIdAndColumnAndStep($relation->id , 'praise_count' , 1);
             }
         } else {
             // 其他类型，预留

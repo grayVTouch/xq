@@ -41,6 +41,10 @@ class CreateVideoProjectTable extends Migration
             $table->tinyInteger('status')->default(0)->comment('状态： -1-审核不通过 0-待审核 1-审核通过');
             $table->string('fail_reason' , 255)->default('')->comment('失败原因，当status=-1时，必须提供');
             $table->tinyInteger('file_process_status')->default(0)->comment('文件处理处理状态：-1-处理失败 0-待处理 1-处理中 2-处理完成 ');
+            $table->text('file_process_message')->nullable(true)->comment('文件处理：信息');
+            $table->text('file_process_data')->nullable(true)->comment('文件处理：数据');
+
+            $table->string('disk' , 255)->default('')->comment('system_settings.disk；存储介质：local-本地存储 aliyun-阿里云 等');
 
             $table->unsignedBigInteger('praise_count')->default(0)->comment('点赞数');
             $table->unsignedBigInteger('against_count')->default(0)->comment('反对数');

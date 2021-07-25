@@ -358,7 +358,7 @@
                                             <td>
                                                 <div class="subtitles">
                                                     <div class="item" v-for="(v,k) in uVideoSubtitles">
-                                                        <div class="name"><input type="text" placeholder="字幕名称" class="form-text" v-model="v.name"></div>
+                                                        <div class="name"><input type="text" placeholder="字幕名称" class="form-text" v-model="v.name" @input="v.error = ''"></div>
                                                         <div class="src"><input type="file" class="form-file" @change="videoSubtitleChangeEvent($event , v)"></div>
 
                                                         <div class="actions">

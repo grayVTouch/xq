@@ -92,7 +92,9 @@
                 <template v-slot:status="{row,index}"><b :class="{'run-red': row.status === -1 , 'run-gray': row.status === 0 , 'run-green': row.status === 1}">{{ row.__status__ }}</b></template>
                 <template v-slot:end_status="{row,index}"><b :class="{'run-red': row.end_status === 'making' , 'run-gray': row.end_status === 'terminated' , 'run-green': row.end_status === 'completed'}">{{ row.__end_status__ }}</b></template>
                 <template v-slot:file_process_status="{row,index}">
-                    <b :class="{'run-gray': row.file_process_status === -1 , 'run-red': row.file_process_status === 0 , 'run-green': row.file_process_status >= 1}">{{ row.__file_process_status__ }}</b>
+                    <i-tooltip max-width="200" :transfer="true" placement="top" :content="row.file_process_status ? row.file_process_status : '暂无处理信息'">
+                        <b :class="{'run-gray': row.file_process_status === -1 , 'run-red': row.file_process_status === 0 , 'run-green': row.file_process_status >= 1}">{{ row.__file_process_status__ }}</b>
+                    </i-tooltip>
                 </template>
                 <template v-slot:tags="{row,index}">
                     <i-poptip placement="right" width="400" title="标签" :transfer="true" trigger="hover">

@@ -96,4 +96,18 @@ class StorageRepository
         return $pathname;
     }
 
+    public static function getRelativeDirectoryByVideoProjectIdAndName(int $video_project_id , string $name): string
+    {
+        $video_project = VideoProjectModel::find($video_project_id);
+        if (empty($video_project)) {
+            throw new Exception("视频专题记录不存在【{$video_project_id}】");
+        }
+        VideoProjectHandler::module($video_project);
+        $dir_prefix = my_config('app.dir')['video_project'];
+        $pathname = !empty($video_project->module) ? $video_project->module->name . '/' : '';
+        $pathname .= $dir_prefix . '/';
+        $pathname .= $name;
+        return $pathname;
+    }
+
 }

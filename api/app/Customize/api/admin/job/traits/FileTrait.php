@@ -1,12 +1,12 @@
 <?php
 
 
-namespace App\Customize\api\admin\job;
+namespace App\Customize\api\admin\job\traits;
 
 
 use function core\format_path;
 
-class FileBaseJob
+trait FileTrait
 {
     protected function generateRealPath(string $dir , string $path): string
     {

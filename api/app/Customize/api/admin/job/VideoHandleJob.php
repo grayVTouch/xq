@@ -5,6 +5,8 @@ namespace App\Customize\api\admin\job;
 use App\Customize\api\admin\facade\AliyunOss;
 use App\Customize\api\admin\handler\VideoHandler;
 use App\Customize\api\admin\job\middleware\BootMiddleware;
+use App\Customize\api\admin\job\traits\FileTrait;
+use App\Customize\api\admin\job\traits\VideoTrait;
 use App\Customize\api\admin\model\ResourceModel;
 use App\Customize\api\admin\model\SystemSettingsModel;
 use App\Customize\api\admin\model\VideoModel;
@@ -27,9 +29,13 @@ use App\Customize\api\admin\repository\FileRepository;
 use function api\admin\my_config;
 use function core\random;
 
-class VideoHandleJob extends FileBaseJob implements ShouldQueue
+class VideoHandleJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use FileTrait;
+    use VideoTrait;
+
 
     /**
      * 视频源
@@ -172,7 +178,8 @@ class VideoHandleJob extends FileBaseJob implements ShouldQueue
         }
 
         VideoModel::updateById($this->videoId , [
-            'video_process_status' => 3
+            'video_process_status' => 3 ,
+            'video_process_message' => '处理成功' ,
         ]);
     }
 
@@ -376,21 +383,32 @@ class VideoHandleJob extends FileBaseJob implements ShouldQueue
         $is_hd = false;
         $max_definition = null;
         // 从小到大 - 排序
-        usort($video_transcoding_config['specification'] , function($a , $b){
+        $video_transcode_specification = $video_transcoding_config['specification'];
+
+        // 从小到大 - 排序
+        usort($video_transcode_specification , function($a , $b){
             if ($a['w'] === $b['w']) {
                 return 0;
             }
-            return $a['w'] > $b['w'] ? 1 : -1;
+            return $a['w'] < $b['w'] ? 1 : -1;
         });
+        $video_transcode_specification = array_filter($video_transcode_specification , function($v) use($video_info){
+            return $video_info['width'] >= $v['w'];
+        });
+        if (count($video_transcode_specification) > 0) {
+            $max_video_transcode_specification = $video_transcode_specification[0];
+        }
         foreach ($video_transcoding_config['specification'] as $k => $v)
         {
             if ($video_info['width'] < $v['w']) {
                 continue ;
             }
-            $max_definition = [
-                'name' => $k ,
-                'definition' => $v ,
-            ];
+            if ($max_video_transcode_specification['w'] === $v['w']) {
+                $max_definition = [
+                    'name'       => $k ,
+                    'definition' => $v ,
+                ];
+            }
             if ($v['is_hd']) {
                 $is_hd = true;
             }
@@ -703,22 +721,32 @@ class VideoHandleJob extends FileBaseJob implements ShouldQueue
         // 是否高清视频
         $is_hd = false;
         $max_definition = null;
+        $video_transcode_specification = $video_transcoding_config['specification'];
+
         // 从小到大 - 排序
-        usort($video_transcoding_config['specification'] , function($a , $b){
+        usort($video_transcode_specification , function($a , $b){
             if ($a['w'] === $b['w']) {
                 return 0;
             }
-            return $a['w'] > $b['w'] ? 1 : -1;
+            return $a['w'] < $b['w'] ? 1 : -1;
         });
+        $video_transcode_specification = array_filter($video_transcode_specification , function($v) use($video_info){
+            return $video_info['width'] >= $v['w'];
+        });
+        if (count($video_transcode_specification) > 0) {
+            $max_video_transcode_specification = $video_transcode_specification[0];
+        }
         foreach ($video_transcoding_config['specification'] as $k => $v)
         {
             if ($video_info['width'] < $v['w']) {
                 continue ;
             }
-            $max_definition = [
-                'name' => $k ,
-                'definition' => $v ,
-            ];
+            if ($max_video_transcode_specification['w'] === $v['w']) {
+                $max_definition = [
+                    'name'       => $k ,
+                    'definition' => $v ,
+                ];
+            }
             if ($v['is_hd']) {
                 $is_hd = true;
             }
@@ -827,29 +855,6 @@ class VideoHandleJob extends FileBaseJob implements ShouldQueue
                 ResourceRepository::create($video_subtitle_convert_access_url , $video_subtitle_convert_file , 'local' , 1 , 0);
             }
         }
-    }
-
-    // 生成媒体的后缀
-    private function generateMediaSuffix(string $type , string $name , string $extension): string
-    {
-        return $type === 'pro' ? $name . '.' . $extension : $name . '【' . random(8 , 'letter' , true) . '】' . '.' . $extension;
-    }
-
-    private function generateVideoMediaSuffix(string $type , string $definition , ?int $index , string $name , string $extension): string
-    {
-        if ($type === 'misc') {
-            return $name . '【' . $definition . '】' . '【' . random(8 , 'letter' , true) . '】' . '.' . $extension;
-        }
-        if ($index < 10) {
-            $index = '000' . $index;
-        } else if ($index < 100) {
-            $index = '00' . $index;
-        } else if ($index < 1000) {
-            $index = '0' . $index;
-        } else {
-            // 其他
-        }
-        return $name . '【' . $definition . '】 ' . $index . '.' . $extension;
     }
 
     public function failed(Exception $e)

@@ -120,10 +120,14 @@
                     <b :class="{'run-red': row.status === -1 , 'run-gray': row.status === 0 , 'run-green': row.status === 1}">{{ row.__status__ }}</b>
                 </template>
                 <template v-slot:video_process_status="{row,index}">
-                    <b :class="{'run-gray': row.video_process_status === -1 , 'run-red': row.video_process_status === 0 , 'run-green': row.video_process_status >= 1}">{{ row.__video_process_status__ }}</b>
+                    <i-tooltip max-width="200" :transfer="true" placement="top" :content="row.video_process_message ? row.video_process_message : '暂无处理信息'">
+                        <b :class="{'run-gray': row.video_process_status === -1 , 'run-red': row.video_process_status === 0 , 'run-green': row.video_process_status >= 1}">{{ row.__video_process_status__ }}</b>
+                    </i-tooltip>
                 </template>
                 <template v-slot:file_process_status="{row,index}">
-                    <b :class="{'run-gray': row.file_process_status === -1 , 'run-red': row.file_process_status === 0 , 'run-green': row.file_process_status >= 1}">{{ row.__file_process_status__ }}</b>
+                    <i-tooltip max-width="200" placement="top" :content="row.file_process_message ? row.file_process_message : '暂无处理信息'" :transfer="true">
+                        <b :class="{'run-gray': row.file_process_status === -1 , 'run-red': row.file_process_status === 0 , 'run-green': row.file_process_status >= 1}">{{ row.__file_process_status__ }}</b>
+                    </i-tooltip>
                 </template>
                 <template v-slot:action="{row , index}">
 <!--                    <my-table-button @click="editEvent(row)"><my-icon icon="edit" />编辑</my-table-button>-->

@@ -67,6 +67,7 @@ class AliyunOss
                 $res = $this->client->putObject($bucket , $filename , $file , $options);
             }
             $url = $res['oss-request-url'] ?? '';
+            $url = urldecode($url);
             return $this->success('' , $url);
         } catch(Exception $e) {
             return $this->error($e->getMessage() , $e->getTrace());
@@ -88,6 +89,7 @@ class AliyunOss
                 $this->client->deleteObject($from_bucket , $from_name);
             }
             $url = $copy_res['oss-request-url'] ?? '';
+            $url = urldecode($url);
             return $this->success('' , $url);
         } catch(Exception $e) {
             return $this->error($e->getMessage() , $e->getTrace());

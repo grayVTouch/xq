@@ -120,7 +120,7 @@ export default {
                     },
                     {
                         title: '处理状态',
-                        key: '__process_status__',
+                        slot: 'process_status',
                         // slot: 'status' ,
                         minWidth: TopContext.table.status,
                         align: TopContext.table.alignCenter,

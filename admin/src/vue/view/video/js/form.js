@@ -556,6 +556,7 @@ export default {
             if (files.length < 1) {
                 return ;
             }
+            record.error = '';
             record.file = files[0];
             this.uploadVideoSubtitle(record , () => {
                 record.uploading = false;
@@ -604,6 +605,15 @@ export default {
             }
             if (form.type === 'misc' && !G.isNumeric(form.category_id)) {
                 error.category_id = '请选择分类';
+            }
+            // 检查是否有未提供名称的字幕
+            for (let i = 0; i < form.video_subtitles.length; ++i)
+            {
+                const cur = form.video_subtitles[i];
+                if (G.isEmptyString(cur.name)) {
+                    error.none = '存在未提供名称的字幕';
+                    break;
+                }
             }
             return {
                 status: G.isEmptyObject(error) ,

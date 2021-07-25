@@ -5,6 +5,7 @@ namespace App\Customize\api\admin\job;
 use App\Customize\api\admin\facade\AliyunOss;
 use App\Customize\api\admin\handler\ImageProjectHandler;
 use App\Customize\api\admin\job\middleware\BootMiddleware;
+use App\Customize\api\admin\job\traits\FileTrait;
 use App\Customize\api\admin\model\ImageModel;
 use App\Customize\api\admin\model\ImageProjectModel;
 use App\Customize\api\admin\model\ResourceModel;
@@ -26,9 +27,11 @@ use function api\admin\my_config;
 use function core\get_extension;
 use function core\random;
 
-class ImageProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
+class ImageProjectResourceHandleJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
+
+    use FileTrait;
 
     private $imageProjectId = 0;
 
@@ -206,7 +209,6 @@ class ImageProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                 if ($this->imageProject->type === 'pro') {
                     $filename       = "{$this->imageProject->name}【{$index}】【预览图】.{$p_compress_extension}";
                 } else {
-                    $preview_dir    = $save_dir;
                     $filename       = $random_value . '【预览图】.' . $p_compress_extension;
                 }
                 $preview_file = $preview_dir . '/' . $filename;
@@ -457,7 +459,6 @@ class ImageProjectResourceHandleJob extends FileBaseJob implements ShouldQueue
                 if ($this->imageProject->type === 'pro') {
                     $filename       = "{$this->imageProject->name}【{$index}】【预览图】.{$extension}";
                 } else {
-                    $preview_dir    = $save_dir;
                     $filename       = $random_value . '【预览图】.' . $extension;
                 }
                 $target_file    = $this->generateRealPath($preview_dir , $filename);

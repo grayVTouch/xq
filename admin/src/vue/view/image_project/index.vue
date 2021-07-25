@@ -137,6 +137,12 @@
                     </i-poptip>
                 </template>
 
+                <template v-slot:process_status="{row,index}">
+                    <i-tooltip max-width="200" :transfer="true" placement="top" :content="row.process_message ? row.process_message : '暂无处理信息'">
+                        <b :class="{'run-gray': row.process_status === -1 , 'run-red': row.process_status === 0 , 'run-green': row.process_status >= 1}">{{ row.__process_status__ }}</b>
+                    </i-tooltip>
+                </template>
+
                 <template v-slot:action="{row,index}">
                     <my-tooltip content="点击查看web端详情">
                         <my-table-button v-if="row.type === 'pro'" @click="linkToShowForImageProjectAtWeb(row)"><my-icon icon="web"></my-icon></my-table-button>

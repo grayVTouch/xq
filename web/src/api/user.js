@@ -32,14 +32,6 @@ export default {
         return Http.post(`${TopContext.api}/user/praise_handle`, query , data);
     },
 
-    collectionHandle(query , data) {
-        return Http.post( `${TopContext.api}/user/collection_handle` , query , data);
-    },
-
-    // 记录用户行为
-    record (query , data) {
-        return Http.post(`${TopContext.api}/user/record` , query , data);
-    },
 
     createAndJoinCollectionGroup(query , data) {
         return Http.post(`${TopContext.api}/user/create_and_join_collection_group`, query , data);

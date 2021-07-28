@@ -22,6 +22,7 @@ router.beforeEach((to , from , next) => {
                 .default().then((res) => {
                 if (res.code !== TopContext.code.Success) {
                     this.errorHandle(res.message);
+                    Prompt.error(res.message);
                     return ;
                 }
                 G.s.json('module' , res.data);

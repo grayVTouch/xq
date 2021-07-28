@@ -11,10 +11,9 @@ module.exports = merge(common, {
         // 初始访问的文件
         index: 'index.html' ,
         // Ip
-        // host: '127.0.0.1' ,
-        host: '0.0.0.0' ,
+        host: '127.0.0.1' ,
         // 端口
-        port: 9000 ,
+        port: 30002 ,
         // 当模块热更新失败的时候，刷新页面。
         // 和 hotOnly 不同弄（失败仅在控制台输出错误）
         hot: true ,
@@ -33,6 +32,12 @@ module.exports = merge(common, {
         // 如果开启了 vue 的 history 模式
         // 那么请务必开启下面这个选项
         historyApiFallback: true ,
+        proxy: {
+            '/api': {
+                target: 'http://api.xq.test' ,
+                changeOrigin: true ,
+            } ,
+        } ,
     } ,
     module: {
         rules: [

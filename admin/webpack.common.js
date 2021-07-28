@@ -28,6 +28,8 @@ module.exports = {
         new CleanWebpackPlugin({
             // 仅删除陈旧的资源
             cleanStaleWebpackAssets: false ,
+            // 排除
+            exclude: ['*.htaccess'] ,
         }) ,
         new HtmlWebpackPlugin({
             title: '兴趣部落' ,

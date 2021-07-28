@@ -617,6 +617,7 @@
     position: relative;
     width: 150px;
     height: 84px;
+    overflow: hidden;
 }
 
 .view > .recommend .video-series .list .video-project .info {

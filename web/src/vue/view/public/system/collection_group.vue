@@ -125,12 +125,11 @@
                 }
                 this.pending(pendingKey , true);
                 const action = row.is_inside ? 0 : 1;
-                Api.user
-                    .collectionHandle(null , {
+                Api.collectionGroup
+                    .collectOrCancel(row.id , null , {
                         relation_type: this.relationType ,
                         relation_id: this.relationId ,
                         action ,
-                        collection_group_id: row.id ,
                     })
                     .then((res) => {
                         if (res.code !== TopContext.code.Success) {

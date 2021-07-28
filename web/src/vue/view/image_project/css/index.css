@@ -249,6 +249,7 @@
     background-color: #3e3d3d;
     padding: 10px 300px;
     border-radius: 3px;
+    display: inline-block;
 }
 
 /**

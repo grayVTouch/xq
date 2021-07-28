@@ -4,6 +4,7 @@ namespace App\Customize\api\admin\job\handler;
 
 use App\Customize\api\admin\facade\AliyunOss;
 use App\Customize\api\admin\handler\VideoHandler as VideoModelHandler;
+use App\Customize\api\admin\job\traits\FileTrait;
 use App\Customize\api\admin\job\traits\VideoTrait;
 use App\Customize\api\admin\model\ResourceModel;
 use App\Customize\api\admin\model\SystemSettingsModel;
@@ -23,6 +24,7 @@ use function core\get_extension;
 
 class VideoHandler
 {
+    use FileTrait;
     use VideoTrait;
 
     /**

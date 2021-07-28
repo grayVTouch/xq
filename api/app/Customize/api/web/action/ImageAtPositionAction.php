@@ -30,10 +30,6 @@ class ImageAtPositionAction extends Action
         }
         $res = ImageAtPositionModel::getByModuleIdAndPositionId($module->id , $position->id);
         $res = ImageAtPositionHandler::handleAll($res);
-        foreach ($res as $v)
-        {
-
-        }
         return self::success('' , $res);
     }
 }

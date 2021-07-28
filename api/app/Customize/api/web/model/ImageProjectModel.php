@@ -12,8 +12,29 @@ class ImageProjectModel extends Model
 {
     protected $table = 'xq_image_project';
 
-    public static function getNewestByFilterAndSize(array $filter = [] , int $size = 0): Collection
+    public function user()
     {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(RelationTagModel::class , 'relation_id' , 'id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ImageModel::class , 'image_project_id' , 'id');
+    }
+
+    public static function getNewestByRelationAndFieldAndFilterAndSize(array $relation = [] , array $field = null , array $filter = [] , int $size = 0): Collection
+    {
+        $field = $field ?? '*';
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
 
@@ -28,16 +49,29 @@ class ImageProjectModel extends Model
         if ($filter['type'] !== '') {
             $where[] = ['type' , '=' , $filter['type']];
         }
-
-        return self::where($where)
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+        return self::with($with)
+            ->select($field)
+            ->where($where)
             ->orderBy('created_at' , 'desc')
             ->orderBy('id' , 'asc')
             ->limit($size)
             ->get();
     }
 
-    public static function getHotByFilterAndSize(array $filter = [] , int $size = 0): Collection
+    public static function getHotByRelationAndFieldAndFilterAndSize(array $relation = [] , array $field = null , array $filter = [] , int $size = 0): Collection
     {
+        $field = $field ?? '*';
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
 
@@ -52,7 +86,20 @@ class ImageProjectModel extends Model
         if ($filter['type'] !== '') {
             $where[] = ['type' , '=' , $filter['type']];
         }
-        return self::where($where)
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+        return self::with($with)
+            ->select($field)
+            ->where($where)
             ->orderBy('collect_count' , 'desc')
             ->orderBy('praise_count' , 'desc')
             ->orderBy('view_count' , 'desc')
@@ -62,7 +109,7 @@ class ImageProjectModel extends Model
             ->get();
     }
 
-    public static function getHotWithPagerByFilterAndSize(array $filter = [] , int $size = 0): Paginator
+    public static function getHotWithPagerByRelationAndFilterAndSize(array $relation = [] , array $filter = [] , int $size = 0): Paginator
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
@@ -71,6 +118,18 @@ class ImageProjectModel extends Model
             ['status' , '=' , 1] ,
         ];
 
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
         }
@@ -78,7 +137,8 @@ class ImageProjectModel extends Model
         if ($filter['type'] !== '') {
             $where[] = ['type' , '=' , $filter['type']];
         }
-        return self::where($where)
+        return self::with($with)
+            ->where($where)
             // 查看次数
             ->orderBy('view_count' , 'desc')
             // 点赞次数
@@ -91,10 +151,17 @@ class ImageProjectModel extends Model
     }
 
 
-    public static function getByTagIdAndFilterAndSize(int $tag_id , array $filter = [] , int $size = 0): Collection
+    public static function getByRelationAndFieldAndTagIdAndFilterAndSize(array $relation , ?array $field , int $tag_id , array $filter = [] , int $size = 0): Collection
     {
+        $field = $field ?? 'ip.*';
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
+
+        if (is_array($field)) {
+            array_walk($field , function (&$v) {
+                $v = 'ip.' . $v;
+            });
+        }
 
         $where = [
             ['ip.status' , '=' , 1] ,
@@ -107,8 +174,21 @@ class ImageProjectModel extends Model
         if ($filter['type'] !== '') {
             $where[] = ['ip.type' , '=' , $filter['type']];
         }
-        return self::from('xq_image_project as ip')
-            ->select('ip.*')
+
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+        return self::with($with)
+            ->from('xq_image_project as ip')
+            ->select($field)
             ->where($where)
             ->whereExists(function($query) use($tag_id){
                 $query->select('id')
@@ -126,7 +206,7 @@ class ImageProjectModel extends Model
     }
 
     // 标签对应的图片专题-非严格模式匹配
-    public static function getByTagIdsAndFilterAndSize(array $tag_ids = [] , array $filter = [] , int $size = 0): Paginator
+    public static function getInLooseByRelationAndTagIdsAndFilterAndSize(array $relation = [] , array $tag_ids = [] , array $filter = [] , int $size = 0): Paginator
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
@@ -134,6 +214,18 @@ class ImageProjectModel extends Model
         $where = [
             ['ip.status' , '=' , 1] ,
         ];
+
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
 
         if ($filter['module_id'] !== '') {
             $where[] = ['ip.module_id' , '=' , $filter['module_id']];
@@ -143,7 +235,8 @@ class ImageProjectModel extends Model
             $where[] = ['ip.type' , '=' , $filter['type']];
         }
 
-        return self::from('xq_image_project as ip')
+        return self::with($with)
+            ->from('xq_image_project as ip')
             ->select('ip.*')
             ->where($where)
             ->whereExists(function($query) use($tag_ids){
@@ -161,7 +254,7 @@ class ImageProjectModel extends Model
     }
 
     // 标签对应的图片专题-严格模式匹配
-    public static function getInStrictByTagIdsAndFilterAndSize(array $tag_ids = [] , array $filter = [] , int $size = 0): Paginator
+    public static function getInStrictByRelationAndTagIdsAndFilterAndSize(array $relation = [] , array $tag_ids = [] , array $filter = [] , int $size = 0): Paginator
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
@@ -169,6 +262,18 @@ class ImageProjectModel extends Model
         $where = [
             ['ip.status' , '=' , 1] ,
         ];
+
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
 
         if ($filter['module_id'] !== '') {
             $where[] = ['ip.module_id' , '=' , $filter['module_id']];
@@ -178,7 +283,8 @@ class ImageProjectModel extends Model
             $where[] = ['ip.type' , '=' , $filter['type']];
         }
 
-        return self::from('xq_image_project as ip')
+        return self::with($with)
+            ->from('xq_image_project as ip')
             ->select('ip.*')
             ->where($where)
             ->whereExists(function($query) use($tag_ids){
@@ -198,8 +304,9 @@ class ImageProjectModel extends Model
             ->paginate($size);
     }
 
-    public static function getNewestWithPagerByFilterAndSize(array $filter = [] , int $size = 0): Paginator
+    public static function getNewestWithPagerByRelationAndFieldAndFilterAndSize(array $relation , ?array $field , array $filter = [] , int $size = 0): Paginator
     {
+        $field = $field ?? '*';
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['type']      = $filter['type'] ?? '';
 
@@ -215,13 +322,27 @@ class ImageProjectModel extends Model
             $where[] = ['type' , '=' , $filter['type']];
         }
 
-        return self::where($where)
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
+        return self::with($with)
+            ->select($field)
+            ->where($where)
             ->orderBy('created_at' , 'desc')
             ->orderBy('id' , 'asc')
             ->paginate($size);
     }
 
-    public static function getWithPagerInStrictByFilterAndOrderAndSize(array $filter = [] , $order = null , int $size = 20)
+    public static function getWithPagerInStrictByRelationAndFilterAndOrderAndSize(array $relation = [] , array $filter = [] , $order = null , int $size = 20)
     {
         $filter['value']        = $filter['value'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
@@ -238,6 +359,18 @@ class ImageProjectModel extends Model
             ['ip.name' , 'like' , "%{$value}%"] ,
         ];
 
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
         if ($filter['module_id'] !== '') {
             $where[] = ['ip.module_id' , '=' , $filter['module_id']];
         }
@@ -246,7 +379,8 @@ class ImageProjectModel extends Model
             $where[] = ['ip.type' , '=' , $filter['type']];
         }
 
-        $query = self::from('xq_image_project as ip')
+        $query = self::with($with)
+            ->from('xq_image_project as ip')
             ->where($where);
 
         if (!empty($filter['category_ids'])) {
@@ -257,10 +391,8 @@ class ImageProjectModel extends Model
             $query->whereIn('ip.image_subject_id' , $filter['image_subject_ids']);
         }
 
-        return $query->whereExists(function($query) use($filter){
-                if (empty($filter['tag_ids'])) {
-                    return ;
-                }
+        if (!empty($filter['tag_ids'])) {
+            $query->whereExists(function($query) use($filter){
                 $query->select('*' , DB::raw('count(id) as total'))
                     ->from('xq_relation_tag')
                     ->where([
@@ -270,13 +402,14 @@ class ImageProjectModel extends Model
                     ->groupBy('relation_id')
                     ->having('total' , '=' , count($filter['tag_ids']))
                     ->whereRaw('relation_id = ip.id');
-            })
-            ->orderBy("ip.{$order['field']}" , $order['value'])
+            });
+        }
+        return $query->orderBy("ip.{$order['field']}" , $order['value'])
             ->orderBy('ip.id' , 'desc')
             ->paginate($size);
     }
 
-    public static function getWithPagerInLooseByFilterAndOrderAndSize(array $filter = [] , $order = null , int $size = 20)
+    public static function getWithPagerInLooseByRelationAndFilterAndOrderAndSize(array $relation = [] , array $filter = [] , $order = null , int $size = 20)
     {
         $filter['value']        = $filter['value'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
@@ -293,6 +426,18 @@ class ImageProjectModel extends Model
             ['ip.name' , 'like' , "%{$value}%"] ,
         ];
 
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with['tags'] = function($query){
+                    $query->where('relation_type' , 'image_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
         if ($filter['module_id'] !== '') {
             $where[] = ['ip.module_id' , '=' , $filter['module_id']];
         }
@@ -301,7 +446,8 @@ class ImageProjectModel extends Model
             $where[] = ['ip.type' , '=' , $filter['type']];
         }
 
-        $query = self::from('xq_image_project as ip')
+        $query = self::with($with)
+            ->from('xq_image_project as ip')
             ->where($where);
 
         if (!empty($filter['category_ids'])) {

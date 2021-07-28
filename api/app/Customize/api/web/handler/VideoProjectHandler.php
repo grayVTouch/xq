@@ -26,7 +26,7 @@ use function core\get_time_diff;
 
 class VideoProjectHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
@@ -75,7 +75,8 @@ class VideoProjectHandler extends Handler
         $user = user();
         $user_play_record = null;
         if (!empty($user)) {
-            $user_play_record = UserVideoProjectPlayRecordModel::findByModuleIdAndUserIdAndVideoProjectId($model->module_id , $user->id , $model->id);
+            $user_play_record = property_exists($model , 'user_play_record') ? $model->user_play_record : UserVideoProjectPlayRecordModel::findByModuleIdAndUserIdAndVideoProjectId($model->module_id , $user->id , $model->id);
+            $user_play_record = UserVideoProjectPlayRecordHandler::handle($user_play_record);
         }
         $model->user_play_record = $user_play_record;
     }
@@ -86,7 +87,7 @@ class VideoProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $videos = VideoModel::getByVideoProjectId($model->id);
+        $videos = property_exists($model , 'videos') ? $model->videos : VideoModel::getByVideoProjectId($model->id);
         $videos = VideoHandler::handleAll($videos);
 
         $model->videos = $videos;
@@ -97,7 +98,7 @@ class VideoProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
 
         $model->user = $user;
@@ -109,7 +110,7 @@ class VideoProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $tags = RelationTagModel::getByRelationTypeAndRelationId('video_project' , $model->id);
+        $tags = property_exists($model , 'tags') ? $model->tags : RelationTagModel::getByRelationTypeAndRelationId('video_project' , $model->id);
         $tags = RelationTagHandler::handleAll($tags);
         $model->tags = $tags;
     }
@@ -119,7 +120,7 @@ class VideoProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $video_company = VideoCompanyModel::find($model->video_company_id);
+        $video_company = property_exists($model , 'video_company') ? $model->video_company : VideoCompanyModel::find($model->video_company_id);
         $video_company = VideoCompanyHandler::handle($video_company);
 
         $model->video_company = $video_company;
@@ -130,7 +131,7 @@ class VideoProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $video_series = VideoSeriesModel::find($model->video_series_id);
+        $video_series = property_exists($model , 'video_series') ? $model->video_series : VideoSeriesModel::find($model->video_series_id);
         $video_series = VideoSeriesHandler::handle($video_series);
 
         $model->video_series = $video_series;

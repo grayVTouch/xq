@@ -19,38 +19,73 @@ use function core\convert_object;
 
 class UserHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
         }
-        $res = convert_object($model);
+        $model = convert_object($model);
 
-        // 我关注的人数量（关注数）
-        $res->my_focus_user_count = FocusUserModel::countByUserId($res->id);
-        // 关注我的人数量（粉丝数）
-        $res->focus_me_user_count = FocusUserModel::countByFocusUserId($res->id);
-        // 点赞数（我点赞的数量）
-        $res->praise_count = PraiseModel::countByUserId($res->id);
-        // 收藏数（收藏数量）
-        $res->collect_count = CollectionModel::countByUserId($res->id);
+        $model->__sex__ = get_config_key_mapping_value('business.sex' , $model->sex);
 
+        return $model;
+    }
 
+    // 我关注的人数量（关注数）
+    public static function myFocusUserCount($model)
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $model->my_focus_user_count = FocusUserModel::countByUserId($model->id);
+    }
+
+    // 关注我的人数量（粉丝数）
+    public static function focusMeUserCount($model)
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $model->focus_me_user_count = FocusUserModel::countByFocusUserId($model->id);
+    }
+
+    // 点赞数（我点赞的数量）
+    public static function praiseCount($model)
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $model->praise_count = PraiseModel::countByUserId($model->id);
+    }
+
+    // 收藏数（收藏数量）
+    public static function collectCount($model)
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $model->collect_count = CollectionModel::countByUserId($model->id);
+    }
+
+    // 是否关注
+    public static function focused($model)
+    {
+        if (empty($model)) {
+            return ;
+        }
         // 当前登录用户
         $user = user();
 
         if (!empty($user)) {
-            if ($user->id === $res->id) {
-                $res->focused = 0;
+            if ($user->id === $model->id) {
+                $is_focused = 0;
             } else {
-                $res->focused = FocusUserModel::findByUserIdAndFocusUserId($user->id , $res->id) ? 1 : 0;
+                $is_focused = FocusUserModel::findByUserIdAndFocusUserId($user->id , $model->id) ? 1 : 0;
             }
         } else {
-            $res->focused = 0;
+            $is_focused = 0;
         }
-        $res->__sex__ = get_config_key_mapping_value('business.sex' , $res->sex);
-
-        return $res;
+        $model->focused = $is_focused;
+        $model->is_focused = $is_focused;
     }
-
 }

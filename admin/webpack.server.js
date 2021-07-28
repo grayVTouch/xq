@@ -32,6 +32,12 @@ module.exports = merge(common, {
         // 如果开启了 vue 的 history 模式
         // 那么请务必开启下面这个选项
         historyApiFallback: true ,
+        proxy: {
+            '/api': {
+                target: 'http://api.xq.test' ,
+                changeOrigin: true ,
+            } ,
+        } ,
     } ,
     module: {
         rules: [

@@ -87,8 +87,8 @@ export default {
 
         recordAccessHistory () {
             this.pending('recordAccessHistory' , true);
-            Api.user
-                .record(null , {
+            Api.history
+                .store(null , {
                     relation_type: 'video_project' ,
                     relation_id: this.id ,
                 })

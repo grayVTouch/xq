@@ -25,12 +25,7 @@ use function core\get_time_diff;
 
 class ImageProjectHandler extends Handler
 {
-    /**
-     * @param Model|null $model
-     * @return stdClass|null
-     * @throws Exception
-     */
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
@@ -43,16 +38,6 @@ class ImageProjectHandler extends Handler
         $model->format_time = get_time_diff($model->created_at);
 
         return $model;
-    }
-
-    // 附加：收藏数量
-    public static function collectCount($model): void
-    {
-        if (empty($model)) {
-            return ;
-        }
-        // 收藏数量
-        $model->collect_count = CollectionModel::countByModuleIdAndRelationTypeAndRelationId($model->module_id , 'image_project' , $model->id);
     }
 
     // 附加：是否收藏
@@ -87,7 +72,7 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
 
         $model->module = $module;
@@ -99,7 +84,7 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
 
         $model->user = $user;
@@ -112,7 +97,7 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $category = CategoryModel::find($model->category_id);
+        $category = property_exists($model , 'category') ? $model->category : CategoryModel::find($model->category_id);
         $category = CategoryHandler::handle($category);
         $model->category = $category;
     }
@@ -125,7 +110,7 @@ class ImageProjectHandler extends Handler
             return ;
         }
         if ($model->type === 'pro') {
-            $image_subject = ImageSubjectModel::find($model->image_subject_id);
+            $image_subject = property_exists($model , 'image_subject') ? $model->image_subject : ImageSubjectModel::find($model->image_subject_id);
             $image_subject = ImageSubjectHandler::handle($image_subject);
         } else {
             $image_subject = null;
@@ -139,7 +124,7 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $images = ImageModel::getByImageProjectId($model->id);
+        $images = property_exists($model , 'images') ? $model->images : ImageModel::getByImageProjectId($model->id);
         $images = ImageHandler::handleAll($images);
 
         $model->images = $images;
@@ -151,7 +136,7 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $tags = RelationTagModel::getByRelationTypeAndRelationId('image_project' , $model->id);
+        $tags = property_exists($model , 'tags') ? $model->tags : RelationTagModel::getByRelationTypeAndRelationId('image_project' , $model->id);
         $tags = RelationTagHandler::handleAll($tags);
         $model->tags = $tags;
     }
@@ -161,7 +146,7 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $model->image_count = ImageModel::countByImageProjectId($model->id);
+        $model->image_count = property_exists($model , 'images') ? count($model->images) : ImageModel::countByImageProjectId($model->id);
     }
 
 }

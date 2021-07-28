@@ -32,12 +32,13 @@ module.exports = {
         new CleanWebpackPlugin({
             // 仅删除陈旧的资源
             cleanStaleWebpackAssets: false ,
+            // 排除
+            exclude: ['*.htaccess'] ,
         }) ,
         new HtmlWebpackPlugin({
             title: '兴趣部落' ,
             filename: 'index.html' ,
             template: 'template.html' ,
-
             meta: {
                 // 'viewport': 'width=device-width, initial-scale=1' ,
             } ,

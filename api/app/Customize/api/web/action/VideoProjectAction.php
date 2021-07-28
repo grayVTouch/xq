@@ -47,7 +47,10 @@ class VideoProjectAction extends Action
         }
 
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::getNewestByFilterAndSize($param , $size);
+        $res = VideoProjectModel::getNewestByRelationAndFilterAndSize([
+            'user' ,
+            'tags' ,
+        ] , $param , $size);
         $res = VideoProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -69,7 +72,10 @@ class VideoProjectAction extends Action
         }
 
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::getHotByFilterAndSize($param , $size);
+        $res = VideoProjectModel::getHotByRelationAndFilterAndSize([
+            'user' ,
+            'tags' ,
+        ] , $param , $size);
         $res = VideoProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -91,7 +97,7 @@ class VideoProjectAction extends Action
         }
 
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::getHotWithPagerByFilterAndSize($param , $size);
+        $res = VideoProjectModel::getHotWithPagerByRelationAndFilterAndSize($param , $size);
         $res = VideoProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
@@ -117,7 +123,10 @@ class VideoProjectAction extends Action
         }
 
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::getByTagIdAndFilterAndSize($tag->id , $param , $size);
+        $res = VideoProjectModel::getByRelationAndTagIdAndFilterAndSize([
+            'user' ,
+            'tags' ,
+        ] , $tag->id , $param , $size);
         $res = VideoProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -167,33 +176,6 @@ class VideoProjectAction extends Action
         return self::success('' , $res);
     }
 
-    public static function newestWithPager(Base $context , array $param = [])
-    {
-        $validator = Validator::make($param , [
-            'module_id' => 'required|integer' ,
-        ]);
-
-        if ($validator->fails()) {
-            return self::error($validator->errors()->first() , $validator->errors());
-        }
-
-        $module = ModuleModel::find($param['module_id']);
-        if (empty($module)) {
-            return self::error('模块不存在' , '' , 404);
-        }
-
-        $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::getNewestWithPagerByFilterAndSize($param , $size);
-        $res = VideoProjectHandler::handlePaginator($res);
-        foreach ($res->data as $v)
-        {
-            VideoProjectHandler::isPraised($v);
-            VideoProjectHandler::tags($v);
-            VideoProjectHandler::user($v);
-        }
-        return self::success('' , $res);
-    }
-
     public static function show(Base $context , $id , array $param = [])
     {
         $validator = Validator::make($param , [
@@ -217,7 +199,13 @@ class VideoProjectAction extends Action
         VideoProjectHandler::isCollected($video_project);
         VideoProjectHandler::tags($video_project);
         VideoProjectHandler::user($video_project);
+
         VideoProjectHandler::videos($video_project);
+        array_walk($video_project->videos , function($video){
+            VideoHandler::videos($video);
+            VideoHandler::videoSubtitles($video);
+        });
+
         VideoProjectHandler::videoSeries($video_project);
         VideoProjectHandler::videoCompany($video_project);
 
@@ -279,14 +267,18 @@ class VideoProjectAction extends Action
         }
 
         $param['category_ids'] = array_unique($tmp_category_ids);
+        $relation = [
+            'user' ,
+            'tags' ,
+        ];
         $res = [];
         switch ($param['mode'])
         {
             case 'strict':
-                $res = VideoProjectModel::getWithPagerInStrictByFilterAndOrderAndSize($param , $order , $size);
+                $res = VideoProjectModel::getWithPagerInStrictByRelationAndFilterAndOrderAndSize($relation , $param , $order , $size);
                 break;
             case 'loose':
-                $res = VideoProjectModel::getWithPagerInLooseByFilterAndOrderAndSize($param , $order , $size);
+                $res = VideoProjectModel::getWithPagerInLooseByRelationAndFilterAndOrderAndSize($relation , $param , $order , $size);
                 break;
             default:
                 return self::error('不支持的搜索模式，当前支持的模式有：' . implode(' , ' , $mode_range));
@@ -294,7 +286,7 @@ class VideoProjectAction extends Action
         $res = VideoProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
-            VideoProjectHandler::isCollected($v);
+            VideoProjectHandler::isPraised($v);
             VideoProjectHandler::tags($v);
             VideoProjectHandler::user($v);
         }

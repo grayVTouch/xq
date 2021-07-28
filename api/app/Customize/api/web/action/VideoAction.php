@@ -5,6 +5,7 @@ namespace App\Customize\api\web\action;
 
 
 use App\Customize\api\web\handler\RelationTagHandler;
+use App\Customize\api\web\handler\UserHandler;
 use App\Customize\api\web\handler\VideoHandler;
 use App\Customize\api\web\model\CategoryModel;
 use App\Customize\api\web\model\ModuleModel;
@@ -265,7 +266,9 @@ class VideoAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoModel::getNewestByFilterAndSize($param , $size);
+        $res = VideoModel::getNewestByRelationAndFilterAndSize([
+            'tags'
+        ] , $param , $size);
         $res = VideoHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -285,7 +288,7 @@ class VideoAction extends Action
         }
 
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoModel::getHotByFilterAndSize($param , $size);
+        $res = VideoModel::getHotByRelationAndFilterAndSize(['tags'] , $param , $size);
         $res = VideoHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -345,7 +348,7 @@ class VideoAction extends Action
         }
 
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoModel::getByTagIdAndFilterAndSize($tag->id , $param , $size);
+        $res = VideoModel::getByTagIdAndRelationAndTagIdAndFilterAndSize(['tags'] , $tag->id , $param , $size);
         $res = VideoHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -374,7 +377,7 @@ class VideoAction extends Action
         $param['video_company_ids']    = $param['video_company_ids'] === '' ? [] : json_decode($param['video_company_ids'] , true);
         $param['tag_ids']        = $param['tag_ids'] === '' ? [] : json_decode($param['tag_ids'] , true);
 
-        $order                   = $param['order'] === '' ? null : parse_order($param['order']);
+        $order                  = $param['order'] === '' ? null : parse_order($param['order']);
         $size                   = $param['size'] === '' ? my_config('app.limit') : $param['size'];
 
         // 获取所有子类
@@ -390,14 +393,15 @@ class VideoAction extends Action
         }
 
         $param['category_ids'] = array_unique($tmp_category_ids);
+        $relation = ['tags'];
         $res = [];
         switch ($param['mode'])
         {
             case 'strict':
-                $res = VideoModel::getWithPagerInStrictByFilterAndOrderAndSize($param , $order , $size);
+                $res = VideoModel::getWithPagerInStrictByRelationAndFilterAndOrderAndSize($relation , $param , $order , $size);
                 break;
             case 'loose':
-                $res = VideoModel::getWithPagerInLooseByFilterAndOrderAndSize($param , $order , $size);
+                $res = VideoModel::getWithPagerInLooseByRelationAndFilterAndOrderAndSize($relation , $param , $order , $size);
                 break;
             default:
                 return self::error('不支持的搜索模式，当前支持的模式有：' . implode(' , ' , $mode_range));
@@ -449,7 +453,11 @@ class VideoAction extends Action
         VideoHandler::isCollected($res);
         VideoHandler::tags($res);
         VideoHandler::user($res);
+        // 附加：是否关注自身
+        UserHandler::focused($res->user);
         VideoHandler::userPlayRecord($res);
+        VideoHandler::videos($res);
+        VideoHandler::videoSubtitles($res);
 
         return self::success('' , $res);
     }
@@ -473,7 +481,7 @@ class VideoAction extends Action
         $param['exclude_id'] = $video->id;
         $param['category_id'] = $video->category_id;
         $size = empty($param['size']) ? my_config('app.limit') : $param['size'];
-        $res = VideoModel::getRecommendByFieldAndFilterAndSize(null , $param , $size);
+        $res = VideoModel::getRecommendByRelationAndFieldAndFilterAndSize(['tags'] , null , $param , $size);
         $res = VideoHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {

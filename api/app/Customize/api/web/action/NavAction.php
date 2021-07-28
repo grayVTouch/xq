@@ -16,11 +16,8 @@ class NavAction extends Action
         if (empty($param['module_id'])) {
             return self::error('请提供 module_id');
         }
-        $res = NavModel::getAllByModuleId($param['module_id']);
+        $res = NavModel::getAllByRelationAndModuleId([] , $param['module_id']);
         $res = NavHandler::handleAll($res);
-        array_walk($res , function($v){
-            NavHandler::parent($v);
-        });
         $res = object_to_array($res);
         $res = Category::childrens(0 , $res , null , false ,false);
         return self::success('' , $res);

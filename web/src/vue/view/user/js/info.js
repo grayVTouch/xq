@@ -14,10 +14,6 @@ export default {
         };
     } ,
 
-    created () {
-        this.user();
-    } ,
-
     mixins: [
         mixin
     ] ,
@@ -27,6 +23,7 @@ export default {
         this.initDom();
         this.initIns();
         this.initEvent();
+        this.user();
     } ,
 
     methods: {

@@ -14,7 +14,7 @@ use function core\convert_object;
 
 class RelationTagHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;

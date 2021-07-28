@@ -12,7 +12,7 @@ use function core\convert_object;
 
 class NavHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
@@ -27,9 +27,13 @@ class NavHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $nav = $model->p_id ? NavModel::find($model->p_id) : null;
-        $nav = self::handle($nav);
-        $model->nav = $nav;
+        if ($model->p_id > 0) {
+            $parent = property_exists($model , 'parent') ? $model->parent : NavModel::find($model->p_id);
+        } else {
+            $parent = null;
+        }
+        $parent = self::handle($parent);
+        $model->parent = $parent;
     }
 
 }

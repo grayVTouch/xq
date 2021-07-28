@@ -45,7 +45,11 @@ class Handler
         return $object;
     }
 
-    public static function handle(?Model $model): ?stdClass
+    /**
+     * @param Model|stdClass|null $model
+     * @return stdClass|null
+     */
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;

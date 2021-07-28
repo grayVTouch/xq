@@ -12,7 +12,7 @@ use function core\format_capacity;
 
 class DiskHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;

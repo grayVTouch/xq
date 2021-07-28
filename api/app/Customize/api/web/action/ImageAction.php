@@ -7,6 +7,7 @@ use App\Customize\api\web\handler\CategoryHandler;
 use App\Customize\api\web\handler\ImageHandler;
 use App\Customize\api\web\handler\RelationTagHandler;
 use App\Customize\api\web\handler\ImageSubjectHandler;
+use App\Customize\api\web\handler\UserHandler;
 use App\Customize\api\web\model\CategoryModel;
 use App\Customize\api\web\model\ImageModel;
 use App\Customize\api\web\model\ModuleModel;
@@ -134,6 +135,8 @@ class ImageAction extends Action
         $image = ImageHandler::handle($image);
         // 附加：用户
         ImageHandler::user($image);
+        // 附加：是否关注自身
+        UserHandler::focused($image->user);
         // 附加：标签
         ImageHandler::tags($image);
         // 附加：是否收藏

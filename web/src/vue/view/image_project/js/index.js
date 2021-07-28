@@ -53,7 +53,7 @@ export default {
                 pending: {} ,
                 tagSelectorInSlidebar: false ,
             } ,
-            search: {...search} ,
+            search: G.copy(search) ,
         };
     } ,
 
@@ -373,8 +373,9 @@ export default {
          * *********************
          */
         getWithPagerByTagIdInImageProject (tagId , override = true) {
-            this.search = {...search};
+            this.search = G.copy(search);
             this.curTag = 'tag_' + tagId;
+
             this.getWithPagerInImageProject([tagId] , 'strict' , override);
         } ,
 
@@ -434,10 +435,11 @@ export default {
             const y = window.pageYOffset;
             const scrollHeight = this.dom.html.scrollHeight();
             const clientHeight = this.dom.html.clientHeight();
+            const extraY = TopContext.val.footerH;
             if (this.images.page >= this.images.maxPage) {
                 return ;
             }
-            if (clientHeight + y < scrollHeight) {
+            if (clientHeight + y + extraY < scrollHeight) {
                 return ;
             }
             if (this.pending('images')) {

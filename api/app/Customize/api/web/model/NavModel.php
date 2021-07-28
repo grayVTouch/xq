@@ -10,9 +10,15 @@ class NavModel extends Model
 {
     protected $table = 'xq_nav';
 
-    public static function getAllByModuleId(int $module_id): Collection
+    public function parent()
     {
-        return self::where([
+        $this->hasOne(NavModel::class , 'id' , 'p_id');
+    }
+
+    public static function getAllByRelationAndModuleId(array $relation , int $module_id): Collection
+    {
+        return self::with($relation)
+            ->where([
                 ['module_id' , '=' , $module_id] ,
                 ['is_enabled' , '=' , 1] ,
             ])

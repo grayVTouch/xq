@@ -21,6 +21,15 @@ class RelationTagModel extends Model
                 ->get();
     }
 
+    public static function getByRelationTypeAndRelationIds(string $relation_type , array $relation_ids): Collection
+    {
+        return self::where([
+                ['relation_type' , '=' , $relation_type] ,
+            ])
+            ->whereIn('relation_id' , $relation_ids)
+            ->get();
+    }
+
     public static function delByRelationTypeAndRelationId(string $relation_type , int $relation_id): int
     {
         return self::where([
@@ -78,22 +87,22 @@ class RelationTagModel extends Model
             ['rt.relation_type' , '=' , 'image_project'] ,
         ];
 
+        $query = self::from('xq_relation_tag as rt')
+            ->select('rt.*' , DB::raw('count(rt.id) as total'))
+            ->where($where);
+
         if ($filter['module_id'] !== '') {
             $where[] = ['rt.module_id' , '=' , $filter['module_id']];
         }
-
-        return self::from('xq_relation_tag as rt')
-            ->select('rt.*' , DB::raw('count(rt.id) as total'))
-            ->where($where)
-            ->whereExists(function($query) use($filter){
-                if ($filter['type'] === '') {
-                    return ;
-                }
+        if ($filter['type'] !== '') {
+            $query->whereExists(function($query) use($filter){
                 $query->from('xq_image_project')
                     ->where('type' , $filter['type'])
                     ->whereRaw('rt.relation_id = id');
-            })
-            ->groupBy('rt.tag_id')
+            });
+        }
+
+        return $query->groupBy('rt.tag_id')
             ->orderBy('total' , 'desc')
             ->orderBy('rt.id' , 'asc')
             ->limit($size)

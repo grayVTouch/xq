@@ -13,83 +13,114 @@ class VideoProjectModel extends Model
 {
     protected $table = 'xq_video_project';
 
-    public static function getNewestByFilterAndSize(array $filter = [] , int $size = 0): Collection
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(RelationTagModel::class , 'relation_id' , 'id');
+    }
+
+    public static function getNewestByRelationAndFilterAndSize(array $relation = [] , array $filter = [] , int $size = 0): Collection
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
-
         $where = [];
-
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
         }
 
-        return self::where($where)
+        return self::with($with)
+            ->where($where)
             ->orderBy('created_at' , 'desc')
             ->orderBy('id' , 'asc')
             ->limit($size)
             ->get();
     }
 
-    public static function getHotByFilterAndSize(array $filter = [] , int $size = 0): Collection
+    public static function getHotByRelationAndFilterAndSize(array $relation = [] , array $filter = [] , int $size = 0): Collection
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
 
         $where = [];
 
-        if ($filter['module_id'] !== '') {
-            $where[] = ['vs.module_id' , '=' , $filter['module_id']];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
         }
 
-        return self::selectRaw('vs.*, 
-                (select sum(play_count) from xq_video where type = ? and video_project_id = vs.id) as play_count ,
-                (select sum(view_count) from xq_video where type = ? and video_project_id = vs.id) as view_count , 
-                (select sum(praise_count) from xq_video where type = ? and video_project_id = vs.id) as praise_count ,
-                (select sum(against_count) from xq_video where type = ? and video_project_id = vs.id) as against_count
-                ' , ['pro' , 'pro' , 'pro' , 'pro'])
-            ->from('xq_video_project as vs')
+        if ($filter['module_id'] !== '') {
+            $where[] = ['module_id' , '=' , $filter['module_id']];
+        }
+
+        return self::with($with)
             ->where($where)
             ->orderBy('praise_count' , 'desc')
             ->orderBy('play_count' , 'desc')
             ->orderBy('view_count' , 'desc')
             ->orderBy('against_count' , 'asc')
-            ->orderBy('vs.created_at' , 'desc')
-            ->orderBy('vs.id' , 'asc')
+            ->orderBy('created_at' , 'desc')
+            ->orderBy('id' , 'asc')
             ->limit($size)
             ->get();
     }
 
-    public static function getHotWithPagerByFilterAndSize(array $filter = [] , int $size = 0): Paginator
+    public static function getHotWithPagerByRelationAndFilterAndSize(array $relation = [] , array $filter = [] , int $size = 0): Paginator
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
 
         $where = [];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
 
         if ($filter['module_id'] !== '') {
-            $where[] = ['vs.module_id' , '=' , $filter['module_id']];
+            $where[] = ['module_id' , '=' , $filter['module_id']];
         }
 
         if ($filter['type'] !== '') {
             $where[] = ['type' , '=' , $filter['type']];
         }
-        return self::selectRaw('vs.*, 
-                (select sum(play_count) from xq_video where type = ? and video_project_id = vs.id) as play_count ,
-                (select sum(view_count) from xq_video where type = ? and video_project_id = vs.id) as view_count , 
-                (select sum(praise_count) from xq_video where type = ? and video_project_id = vs.id) as praise_count ,
-                (select sum(against_count) from xq_video where type = ? and video_project_id = vs.id) as against_count
-                ' , ['pro' , 'pro' , 'pro' , 'pro'])
-            ->from('xq_video_project as vs')
+        return self::with($with)
             ->where($where)
             ->orderBy('praise_count' , 'desc')
             ->orderBy('play_count' , 'desc')
             ->orderBy('view_count' , 'desc')
             ->orderBy('against_count' , 'asc')
-            ->orderBy('vs.created_at' , 'desc')
-            ->orderBy('vs.id' , 'asc')
+            ->orderBy('created_at' , 'desc')
+            ->orderBy('id' , 'asc')
             ->paginate($size);
     }
 
 
-    public static function getByTagIdAndFilterAndSize(int $tag_id , array $filter = [] , int $size = 0): Collection
+    public static function getByRelationAndTagIdAndFilterAndSize(array $relation , int $tag_id , array $filter = [] , int $size = 0): Collection
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
 
@@ -97,11 +128,24 @@ class VideoProjectModel extends Model
             ['vs.status' , '=' , 1] ,
         ];
 
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
         if ($filter['module_id'] !== '') {
             $where[] = ['vs.module_id' , '=' , $filter['module_id']];
         }
 
-        return self::from('xq_video_project as vs')
+        return self::with($with)
+            ->from('xq_video_project as vs')
             ->select('vs.*')
             ->where($where)
             ->whereExists(function($query) use($tag_id){
@@ -190,7 +234,7 @@ class VideoProjectModel extends Model
             ->paginate($size);
     }
 
-    public static function getWithPagerInStrictByFilterAndOrderAndSize(array $filter = [] , $order = null , int $size = 20)
+    public static function getWithPagerInStrictByRelationAndFilterAndOrderAndSize(array $relation = [] , array $filter = [] , $order = null , int $size = 20)
     {
         $filter['value']        = $filter['value'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
@@ -203,6 +247,18 @@ class VideoProjectModel extends Model
 
         $where = [];
 
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
         if ($filter['module_id'] !== '') {
             $where[] = ['vp.module_id' , '=' , $filter['module_id']];
         }
@@ -211,7 +267,8 @@ class VideoProjectModel extends Model
             $where[] = ['vp.name' , 'like' , "%{$filter['value']}%"];
         }
 
-        $query = self::from('xq_video_project as vp')
+        $query = self::with($with)
+            ->from('xq_video_project as vp')
             ->where($where);
 
         if (!empty($filter['video_series_ids'])) {
@@ -246,7 +303,7 @@ class VideoProjectModel extends Model
             ->paginate($size);
     }
 
-    public static function getWithPagerInLooseByFilterAndOrderAndSize(array $filter = [] , $order = null , int $size = 20)
+    public static function getWithPagerInLooseByRelationAndFilterAndOrderAndSize(array $relation = [] , array $filter = [] , $order = null , int $size = 20)
     {
         $filter['value']        = $filter['value'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
@@ -259,6 +316,20 @@ class VideoProjectModel extends Model
 
         $where = [];
 
+
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video_project');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
+
         if ($filter['module_id'] !== '') {
             $where[] = ['vp.module_id' , '=' , $filter['module_id']];
         }
@@ -267,7 +338,8 @@ class VideoProjectModel extends Model
             $where[] = ['vp.name' , 'like' , "%{$filter['value']}%"];
         }
 
-        $query = self::from('xq_video_project as vp')
+        $query = self::with($with)
+            ->from('xq_video_project as vp')
             ->where($where);
 
         if (!empty($filter['video_series_ids'])) {
@@ -318,26 +390,19 @@ class VideoProjectModel extends Model
         ];
 
         if ($filter['module_id'] !== '') {
-            $where[] = ['vs.module_id' , '=' , $filter['module_id']];
+            $where[] = ['module_id' , '=' , $filter['module_id']];
         }
 
         if ($filter['category_id'] !== '') {
-            $where[] = ['vs.category_id' , '=' , $filter['category_id']];
+            $where[] = ['category_id' , '=' , $filter['category_id']];
         }
 
-        return self::selectRaw('vs.*, 
-                (select sum(play_count) from xq_video where type = ? and video_project_id = vs.id) as play_count ,
-                (select sum(view_count) from xq_video where type = ? and video_project_id = vs.id) as view_count , 
-                (select sum(praise_count) from xq_video where type = ? and video_project_id = vs.id) as praise_count ,
-                (select sum(against_count) from xq_video where type = ? and video_project_id = vs.id) as against_count
-                ' , ['pro' , 'pro' , 'pro' , 'pro'])
-            ->from('xq_video_project as vs')
-            ->where($where)
+        return self::where($where)
             ->orderBy('praise_count' , 'desc')
             ->orderBy('play_count' , 'desc')
             ->orderBy('view_count' , 'desc')
             ->orderBy('against_count' , 'asc')
-            ->orderBy('vs.created_at' , 'desc')
+            ->orderBy('created_at' , 'desc')
             ->limit($size)
             ->get();
     }

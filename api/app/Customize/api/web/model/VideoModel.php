@@ -11,6 +11,17 @@ class VideoModel extends Model
 {
     protected $table = 'xq_video';
 
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function tags()
+    {
+        return $this->hasMany(RelationTagModel::class , 'relation_id' , 'id');
+    }
+
+
     public static function getByVideoProjectId(int $video_project_id): Collection
     {
         return self::where([
@@ -34,24 +45,36 @@ class VideoModel extends Model
             ->get();
     }
 
-    public static function getNewestByFilterAndSize(array $filter = [] , int $size = 0): Collection
+    public static function getNewestByRelationAndFilterAndSize(array $relation = [] , array $filter = [] , int $size = 0): Collection
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
         $where = [
             ['type' , '=' , 'misc'] ,
             ['status' , '=' , 1] ,
         ];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
         }
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy('created_at' , 'desc')
             ->orderBy('id' , 'asc')
             ->limit($size)
             ->get();
     }
 
-    public static function getRecommendByFieldAndFilterAndSize(array $field = null , array $filter = [] , int $size = 20): Paginator
+    public static function getRecommendByRelationAndFieldAndFilterAndSize(array $relation = [] , array $field = null , array $filter = [] , int $size = 20): Paginator
     {
         $field = $field ?? '*';
         $filter['module_id'] = $filter['module_id'] ?? '';
@@ -62,6 +85,17 @@ class VideoModel extends Model
             ['type' , '=' , 'misc'] ,
             ['status' , '=' , 1] ,
         ];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
         }
@@ -71,7 +105,8 @@ class VideoModel extends Model
         if ($filter['category_id'] !== '') {
             $where[] = ['category_id' , '=' , $filter['category_id']];
         }
-        return self::select($field)
+        return self::with($with)
+            ->select($field)
             ->where($where)
             ->orderBy('collect_count' , 'desc')
             ->orderBy('praise_count' , 'desc')
@@ -81,7 +116,7 @@ class VideoModel extends Model
             ->paginate($size);
     }
 
-    public static function getHotByFilterAndSize(array $filter = [] , int $size = 0): Collection
+    public static function getHotByRelationAndFilterAndSize(array $relation = [] , array $filter = [] , int $size = 0): Collection
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
 
@@ -89,12 +124,24 @@ class VideoModel extends Model
             ['type' , '=' , 'misc'] ,
             ['status' , '=' , 1] ,
         ];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
 
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
         }
 
-        return self::where($where)
+        return self::with($with)
+            ->where($where)
             ->orderBy('collect_count' , 'desc')
             ->orderBy('praise_count' , 'desc')
             ->orderBy('play_count' , 'desc')
@@ -105,7 +152,7 @@ class VideoModel extends Model
             ->get();
     }
 
-    public static function getByTagIdAndFilterAndSize(int $tag_id , array $filter = [] , int $size = 0): Collection
+    public static function getByTagIdAndRelationAndTagIdAndFilterAndSize(array $relation , int $tag_id , array $filter = [] , int $size = 0): Collection
     {
         $filter['module_id'] = $filter['module_id'] ?? '';
 
@@ -113,12 +160,24 @@ class VideoModel extends Model
             ['v.type' , '=' , 'misc'] ,
             ['v.status' , '=' , 1] ,
         ];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
 
         if ($filter['module_id'] !== '') {
             $where[] = ['v.module_id' , '=' , $filter['module_id']];
         }
 
-        return self::from('xq_video as v')
+        return self::with($with)
+            ->from('xq_video as v')
             ->select('v.*')
             ->where($where)
             ->whereExists(function($query) use($tag_id){
@@ -135,7 +194,7 @@ class VideoModel extends Model
             ->get();
     }
 
-    public static function getWithPagerInStrictByFilterAndOrderAndSize(array $filter = [] , $order = null , int $size = 20)
+    public static function getWithPagerInStrictByRelationAndFilterAndOrderAndSize(array $relation = [] , array $filter = [] , $order = null , int $size = 20)
     {
         $filter['value']        = $filter['value'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
@@ -148,6 +207,17 @@ class VideoModel extends Model
             ['v.type' , '=' , 'misc'] ,
             ['v.status' , '=' , 1] ,
         ];
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
 
         if ($filter['module_id'] !== '') {
             $where[] = ['v.module_id' , '=' , $filter['module_id']];
@@ -157,7 +227,8 @@ class VideoModel extends Model
             $where[] = ['v.name' , 'like' , "%{$filter['value']}%"];
         }
 
-        $query = self::from('xq_video as v')
+        $query = self::with($with)
+            ->from('xq_video as v')
             ->where($where);
 
         if (!empty($filter['category_ids'])) {
@@ -184,7 +255,7 @@ class VideoModel extends Model
             ->paginate($size);
     }
 
-    public static function getWithPagerInLooseByFilterAndOrderAndSize(array $filter = [] , $order = null , int $size = 20)
+    public static function getWithPagerInLooseByRelationAndFilterAndOrderAndSize(array $relation = [] , array $filter = [] , $order = null , int $size = 20)
     {
         $filter['value']        = $filter['value'] ?? '';
         $filter['module_id']    = $filter['module_id'] ?? '';
@@ -198,6 +269,18 @@ class VideoModel extends Model
             ['v.status' , '=' , 1] ,
         ];
 
+        $with = [];
+        foreach ($relation as $v)
+        {
+            if ($v === 'tags') {
+                $with[$v] = function($query){
+                    $query->where('relation_type' , 'video');
+                };
+                continue ;
+            }
+            $with[] = $v;
+        }
+
         if ($filter['module_id'] !== '') {
             $where[] = ['v.module_id' , '=' , $filter['module_id']];
         }
@@ -206,7 +289,8 @@ class VideoModel extends Model
             $where[] = ['v.name' , 'like' , "%{$filter['value']}%"];
         }
 
-        $query = self::from('xq_video as v')
+        $query = self::with($with)
+            ->from('xq_video as v')
             ->where($where);
 
         if (!empty($filter['category_ids'])) {

@@ -314,8 +314,8 @@ export default {
                 return ;
             }
             this.pending(pendingKey , true);
-            Api.user
-                .updateCollectionGroup(null , this.updateCollectionGroupForm)
+            Api.collectionGroup
+                .update(this.updateCollectionGroupForm.id , null , this.updateCollectionGroupForm)
                 .then((res) => {
                     this.pending(pendingKey , false);
                     if (res.code !== TopContext.code.Success) {

@@ -22,6 +22,17 @@ class PraiseModel extends Model
             ->first();
     }
 
+    public static function findByModuleIdAndUserIdAndRelationTypeAndRelationIds(int $module_id ,int $user_id , string $relation_type , array $relation_ids): Collection
+    {
+        return self::where([
+            ['module_id' , '=' , $module_id] ,
+            ['user_id' , '=' , $user_id] ,
+            ['relation_type' , '=' , $relation_type] ,
+        ])
+            ->whereIn('relation_id' , $relation_ids)
+            ->get();
+    }
+
     public static function getByModuleIdAndUserIdAndRelationTypeAndRelationIds(int $module_id ,int $user_id , string $relation_type , array $relation_ids = []): ?Collection
     {
         return self::where([

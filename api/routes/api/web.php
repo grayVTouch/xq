@@ -5,7 +5,10 @@ use App\Customize\api\web\middleware\CustomizeMiddleware;
 use App\Customize\api\web\middleware\UserAuthMiddleware;
 use App\Customize\api\web\middleware\UserMiddleware;
 use App\Http\Controllers\api\web\Category;
+use App\Http\Controllers\api\web\Collection;
+use App\Http\Controllers\api\web\CollectionGroup;
 use App\Http\Controllers\api\web\File;
+use App\Http\Controllers\api\web\History;
 use App\Http\Controllers\api\web\Image;
 use App\Http\Controllers\api\web\ImageAtPosition;
 use App\Http\Controllers\api\web\ImageProject;
@@ -21,6 +24,8 @@ use App\Http\Controllers\api\web\VideoProject;
 use App\Http\Controllers\api\web\VideoSeries;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Test;
+
 Route::prefix('web')
     ->middleware([
         CustomizeMiddleware::class ,
@@ -31,6 +36,8 @@ Route::prefix('web')
             UserMiddleware::class
         ])->group(function(){
             // 不用登录的相关接口
+
+            Route::any('fuck' , [Test::class , 'test']);
 
             // 文件上传
             Route::post('upload'        , [File::class      , 'upload']);
@@ -236,32 +243,11 @@ Route::prefix('web')
         ])->group(function(){
             // 要求登录的相关接口
 
-            // 用户 - 收藏动作
-            Route::post('user/collection_handle'    , [User::class , 'collectionHandle']);
+
             // 用户 - 点赞动作
             Route::post('user/praise_handle'        , [User::class , 'praiseHandle']);
-            // 用户 - 记录历史
-            Route::post('user/record'               , [User::class , 'record']);
-            // 用户 - 创建并加入收藏夹
-            Route::post('user/create_and_join_collection_group' , [User::class , 'createAndJoinCollectionGroup']);
-            // 用户 - 创建收藏夹
-            Route::post('user/create_collection_group' , [User::class , 'createCollectionGroup']);
-            // 用户 - 加入收藏夹
-            Route::post('user/join_collection_group' , [User::class , 'joinCollectionGroup']);
-            // 用户 - 删除收藏夹
-            Route::delete('user/destroy_collection_group' , [User::class , 'destroyCollectionGroup']);
-            // 用户 - 批量删除收藏夹
-            Route::delete('user/destroy_all_collection_group' , [User::class , 'destroyAllCollectionGroup']);
-            // 用户 - 删除收藏夹
-            Route::delete('user/destroy_collection' , [User::class , 'destroyCollection']);
-            // 用户 - 删除历史记录
-            Route::delete('user/destroy_history' , [User::class , 'destroyHistory']);
             // 用户 - 删除点赞记录
             Route::delete('user/destroy_my_praise' , [User::class , 'destroyMyPraise']);
-            // 用户 - 收藏夹列表（带判断 某事物是否存在于此收藏夹）
-            Route::get('user/collection_group_with_judge' , [User::class , 'collectionGroupWithJudge']);
-            // 用户 - 收藏夹列表
-            Route::get('user/collection_group' , [User::class , 'collectionGroup']);
             // 用户 - 个人信息
             Route::get('user_info' , [User::class , 'info']);
             // 用户 - 历史记录 - 简要
@@ -270,21 +256,72 @@ Route::prefix('web')
             Route::get('history' , [User::class , 'histories']);
             // 用户 - 我的点赞记录
             Route::get('my_praise' , [User::class , 'myPraise']);
-            // 用户 - 收藏夹（含收藏内容） - 简要
-            Route::get('less_relation_in_collection' , [User::class , 'lessRelationInCollection']);
-            // 用户 - 收藏夹（含收藏内容） - 简要
-            Route::get('less_collection_group_with_collection' , [User::class , 'lessCollectionGroupWithCollection']);
             // 用户 - 更新用户信息
             Route::put('user' , [User::class , 'update']);
             // 用户 - 局部更新
             Route::patch('user' , [User::class , 'localUpdate']);
             // 用户 - 更新密码（用户已登录状态）
             Route::patch('user/update_password_in_logged' , [User::class , 'updatePasswordInLogged']);
-            // 用户 - 更新收藏夹
-            Route::patch('user/update_collection_group' , [User::class , 'updateCollectionGroup']);
             // 关注用户
             Route::post('user/focus_handle' , [User::class , 'focusHandle']);
 
+            /**
+             * 历史记录
+             */
+            // 历史记录 - 新增
+            Route::post('history' , [History::class , 'store']);
+            // 历史记录 - 删除
+            Route::delete('destroy_all_history' , [History::class , 'destroyAll']);
+            // 历史记录 - 更少的记录
+            Route::get('less_history' , [History::class , 'less']);
+            // 历史记录 - 列表
+            Route::get('history' , [History::class , 'index']);
+
+            /**
+             * 我的收藏
+             */
+            // 收藏夹 - 收藏动作
+            Route::post('collection_group/{id}/collect_or_cancel'    , [CollectionGroup::class , 'collectOrCancel']);
+            // 收藏夹 - 创建并加入收藏夹
+            Route::post('create_and_join_collection_group' , [CollectionGroup::class , 'createAndJoin']);
+            // 收藏夹 - 创建收藏夹
+            Route::post('collection_group' , [CollectionGroup::class , 'store']);
+            // 收藏夹 - 加入收藏夹
+            Route::post('collection_group/{id}/join' , [CollectionGroup::class , 'join']);
+            // 收藏夹 - 批量删除收藏夹
+            Route::delete('destroy_all_collection_group' , [CollectionGroup::class , 'destroyAll']);
+            // 收藏夹 - 删除收藏夹
+            Route::delete('collection_group/{id}' , [CollectionGroup::class , 'destroy']);
+            // 收藏夹 - 收藏夹列表（带判断 某事物是否存在于此收藏夹）
+            Route::get('collection_group_with_judge' , [CollectionGroup::class , 'getWithJudge']);
+            // 收藏夹 - 收藏夹列表
+            Route::get('collection_group' , [CollectionGroup::class , 'index']);
+            // 收藏夹 - 收藏内容
+            Route::get('collection_group/{id}/less_collection' , [CollectionGroup::class , 'lessCollection']);
+            // 收藏夹 - 收藏夹内容
+            Route::get('collection_group_with_collection' , [CollectionGroup::class , 'getWithCollection']);
+            // 收藏夹 - 更新收藏夹
+            Route::put('collection_group/{id}' , [CollectionGroup::class , 'update']);
+            // 收藏夹 - 详情
+            Route::get('collection_group/{id}' , [CollectionGroup::class , 'show']);
+            // 收藏夹 - 收藏内容列表
+            Route::get('collection_group/{id}/collection' , [CollectionGroup::class , 'collections']);
+
+            /**
+             * ****************
+             * 收藏内容
+             * ****************
+             */
+            // 收藏内容 - 删除
+            Route::delete('collection/{id}' , [Collection::class , 'destroy']);
+            // 收藏内容 - 列表
+            Route::get('collection' , [Collection::class , 'index']);
+
+            /**
+             * ****************
+             * 我的点赞
+             * ****************
+             */
 
             /**
              * 推按专题

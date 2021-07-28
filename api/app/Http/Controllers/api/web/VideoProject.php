@@ -47,19 +47,6 @@ class VideoProject extends Base
         return success($res['message'] , $res['data']);
     }
 
-    public function newestWithPager()
-    {
-        $param = $this->request->query();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['type']      = $param['type'] ?? '';
-        $param['size']     = $param['size'] ?? '';
-        $res = VideoProjectAction::newestWithPager($this , $param);
-        if ($res['code'] !== 0) {
-            return error($res['message'] , $res['data'] , $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
-
     // 标签对应内容
     public function getByTagId()
     {

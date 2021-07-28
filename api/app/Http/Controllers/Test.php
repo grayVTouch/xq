@@ -16,4 +16,10 @@ class Test extends Controller
     {
         var_dump('wohenhao !!!');
     }
+
+    public function test()
+    {
+//        var_dump('test method!!!');
+        phpinfo();
+    }
 }

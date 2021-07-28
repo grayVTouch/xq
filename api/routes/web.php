@@ -13,8 +13,6 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
-
-Route::put('test' , 'Test@one');
+//Route::get('/', function () {
+//    return view('welcome');
+//});

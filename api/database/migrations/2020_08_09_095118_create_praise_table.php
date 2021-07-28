@@ -27,7 +27,7 @@ class CreatePraiseTable extends Migration
 
             $table->timestamps();
 
-            $table->unique(['user_id' , 'relation_type' , 'relation_id' , 'module_id'] , 'unique');
+            $table->unique(['module_id' , 'user_id' , 'relation_type' , 'relation_id'] , 'murr_unique');
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';

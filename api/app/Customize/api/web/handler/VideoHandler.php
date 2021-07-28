@@ -23,22 +23,12 @@ use function core\get_time_diff;
 
 class VideoHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
         }
         $model = convert_object($model);
-
-        $videos = VideoSrcModel::getByVideoId($model->id);
-        $videos = VideoSrcHandler::handleAll($videos);
-
-        $video_subtitles = VideoSubtitleModel::getByVideoId($model->id);
-        $video_subtitles = VideoSubtitleHandler::handleAll($video_subtitles);
-
-        $model->videos = $videos;
-        $model->video_subtitles = $video_subtitles;
-
 
         $model->__duration__          = empty($model->duration) ? 0 : format_time($model->duration , 'HH:II:SS');
         $model->__thumb__ = empty($model->thumb) ? $model->thumb_for_program : $model->thumb;
@@ -85,7 +75,7 @@ class VideoHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $tags = RelationTagModel::getByRelationTypeAndRelationId('video' , $model->id);
+        $tags = property_exists($model , 'tags') ? $model->tags : RelationTagModel::getByRelationTypeAndRelationId('video' , $model->id);
         $tags = RelationTagHandler::handleAll($tags);
         $model->tags = $tags;
     }
@@ -95,7 +85,7 @@ class VideoHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
 
         $model->user = $user;
@@ -110,9 +100,31 @@ class VideoHandler extends Handler
         $user = user();
         $user_play_record = null;
         if (!empty($user)) {
-            $user_play_record = UserVideoPlayRecordModel::findByModuleIdAndUserIdAndVideoId($model->module_id , $user->id , $model->id);
+            $user_play_record = property_exists($model , 'user_play_record') ? $model->user_play_record : UserVideoPlayRecordModel::findByModuleIdAndUserIdAndVideoId($model->module_id , $user->id , $model->id);
+            $user_play_record = UserVideoPlayRecordHandler::handle($user_play_record);
         }
         $model->user_play_record = $user_play_record;
+    }
+
+    public static function videos($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $videos = property_exists($model , 'videos') ? $model->videos : VideoSrcModel::getByVideoId($model->id);
+        $videos = VideoSrcHandler::handleAll($videos);
+
+        $model->videos = $videos;
+    }
+
+    public static function videoSubtitles($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $video_subtitles = property_exists($model , 'video_subtitles') ? $model->video_subtitles : VideoSubtitleModel::getByVideoId($model->id);
+        $video_subtitles = VideoSubtitleHandler::handleAll($video_subtitles);
+        $model->video_subtitles = $video_subtitles;
     }
 
 }

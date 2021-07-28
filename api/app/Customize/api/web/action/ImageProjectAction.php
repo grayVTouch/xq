@@ -7,9 +7,11 @@ use App\Customize\api\web\handler\CategoryHandler;
 use App\Customize\api\web\handler\ImageProjectHandler;
 use App\Customize\api\web\handler\RelationTagHandler;
 use App\Customize\api\web\handler\ImageSubjectHandler;
+use App\Customize\api\web\handler\UserHandler;
 use App\Customize\api\web\model\CategoryModel;
 use App\Customize\api\web\model\ImageProjectModel;
 use App\Customize\api\web\model\ModuleModel;
+use App\Customize\api\web\model\PraiseModel;
 use App\Customize\api\web\model\RelationTagModel;
 use App\Customize\api\web\model\ImageSubjectModel;
 use App\Customize\api\web\model\TagModel;
@@ -20,6 +22,7 @@ use Illuminate\Validation\Rule;
 use function api\web\my_config;
 use function api\web\my_config_keys;
 use function api\web\parse_order;
+use function api\web\user;
 use function core\object_to_array;
 
 class ImageProjectAction extends Action
@@ -39,8 +42,13 @@ class ImageProjectAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageProjectModel::getNewestByFilterAndSize($param , $size);
+        $res = ImageProjectModel::getNewestByRelationAndFieldAndFilterAndSize([
+            'user' ,
+            'tags' ,
+            'images' ,
+        ] , null , $param , $size);
         $res = ImageProjectHandler::handleAll($res);
+
         foreach ($res as $v)
         {
             // 附加：用户
@@ -51,6 +59,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -75,7 +85,11 @@ class ImageProjectAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageProjectModel::getHotByFilterAndSize($param , $size);
+        $res = ImageProjectModel::getHotByRelationAndFieldAndFilterAndSize([
+            'user' ,
+            'tags' ,
+            'images' ,
+        ] , null , $param, $size);
         $res = ImageProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -87,6 +101,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -114,7 +130,11 @@ class ImageProjectAction extends Action
             return self::error('标签不存在' , '' , 404);
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageProjectModel::getByTagIdAndFilterAndSize($tag->id , $param , $size);
+        $res = ImageProjectModel::getByRelationAndFieldAndTagIdAndFilterAndSize([
+            'user' ,
+            'tags' ,
+            'images' ,
+        ] , null , $tag->id , $param , $size);
         $res = ImageProjectHandler::handleAll($res);
         foreach ($res as $v)
         {
@@ -126,6 +146,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -149,6 +171,8 @@ class ImageProjectAction extends Action
         $image_project = ImageProjectHandler::handle($image_project);
         // 附加：用户
         ImageProjectHandler::user($image_project);
+        // 附加：是否关注自身
+        UserHandler::focused($image_project->user);
         // 附加：图片
         ImageProjectHandler::images($image_project);
         // 附加：标签
@@ -176,7 +200,11 @@ class ImageProjectAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageProjectModel::getHotWithPagerByFilterAndSize($param , $size);
+        $res = ImageProjectModel::getHotWithPagerByRelationAndFilterAndSize([
+            'user' ,
+            'tags' ,
+            'images' ,
+        ] , $param , $size);
         $res = ImageProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
@@ -188,6 +216,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -218,13 +248,18 @@ class ImageProjectAction extends Action
             return self::error('部分或全部标签未找到');
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
+        $relation = [
+            'user' ,
+            'tags' ,
+            'images' ,
+        ];
         switch ($param['mode'])
         {
             case 'strict':
-                $res = ImageProjectModel::getInStrictByTagIdsAndFilterAndSize($tag_ids , $param , $size);
+                $res = ImageProjectModel::getInStrictByRelationAndTagIdsAndFilterAndSize($relation , $tag_ids , $param , $size);
                 break;
             case 'loose':
-                $res = ImageProjectModel::getByTagIdsAndFilterAndSize($tag_ids , $param , $size);
+                $res = ImageProjectModel::getInLooseByRelationAndTagIdsAndFilterAndSize($relation , $tag_ids , $param , $size);
                 break;
             default:
                 return self::error('不支持的 mode ，当前受支持的 mode 有：' . implode(' , ' , $mode_range));
@@ -240,6 +275,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -265,11 +302,7 @@ class ImageProjectAction extends Action
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
         $res = RelationTagModel::hotTagsInImageProjectByFilterAndSize($param , $size);
         $res = RelationTagHandler::handleAll($res);
-        foreach ($res as $v)
-        {
-            // 附加：关联数据
-            RelationTagHandler::relation($v);
-        }
+
         return self::success('' , $res);
     }
 
@@ -306,7 +339,11 @@ class ImageProjectAction extends Action
             return self::error('模块不存在' , '' , 404);
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageProjectModel::getNewestWithPagerByFilterAndSize($param , $size);
+        $res = ImageProjectModel::getNewestWithPagerByRelationAndFieldAndFilterAndSize([
+            'user' ,
+            'tags' ,
+            'images' ,
+        ] , null , $param , $size);
         $res = ImageProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
@@ -318,6 +355,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -392,18 +431,24 @@ class ImageProjectAction extends Action
         }
         $param['category_ids'] = array_unique($tmp_category_ids);
         $res = [];
+        $relation = [
+            'user' ,
+            'tags' ,
+            'images' ,
+        ];
         switch ($param['mode'])
         {
             case 'strict':
-                $res = ImageProjectModel::getWithPagerInStrictByFilterAndOrderAndSize($param , $order , $size);
+                $res = ImageProjectModel::getWithPagerInStrictByRelationAndFilterAndOrderAndSize($relation , $param , $order , $size);
                 break;
             case 'loose':
-                $res = ImageProjectModel::getWithPagerInLooseByFilterAndOrderAndSize($param , $order , $size);
+                $res = ImageProjectModel::getWithPagerInLooseByRElationAndFilterAndOrderAndSize($relation , $param , $order , $size);
                 break;
             default:
                 return self::error('不支持的搜索模式，当前支持的模式有：' . implode(' , ' , $mode_range));
         }
         $res = ImageProjectHandler::handlePaginator($res);
+
         foreach ($res->data as $v)
         {
             // 附加：用户
@@ -414,6 +459,8 @@ class ImageProjectAction extends Action
             ImageProjectHandler::isPraised($v);
             // 附加：图片数
             ImageProjectHandler::imageCount($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }

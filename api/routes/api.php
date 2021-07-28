@@ -1,8 +1,5 @@
 <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -14,13 +11,12 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
 
+use Illuminate\Support\Facades\Route;
+
+Route::get('api_test' , function(){
+    echo 'fuck111';
+});
 
 require_once __DIR__ . '/api/admin.php';
 require_once __DIR__ . '/api/web.php';
-
-Route::get('test/{module_id}/filter' , 'Test@one');
-Route::get('test/{p_id}/filter' , 'Test@two');

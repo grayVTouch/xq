@@ -1,6 +1,7 @@
 export default {
     // 接口地址
-    apiUrl: 'http://api.xq.test' ,
+    // apiUrl: 'http://api.xq.test' ,
+    apiUrl: '' ,
 
     // 资源链接
     resUrl: 'http://res.xq.test' ,

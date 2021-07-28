@@ -142,8 +142,8 @@ export default {
 
         record () {
             this.pending('record' , true);
-            Api.user
-                .record(null , {
+            Api.history
+                .store(null , {
                     relation_type: 'image' ,
                     relation_id: this.id ,
                 })

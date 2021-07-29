@@ -360,6 +360,7 @@ export default {
             if (this.mode === 'edit') {
                 this.findById(this.id)
                     .then((res) => {
+                        console.log('类型' , this.form.type);
                         this.getTopTags();
                         this.getCategories();
 

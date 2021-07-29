@@ -17,6 +17,7 @@ import video from '@api/video.js';
 import history from '@api/history.js';
 import collectionGroup from '@api/collection_group.js';
 import praise from '@api/praise.js';
+import collection from '@api/collection.js';
 
 window.Api = {
     misc ,
@@ -38,4 +39,5 @@ window.Api = {
     history ,
     collectionGroup ,
     praise ,
+    collection ,
 };

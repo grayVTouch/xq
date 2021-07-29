@@ -27,7 +27,10 @@ class VideoSeriesAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoSeriesModel::index($param , $order , $size);
+        $res = VideoSeriesModel::index([
+            'user' ,
+            'module' ,
+        ] , $param , $order , $size);
         $res = VideoSeriesHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {

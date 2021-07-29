@@ -16,6 +16,7 @@ use App\Http\Controllers\api\web\Misc;
 use App\Http\Controllers\api\web\Module;
 use App\Http\Controllers\api\web\Nav;
 use App\Http\Controllers\api\web\ImageSubject;
+use App\Http\Controllers\api\web\Praise;
 use App\Http\Controllers\api\web\Tag;
 use App\Http\Controllers\api\web\User;
 use App\Http\Controllers\api\web\Video;
@@ -243,19 +244,8 @@ Route::prefix('web')
         ])->group(function(){
             // 要求登录的相关接口
 
-
-            // 用户 - 点赞动作
-            Route::post('user/praise_handle'        , [User::class , 'praiseHandle']);
-            // 用户 - 删除点赞记录
-            Route::delete('user/destroy_my_praise' , [User::class , 'destroyMyPraise']);
             // 用户 - 个人信息
             Route::get('user_info' , [User::class , 'info']);
-            // 用户 - 历史记录 - 简要
-            Route::get('less_history' , [User::class , 'lessHistory']);
-            // 用户 - 历史记录 - 完整
-            Route::get('history' , [User::class , 'histories']);
-            // 用户 - 我的点赞记录
-            Route::get('my_praise' , [User::class , 'myPraise']);
             // 用户 - 更新用户信息
             Route::put('user' , [User::class , 'update']);
             // 用户 - 局部更新
@@ -314,19 +304,25 @@ Route::prefix('web')
              */
             // 收藏内容 - 删除
             Route::delete('collection/{id}' , [Collection::class , 'destroy']);
-            // 收藏内容 - 列表
-            Route::get('collection' , [Collection::class , 'index']);
 
             /**
              * ****************
              * 我的点赞
              * ****************
              */
+            // 用户 - 点赞动作
+            Route::post('praise_handle'        , [Praise::class , 'createOrCancel']);
+            // 用户 - 删除点赞记录
+            Route::delete('destroy_all_praise' , [Praise::class , 'destroyAll']);
+            // 用户 - 我的点赞记录
+            Route::get('praise' , [Praise::class , 'index']);
 
             /**
-             * 推按专题
+             * ****************
+             * 图片
+             * ****************
              */
-            // 视频专题 - 点赞（取消点赞）
+            // 视频- 点赞（取消点赞）
             Route::post('image/{id}/praise_handle' , [Image::class , 'praiseHandle']);
 
             /**

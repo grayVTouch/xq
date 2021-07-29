@@ -31,6 +31,7 @@ use function api\admin\my_config_keys;
 use function api\admin\parse_order;
 use function core\array_unit;
 use function core\current_datetime;
+use function core\object_to_array;
 
 class ImageProjectAction extends Action
 {
@@ -51,8 +52,16 @@ class ImageProjectAction extends Action
         }
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageProjectModel::index($param , $order , $size);
+        $res = ImageProjectModel::index([
+            'module' ,
+            'user' ,
+            'category' ,
+            'imageSubject' ,
+            'images' ,
+        ] , $param , $order , $size);
+
         $res = ImageProjectHandler::handlePaginator($res);
+
         foreach ($res->data as $v)
         {
             // 附加：模块
@@ -64,9 +73,11 @@ class ImageProjectAction extends Action
             // 附加：主体
             ImageProjectHandler::imageSubject($v);
             // 附加：图片
-            ImageProjectHandler::images($v);
+            ImageProjectHandler::imageCount($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
+
+            unset($v->images);
         }
         return self::success('' , $res);
     }
@@ -171,7 +182,7 @@ class ImageProjectAction extends Action
                     return self::error('存在不存在的标签' , '' , 404);
                 }
                 RelationTagModel::insertGetId([
-                    'relation_type' => 'image_project' ,
+                    'relation_type'     => $param['type'] === 'pro' ? 'image_project' : 'image' ,
                     'relation_id'   => $image_project->id ,
                     'tag_id'        => $tag->id ,
                     'name'          => $tag->name ,
@@ -294,7 +305,7 @@ class ImageProjectAction extends Action
                     return self::error('存在不存在的标签' , '' , 404);
                 }
                 RelationTagModel::insertGetId([
-                    'relation_type'     => 'image_project' ,
+                    'relation_type'     => $param['type'] === 'pro' ? 'image_project' : 'image' ,
                     'relation_id'       => $id ,
                     'tag_id'            => $tag->id ,
                     'name'              => $tag->name ,

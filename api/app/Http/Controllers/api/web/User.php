@@ -3,9 +3,6 @@
 
 namespace App\Http\Controllers\api\web;
 
-
-use App\Customize\api\web\action\ImageSubjectWithAuthAction;
-use App\Customize\api\web\action\LoginAction;
 use App\Customize\api\web\action\UserAction;
 use function api\web\error;
 use function api\web\success;
@@ -66,21 +63,6 @@ class User extends Base
         return success($res['message'] , $res['data']);
     }
 
-    // 点赞 & 取消点赞
-    public function praiseHandle()
-    {
-        $param = $this->request->post();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['relation_type']    = $param['relation_type'] ?? '';
-        $param['relation_id']    = $param['relation_id'] ?? '';
-        $param['action']    = $param['action'] ?? '';
-        $res = UserAction::praiseHandle($this , $param);
-        if ($res['code'] !== 0) {
-            return error($res['message'] , $res['data'], $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
-
     public function update()
     {
         $param = $this->request->post();
@@ -131,18 +113,6 @@ class User extends Base
         return success($res['message'] , $res['data']);
     }
 
-    public function destroyHistory()
-    {
-        $param = $this->request->post();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['history_ids'] = $param['history_ids'] ?? '';
-        $res = UserAction::destroyHistory($this , $param);
-        if ($res['code'] !== 0) {
-            return error($res['message'] , $res['data'], $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
-
     public function focusHandle()
     {
         $param = $this->request->post();
@@ -187,29 +157,5 @@ class User extends Base
     }
 
 
-    public function myPraise()
-    {
-        $param = $this->request->query();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['relation_type'] = $param['relation_type'] ?? '';
-        $param['value'] = $param['value'] ?? '';
-        $param['size'] = $param['size'] ?? '';
-        $res = UserAction::myPraise($this , $param);
-        if ($res['code'] != 0) {
-            return error($res['message'] , $res['data'] , $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
 
-    public function destroyMyPraise()
-    {
-        $param = $this->request->post();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['praise_ids'] = $param['praise_ids'] ?? '';
-        $res = UserAction::destroyMyPraise($this , $param);
-        if ($res['code'] !== 0) {
-            return error($res['message'] , $res['data'], $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
 }

@@ -109,7 +109,7 @@ export default {
             }
             const praised = row.is_praised ? 0 : 1;
             this.pending('praiseHandle' , true);
-            Api.user
+            Api.praise
                 .praiseHandle(null , {
                     relation_type: 'image_project' ,
                     relation_id: row.id ,

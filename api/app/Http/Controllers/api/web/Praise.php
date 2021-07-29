@@ -4,24 +4,12 @@
 namespace App\Http\Controllers\api\web;
 
 
-use App\Customize\api\web\action\HistoryAction;
+use App\Customize\api\web\action\PraiseAction;
 use function api\web\error;
 use function api\web\success;
 
-class History extends Base
+class Praise extends Base
 {
-    public function less()
-    {
-        $param = $this->request->query();
-        $param['module_id'] = $param['module_id'] ?? '';
-        $param['size'] = $param['size'] ?? '';
-        $res = HistoryAction::less($this , $param);
-        if ($res['code'] != 0) {
-            return error($res['message'] , $res['data'] , $res['code']);
-        }
-        return success($res['message'] , $res['data']);
-    }
-
     public function index()
     {
         $param = $this->request->query();
@@ -29,7 +17,7 @@ class History extends Base
         $param['relation_type'] = $param['relation_type'] ?? '';
         $param['value'] = $param['value'] ?? '';
         $param['size'] = $param['size'] ?? '';
-        $res = HistoryAction::index($this , $param);
+        $res = PraiseAction::index($this , $param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);
         }
@@ -42,23 +30,24 @@ class History extends Base
         $param['module_id'] = $param['module_id'] ?? '';
         $ids = $param['ids'] ?? '[]';
         $ids = json_decode($ids , true);
-
-        $res = HistoryAction::destroyAll($this , $ids , $param);
+        $res = PraiseAction::destroyAll($this , $ids , $param);
         if ($res['code'] !== 0) {
             return error($res['message'] , $res['data'], $res['code']);
         }
         return success($res['message'] , $res['data']);
     }
 
-    public function store()
+    // 点赞 & 取消点赞
+    public function createOrCancel()
     {
         $param = $this->request->post();
-        $param['module_id']      = $param['module_id'] ?? '';
+        $param['module_id'] = $param['module_id'] ?? '';
         $param['relation_type']    = $param['relation_type'] ?? '';
         $param['relation_id']    = $param['relation_id'] ?? '';
-        $res = HistoryAction::store($this , $param);
-        if ($res['code'] != 0) {
-            return error($res['message'] , $res['data'] , $res['code']);
+        $param['action']    = $param['action'] ?? '';
+        $res = PraiseAction::createOrCancel($this , $param);
+        if ($res['code'] !== 0) {
+            return error($res['message'] , $res['data'], $res['code']);
         }
         return success($res['message'] , $res['data']);
     }

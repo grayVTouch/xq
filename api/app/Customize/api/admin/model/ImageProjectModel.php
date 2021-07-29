@@ -11,7 +11,33 @@ class ImageProjectModel extends Model
 {
     protected $table = 'xq_image_project';
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class , 'category_id' , 'id');
+    }
+
+    public function imageSubject()
+    {
+        return $this->belongsTo(ImageSubjectModel::class , 'image_subject_id' , 'id');
+    }
+
+    public function images()
+    {
+        return $this->hasMany(ImageModel::class , 'image_project_id' , 'id');
+    }
+
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id']           = $filter['id'] ?? '';
         $filter['name']         = $filter['name'] ?? '';
@@ -59,7 +85,8 @@ class ImageProjectModel extends Model
             $where[] = ['status' , '=' , $filter['status']];
         }
 
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

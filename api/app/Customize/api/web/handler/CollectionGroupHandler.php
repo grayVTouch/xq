@@ -21,10 +21,10 @@ class CollectionGroupHandler extends Handler
         if (empty($model)) {
             return null;
         }
-        $res = convert_object($model);
+        $model = convert_object($model);
 
         // 该收藏夹内的物品数量
-        return $res;
+        return $model;
     }
 
     // 附加：模块

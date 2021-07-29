@@ -16,7 +16,7 @@ use function core\convert_object;
 
 class VideoCompanyHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
@@ -28,24 +28,28 @@ class VideoCompanyHandler extends Handler
         return $model;
     }
 
-    public static function user($model): void
-    {
-        if (empty($model)) {
-            return ;
-        }
-        $user = UserModel::find($model->user_id);
-        $user = UserHandler::handle($user);
-        $model->user = $user;
-    }
-
+    // 附加：模块
     public static function module($model): void
     {
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
+
         $model->module = $module;
+    }
+
+    // 附加：用户
+    public static function user($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
+        $user = UserHandler::handle($user);
+
+        $model->user = $user;
     }
 
     public static function region($model): void
@@ -53,7 +57,7 @@ class VideoCompanyHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $region = RegionModel::find($model->country_id);
+        $region = property_exists($model , 'region') ? $model->region : RegionModel::find($model->country_id);
         $region = RegionHandler::handle($region);
         $model->region = $region;
     }

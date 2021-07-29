@@ -128,6 +128,10 @@
                                                     <div class="name">{{ v.name }}</div>
                                                     <div class="number">{{ v.count }}</div>
                                                 </div>
+                                                <div class="item" v-if="favorites.total_collection_group > favorites.collectionGroups.length">
+                                                    <div class="name"><a target="_blank" :href="genUrl('/user/favorites')">加载更多</a></div>
+                                                    <div class="number"></div>
+                                                </div>
                                             </div>
                                             <div class="list">
                                                 <template v-for="v in favorites.collection_group.collections">
@@ -194,7 +198,7 @@
                                                 <div class="loaded" v-if="favorites.collection_group.count !== 0 && favorites.collection_group.count === favorites.collection_group.collections.length"><span>到底了</span></div>
 
                                                 <div class="load-more" v-if="!val.pending.getCollectionGroupWithCollection && favorites.collection_group.count > 0 && favorites.collection_group.count !== favorites.collection_group.collections.length">
-                                                    <my-link class="more" href="#/user/favorites" @click="hideFavoritesCtrl">加载更多</my-link>
+                                                    <my-link class="more" target="_blank" :href="genUrl('/user/favorites')" @click="hideFavoritesCtrl">加载更多</my-link>
                                                 </div>
                                             </div>
                                         </div>

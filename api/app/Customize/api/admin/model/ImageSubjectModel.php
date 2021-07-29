@@ -12,7 +12,17 @@ class ImageSubjectModel extends Model
 {
     protected $table = 'xq_image_subject';
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id'] = $filter['id'] ?? '';
         $filter['name'] = $filter['name'] ?? '';
@@ -29,7 +39,9 @@ class ImageSubjectModel extends Model
         if ($filter['module_id'] !== '') {
             $where[] = ['module_id' , '=' , $filter['module_id']];
         }
-        return self::where($where)
+        $with = $relation;
+        return self::with($with)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

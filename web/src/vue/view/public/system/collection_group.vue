@@ -99,8 +99,8 @@
             // 获取我的收藏夹
             getData () {
                 this.pending('getData' , true);
-                Api.user
-                    .collectionGroupWithJudge({
+                Api.collectionGroup
+                    .getWithJudge({
                         relation_type: this.relationType ,
                         relation_id: this.relationId ,
                     })
@@ -154,8 +154,8 @@
                     return ;
                 }
                 this.pending('createAndJoinCollectionGroup' , true);
-                Api.user
-                    .createAndJoinCollectionGroup(null , {
+                Api.collectionGroup
+                    .createAndJoin(null , {
                         ...this.collectionGroup ,
                         relation_type: this.relationType ,
                         relation_id: this.relationId ,

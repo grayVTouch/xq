@@ -73,7 +73,7 @@ export default {
             const self = this;
             const praised = this.data.is_praised ? 0 : 1;
             this.pending('praiseHandle' , true);
-            Api.user
+            Api.praise
                 .praiseHandle(null , {
                     relation_type: 'image_project' ,
                     relation_id: this.data.id ,

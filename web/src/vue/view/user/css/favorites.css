@@ -228,7 +228,10 @@
 
 
 .content-mask .favorites .collection-groups .collection-group .item .name {
-
+    max-width: 120px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .content-mask .favorites .collection-groups .collection-group .item .number {

@@ -89,8 +89,15 @@ class PraiseModel extends Model
                     ->where('p.relation_type' , '=' , 'video_project');
             });
         };
+        $handle_video = function() use($value , $query){
+            $query->leftJoin('xq_video as v' , function($join){
+                $join->on('p.relation_id' , '=' , 'v.id')
+                    ->where('p.relation_type' , '=' , 'video');
+            });
+        };
         switch ($relation_type)
         {
+            case 'image':
             case 'image_project':
                 if (!empty($value)) {
                     $where[] = ['ip.name' , 'like' , "%{$value}%"];
@@ -103,13 +110,21 @@ class PraiseModel extends Model
                 }
                 $handle_video_project();
                 break;
+            case 'video':
+                if (!empty($value)) {
+                    $where[] = ['v.name' , 'like' , "%{$value}%"];
+                }
+                $handle_video();
+                break;
             default:
                 $handle_image_project();
                 $handle_video_project();
+                $handle_video();
                 if (!empty($value)) {
                     $query->where(function($query) use($value){
                         $query->where('ip.name' , 'like' , "%{$value}%")
-                            ->orWhere('vp.name' , 'like' , "%{$value}%");
+                            ->orWhere('vp.name' , 'like' , "%{$value}%")
+                            ->orWhere('v.name' , 'like' , "%{$value}%");
                     });
                 }
         }

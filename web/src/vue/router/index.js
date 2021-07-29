@@ -21,7 +21,6 @@ router.beforeEach((to , from , next) => {
             Api.module
                 .default().then((res) => {
                 if (res.code !== TopContext.code.Success) {
-                    this.errorHandle(res.message);
                     Prompt.error(res.message);
                     return ;
                 }

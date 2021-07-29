@@ -514,5 +514,4 @@ class ImageProjectModel extends Model
             ->get();
     }
 
-
 }

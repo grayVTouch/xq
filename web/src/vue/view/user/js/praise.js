@@ -57,8 +57,8 @@ export default {
 
         getData () {
             this.pending('getData' , true);
-            Api.user
-                .myPraise({
+            Api.praise
+                .index({
                     size: this.data.size ,
                     page: this.data.page ,
                     ...this.search ,
@@ -107,9 +107,9 @@ export default {
                 return ;
             }
             this.pending(pendingKey , true);
-            Api.user
-                .destroyMyPraise(null , {
-                    praise_ids: G.jsonEncode([row.id])
+            Api.praise
+                .destroyAll(null , {
+                    ids: G.jsonEncode([row.id])
                 })
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {

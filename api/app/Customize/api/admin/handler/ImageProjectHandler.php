@@ -20,7 +20,7 @@ use function core\convert_object;
 
 class ImageProjectHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
@@ -34,43 +34,51 @@ class ImageProjectHandler extends Handler
         return $model;
     }
 
-    public static function user($model): void
-    {
-        if (empty($model)) {
-            return ;
-        }
-        $user = UserModel::find($model->user_id);
-        $user = UserHandler::handle($user);
-        $model->user = $user;
-    }
-
+    // 附加：模块
     public static function module($model): void
     {
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
+
         $model->module = $module;
     }
 
+    // 附加：用户
+    public static function user($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
+        $user = UserHandler::handle($user);
+
+        $model->user = $user;
+    }
+
+
+    // 附加：分类
     public static function category($model): void
     {
         if (empty($model)) {
             return ;
         }
-        $category = CategoryModel::find($model->category_id);
+        $category = property_exists($model , 'category') ? $model->category : CategoryModel::find($model->category_id);
         $category = CategoryHandler::handle($category);
         $model->category = $category;
     }
 
+
+    // 附加：图片专题
     public static function imageSubject($model): void
     {
         if (empty($model)) {
             return ;
         }
         if ($model->type === 'pro') {
-            $image_subject = ImageSubjectModel::find($model->image_subject_id);
+            $image_subject = property_exists($model , 'image_subject') ? $model->image_subject : ImageSubjectModel::find($model->image_subject_id);
             $image_subject = ImageSubjectHandler::handle($image_subject);
         } else {
             $image_subject = null;
@@ -78,13 +86,15 @@ class ImageProjectHandler extends Handler
         $model->image_subject = $image_subject;
     }
 
+    // 附加：图片专题
     public static function images($model): void
     {
         if (empty($model)) {
             return ;
         }
-        $images = ImageModel::getByImageProjectId($model->id);
+        $images = property_exists($model , 'images') ? $model->images : ImageModel::getByImageProjectId($model->id);
         $images = ImageHandler::handleAll($images);
+
         $model->images = $images;
     }
 
@@ -93,8 +103,18 @@ class ImageProjectHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $tags = RelationTagModel::getByRelationTypeAndRelationId('image_project' , $model->id);
+        $tags = RelationTagModel::getByRelationTypeAndRelationId($model->type === 'pro' ? 'image_project' : 'image' , $model->id);
         $model->tags = $tags;
     }
 
+    public static function imageCount($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $images = property_exists($model , 'images') ? $model->images : ImageModel::getByImageProjectId($model->id);
+        $images = ImageHandler::handleAll($images);
+
+        $model->image_count = count($images);
+    }
 }

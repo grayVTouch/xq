@@ -46,8 +46,8 @@
         methods: {
             getData () {
                 this.pending('getData' , true);
-                Api.user
-                    .collectionGroupByUserId(this.$parent.id , {
+                Api.collectionGroup
+                    .index({
                         // size: this.data.size ,
                         // page: this.data.page ,
                         relation_type: 'image_project' ,

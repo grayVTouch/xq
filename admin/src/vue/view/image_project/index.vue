@@ -148,7 +148,7 @@
                         <my-table-button v-if="row.type === 'pro'" @click="linkToShowForImageProjectAtWeb(row)"><my-icon icon="web"></my-icon></my-table-button>
                     </my-tooltip>
                     <my-tooltip content="点击查看图片列表">
-                        <my-table-button @click="showImagePreview(row)"><my-icon icon="shangchuantupian"></my-icon>【{{ row.images.length }}P】</my-table-button>
+                        <my-table-button @click="showImagePreview(row)"><my-icon icon="shangchuantupian"></my-icon>【{{ row.image_count }}P】</my-table-button>
                     </my-tooltip>
                 </template>
 

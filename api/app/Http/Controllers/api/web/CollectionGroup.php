@@ -141,7 +141,7 @@ class CollectionGroup extends Base
 
     public function getWithCollection()
     {
-        $param = $this->request->post();
+        $param = $this->request->query();
         $param['module_id'] = $param['module_id'] ?? '';
         $param['collection_group_limit'] = $param['collection_group_limit'] ?? '';
         $param['collection_limit'] = $param['collection_limit'] ?? '';

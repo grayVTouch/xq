@@ -58,19 +58,19 @@ class PraiseHandler extends Handler
         switch ($model->relation_type)
         {
             case 'image_project':
-                $relation = ImageProjectModel::find($model->relation_id);
+                $relation = property_exists($model , 'relation') ? $model->relation : ImageProjectModel::find($model->relation_id);
                 $relation = ImageProjectHandler::handle($relation);
                 break;
             case 'video_project':
-                $relation = VideoProjectModel::find($model->relation_id);
+                $relation = property_exists($model , 'relation') ? $model->relation : VideoProjectModel::find($model->relation_id);
                 $relation = VideoProjectHandler::handle($relation);
                 break;
             case 'image':
-                $relation = ImageModel::find($model->relation_id);
+                $relation = property_exists($model , 'relation') ? $model->relation : ImageModel::find($model->relation_id);
                 $relation = ImageHandler::handle($relation);
                 break;
             case 'video':
-                $relation = VideoModel::find($model->relation_id);
+                $relation = property_exists($model , 'relation') ? $model->relation : VideoModel::find($model->relation_id);
                 $relation = VideoHandler::handle($relation);
                 break;
             default:

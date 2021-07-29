@@ -18,4 +18,14 @@ class UserVideoProjectPlayRecordModel extends Model
             ['video_project_id' , '=' , $video_project_id] ,
         ])->first();
     }
+
+    public static function getByModuleIdAndUserIdAndVideoProjectIds(int $module_id , int $user_id , array $video_project_ids)
+    {
+        return self::where([
+                ['module_id' , '=' , $module_id] ,
+                ['user_id' , '=' , $user_id] ,
+            ])
+            ->whereIn('video_project_id' , $video_project_ids)
+            ->get();
+    }
 }

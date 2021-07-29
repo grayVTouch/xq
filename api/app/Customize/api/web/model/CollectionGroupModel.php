@@ -39,6 +39,7 @@ class CollectionGroupModel extends Model
                 ['user_id' , '=' , $user_id] ,
                 ['name' , 'like' , "%{$value}%"] ,
             ])
+            ->orderBy('created_at' , 'desc')
             ->get();
     }
 
@@ -50,50 +51,6 @@ class CollectionGroupModel extends Model
                 ['user_id' , '=' , $user_id] ,
             ])
             ->orderBy('id' , 'desc')
-            ->get();
-    }
-
-    public static function getByModuleIdAndUserIdAndRelationTypeAndValue(int $module_id , int $user_id , string $relation_type = '' , string $value = ''): Collection
-    {
-        $where = [
-            ['cg.module_id' , '=' , $module_id] ,
-            ['cg.user_id' , '=' , $user_id] ,
-        ];
-
-        $where[] = ['cg.name' , 'like' , "%{$value}%"];
-
-        $query = self::from('xq_collection_group as cg')
-            ->where($where);
-
-        $handle_image_project = function()use($relation_type , $query){
-            $query->whereExists(function($query) use($relation_type){
-                $query->select('id')
-                    ->from('xq_collection')
-                    ->whereRaw('collection_group_id = cg.id')
-                    ->where('relation_type' , $relation_type);
-            });
-        };
-
-        $handle_video_project = function()use($relation_type , $query){
-            $query->whereExists(function($query) use($relation_type){
-                $query->select('id')
-                    ->from('xq_collection')
-                    ->whereRaw('collection_group_id = cg.id')
-                    ->where('relation_type' , $relation_type);
-            });
-        };
-
-        switch ($relation_type)
-        {
-            case 'image_project':
-                $handle_image_project();
-                break;
-            case 'video_project':
-                $handle_video_project();
-                break;
-            default:
-        }
-        return $query->orderBy('cg.created_at' , 'desc')
             ->get();
     }
 

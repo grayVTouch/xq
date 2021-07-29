@@ -160,7 +160,7 @@
                 }
                 const action = imageProject.is_praised ? 0 : 1;
                 this.pending('praiseHandle' , true);
-                Api.user
+                Api.praise
                     .praiseHandle(null , {
                         relation_type: 'image_project' ,
                         relation_id: imageProject.id ,
@@ -184,8 +184,8 @@
 
             initData () {
                 this.pending('initData' , true);
-                Api.user
-                    .collectionGroupInfo(this.id)
+                Api.collectionGroup
+                    .show(this.id)
                     .then((res) => {
                         if (res.code !== TopContext.code.Success) {
                             this.errorHandleAtHomeChildren(res.message , res.code);
@@ -200,10 +200,9 @@
 
             getCollection () {
                 this.pending('getCollection' , true);
-                Api.user
-                    .collections({
+                Api.collectionGroup
+                    .collections(this.id , {
                         relation_type: this.collections.relation_type ,
-                        collection_group_id: this.id ,
                         size: this.collections.size
                     })
                     .then((res) => {

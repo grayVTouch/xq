@@ -542,8 +542,8 @@ export default {
         // 获取历史记录
         getHistories () {
             this.pending('getHistories' , true);
-            Api.user
-                .lessHistory({
+            Api.history
+                .less({
                     size: TopContext.size
                 })
                 .then((res) => {
@@ -675,9 +675,10 @@ export default {
 
         getCollectionGroupWithCollection () {
             this.pending('getCollectionGroupWithCollection' , true);
-            Api.user
-                .lessCollectionGroupWithCollection({
-                    // size: TopContext.size
+            Api.collectionGroup
+                .getWithCollection({
+                    collection_group_limit: 6 ,
+                    collection_limit: 6 ,
                 })
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {

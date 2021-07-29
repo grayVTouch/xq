@@ -26,7 +26,10 @@ class ImageSubjectAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageSubjectModel::index($param , $order , $size);
+        $res = ImageSubjectModel::index([
+            'module' ,
+            'user' ,
+        ] , $param , $order , $size);
         $res = ImageSubjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {

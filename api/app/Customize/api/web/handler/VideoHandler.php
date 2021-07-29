@@ -30,8 +30,8 @@ class VideoHandler extends Handler
         }
         $model = convert_object($model);
 
-        $model->__duration__          = empty($model->duration) ? 0 : format_time($model->duration , 'HH:II:SS');
-        $model->__thumb__ = empty($model->thumb) ? $model->thumb_for_program : $model->thumb;
+        $model->__duration__    = empty($model->duration) ? 0 : format_time($model->duration , 'HH:II:SS');
+        $model->__thumb__       = empty($model->thumb) ? $model->thumb_for_program : $model->thumb;
 
         $model->__name__ = $model->type === 'pro' ?
             (empty($model->name) ? sprintf("%'04s" , $model->index) : $model->name)

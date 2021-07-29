@@ -4,7 +4,6 @@
 namespace App\Customize\api\admin\handler;
 
 
-use App\Customize\api\admin\model\Model;
 use Illuminate\Contracts\Pagination\Paginator;
 use stdClass;
 use function core\convert_object;
@@ -45,7 +44,7 @@ class Handler
         return $object;
     }
 
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;

@@ -49,4 +49,9 @@ class Model extends BaseModel
     {
         return static::where('id' , $id)->decrement($column , $step);
     }
+
+    public static function getByIds(array $ids)
+    {
+        return static::whereIn('id' , $ids)->get();
+    }
 }

@@ -12,7 +12,22 @@ class VideoCompanyModel extends Model
 {
     protected $table = 'xq_video_company';
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function region()
+    {
+        return $this->belongsTo(RegionModel::class , 'country_id' , 'id');
+    }
+
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id']           = $filter['id'] ?? '';
         $filter['name']         = $filter['name'] ?? '';
@@ -40,7 +55,8 @@ class VideoCompanyModel extends Model
             $where[] = ['country_id' , '=' , $filter['country_id']];
         }
 
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

@@ -15,6 +15,6 @@ export default {
     },
 
     destroyAll (query , data) {
-        return Http.delete(`${TopContext.api}//destroy_all_history`, query , data);
+        return Http.delete(`${TopContext.api}/destroy_all_history`, query , data);
     },
 };

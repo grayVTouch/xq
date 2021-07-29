@@ -95,7 +95,4 @@ class CollectionHandler extends Handler
         }
         $model->relation = $relation;
     }
-
-
-
 }

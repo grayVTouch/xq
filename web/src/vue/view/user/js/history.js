@@ -57,8 +57,8 @@ export default {
 
         getHistory () {
             this.pending('getHistory' , true);
-            Api.user
-                .history({
+            Api.history
+                .index({
                     size: this.history.size ,
                     page: this.history.page ,
                     ...this.search ,
@@ -102,21 +102,21 @@ export default {
                 });
         } ,
 
-        destroyHistory (history) {
-            const pendingKey = 'destroyHistory_' + history.id;
+        destroyHistory (row) {
+            const pendingKey = 'destroyHistory_' + row.id;
             if (this.pending(pendingKey)) {
                 return ;
             }
             this.pending(pendingKey , true);
-            Api.user
-                .destroyHistory(null , {
-                    history_ids: G.jsonEncode([history.id])
+            Api.history
+                .destroyAll(null , {
+                    ids: G.jsonEncode([row.id])
                 })
                 .then((res) => {
                     this.pending(pendingKey , false);
                     if (res.code !== TopContext.code.Success) {
                         this.errorHandleAtUserChildren(res.message , res.code , () => {
-                            this.destroyHistory(history);
+                            this.destroyHistory(row);
                         });
                         return ;
                     }

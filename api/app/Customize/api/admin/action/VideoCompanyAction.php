@@ -27,7 +27,11 @@ class VideoCompanyAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoCompanyModel::index($param , $order , $size);
+        $res = VideoCompanyModel::index([
+            'module' ,
+            'user' ,
+            'region' ,
+        ] , $param , $order , $size);
         $res = VideoCompanyHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {

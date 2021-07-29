@@ -85,8 +85,8 @@ export default {
         getCollectionGroup (callback) {
             return new Promise((resolve) => {
                 this.pending('getCollectionGroup' , true);
-                Api.user
-                    .collectionGroup()
+                Api.collectionGroup
+                    .index()
                     .then((res) => {
                         this.pending('getCollectionGroup' , false);
                         if (res.code !== TopContext.code.Success) {
@@ -112,9 +112,9 @@ export default {
                 return ;
             }
             this.pending(pending , true);
-            Api.user
-                .destroyAllCollectionGroup(null , {
-                    collection_group_ids: G.jsonEncode([collectionGroup.id])
+            Api.collectionGroup
+                .destroyAll(null , {
+                    ids: G.jsonEncode([collectionGroup.id])
                 })
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {
@@ -148,11 +148,10 @@ export default {
         // 获取指定收藏夹下收藏的内容
         getCollections (collectionGroupId) {
             this.pending('getCollections' , true);
-            Api.user
-                .collections({
+            Api.collectionGroup
+                .collections(collectionGroupId , {
                     size: this.collections.size ,
                     page: this.collections.page ,
-                    collection_group_id: collectionGroupId ,
                     ...this.search ,
                 })
                 .then((res) => {
@@ -234,8 +233,8 @@ export default {
                 return ;
             }
             this.pending('createCollectionGroup' , true);
-            Api.user
-                .createCollectionGroup(null , this.collectionGroupForm)
+            Api.collectionGroup
+                .store(null , this.collectionGroupForm)
                 .then((res) => {
                     this.pending('createCollectionGroup' , false);
                     if (res.code !== TopContext.code.Success) {
@@ -259,10 +258,8 @@ export default {
                 return ;
             }
             this.pending(pendingKey , true);
-            Api.user
-                .destroyCollection(null , {
-                    collection_id: collection.id ,
-                })
+            Api.collection
+                .destroy(collection.id)
                 .then((res) => {
                     this.pending(pendingKey , false);
                     if (res.code !== TopContext.code.Success) {
@@ -292,7 +289,7 @@ export default {
         } ,
 
         showUpdateFavoritesForm (collectionGroup) {
-            this.updateCollectionGroupForm.collection_group_id = collectionGroup.id;
+            this.updateCollectionGroupForm.id = collectionGroup.id;
             this.updateCollectionGroupForm.name = collectionGroup.name;
             this.hideCollectionGroupAction(collectionGroup);
             const updateForm = G(this.$refs['update-form-' + collectionGroup.id]);
@@ -309,7 +306,7 @@ export default {
         } ,
 
         updateCollectionGroup () {
-            const pendingKey = 'updateCollectionGroup_' + this.updateCollectionGroupForm.collection_group_id;
+            const pendingKey = 'updateCollectionGroup_' + this.updateCollectionGroupForm.id;
             if (this.pending(pendingKey)) {
                 return ;
             }

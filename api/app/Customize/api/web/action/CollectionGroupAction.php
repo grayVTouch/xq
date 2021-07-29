@@ -20,6 +20,7 @@ use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\UserModel;
 use App\Customize\api\web\model\VideoModel;
 use App\Customize\api\web\model\VideoProjectModel;
+use App\Customize\api\web\repository\Repository;
 use App\Http\Controllers\api\web\Base;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -28,6 +29,7 @@ use Illuminate\Validation\Rule;
 use function api\web\my_config;
 use function api\web\my_config_keys;
 use function api\web\user;
+use function core\current_datetime;
 
 class CollectionGroupAction extends Action
 {
@@ -105,15 +107,12 @@ class CollectionGroupAction extends Action
         $user = user();
         $res = CollectionGroupModel::getByModuleIdAndUserId($module->id , $user->id);
         $res = CollectionGroupHandler::handleAll($res);
+        // 附加：是否存在于里面
         foreach ($res as $v)
         {
             // 附加：累计数量
             CollectionGroupHandler::count($v);
-            // 附加：封面
-            CollectionGroupHandler::thumb($v);
-            // 附加：图片专题数量
-            CollectionGroupHandler::countForImageProject($v);
-            // 附加：是否存在于里面
+            // 是否在里面
             CollectionGroupHandler::isInside($v , $param['relation_type'] , $relation->id);
         }
         return self::success('' , $res);
@@ -134,16 +133,18 @@ class CollectionGroupAction extends Action
             return self::error('模块不存在');
         }
         $user = user();
-        $res = CollectionGroupModel::getByModuleIdAndUserIdAndRelationTypeAndValue($module->id , $user->id , $param['relation_type'] ,  $param['value']);
+        $res = CollectionGroupModel::getByModuleIdAndUserIdAndValue($module->id , $user->id ,  $param['value']);
         $res = CollectionGroupHandler::handleAll($res);
-        array_walk($res , function ($v){
-            // 附加：累计数量
-            CollectionGroupHandler::count($v);
-            // 附加：封面
-            CollectionGroupHandler::thumb($v);
-            // 附加：图片专题数量
-            CollectionGroupHandler::countForImageProject($v);
-        });
+        if ($param['relation_type'] === 'image_project') {
+            array_walk($res , function ($v) use($param){
+                // 附加：累计数量
+                CollectionGroupHandler::count($v);
+                // 附加：封面
+                CollectionGroupHandler::thumb($v);
+                // 附加：图片专题数量
+                CollectionGroupHandler::countForImageProject($v);
+            });
+        }
         return self::success('' , $res);
     }
 
@@ -436,39 +437,17 @@ class CollectionGroupAction extends Action
         $total_collection_group = CollectionGroupModel::countByModuleIdAndUserId($module->id , $user->id);
         $collection_group = CollectionGroupModel::getByModuleIdAndUserIdAndSize($module->id , $user->id , $collection_group_limit);
         $collection_group = CollectionGroupHandler::handleAll($collection_group);
+        $all_collections = [];
         foreach ($collection_group as $v)
         {
+            // 附加：累计数量
+            CollectionGroupHandler::count($v);
             $collections = CollectionModel::getByModuleIdAndUserIdAndCollectionGroupIdAndSize($module->id , $user->id , $v->id , $collection_limit);
             $collections = CollectionHandler::handleAll($collections);
-            foreach ($collections as $v1)
-            {
-                CollectionHandler::relation($v1);
-                switch ($v1->relation_type)
-                {
-                    case 'image_project':
-                        ImageProjectHandler::user($v1->relation);
-                        break;
-                    case 'video_project':
-                        VideoProjectHandler::user($v1->relation);
-                        VideoProjectHandler::userPlayRecord($v1->relation);
-                        if (!empty($v1->relation)) {
-                            UserVideoProjectPlayRecordHandler::video($v1->relation->user_play_record);
-                        }
-                        break;
-                    case 'video':
-                        VideoHandler::user($v1->relation);
-                        VideoHandler::userPlayRecord($v1->relation);
-                        if (!empty($v1->relation)) {
-                            UserVideoPlayRecordHandler::video($v1->relation->user_play_record);
-                        }
-                        break;
-                    case 'image':
-                        ImageHandler::user($v1->relation);
-                        break;
-                }
-            }
+            $all_collections = array_merge($all_collections , $collections);
             $v->collections = $collections;
         }
+        Repository::withRelationUsePreloadByModuleAndCollectionSupportCollection($module , $all_collections);
         return self::success('' , [
             'total_collection_group'    => $total_collection_group ,
             'collection_groups'         => $collection_group ,
@@ -481,7 +460,6 @@ class CollectionGroupAction extends Action
         $relation_type_range = my_config_keys('business.content_type');
         $validator = Validator::make($param , [
             'module_id' => 'required' ,
-            'collection_group_id' => 'required' ,
             'relation_type' => ['sometimes' , Rule::in($relation_type_range)] ,
         ]);
         if ($validator->fails()) {
@@ -498,33 +476,7 @@ class CollectionGroupAction extends Action
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
         $res = CollectionModel::getWithPagerByModuleIdAndUserIdAndCollectionGroupIdAndValueAndRelationTypeAndSize($module->id , user()->id , $collection_group->id , $param['value'] , $param['relation_type'] , $size);
         $res = CollectionHandler::handlePaginator($res);
-        foreach ($res->data as $v)
-        {
-            CollectionHandler::relation($v);
-            switch ($v->relation_type)
-            {
-                case 'image_project':
-                    ImageProjectHandler::user($v->relation);
-                    break;
-                case 'video_project':
-                    VideoProjectHandler::user($v->relation);
-                    VideoProjectHandler::userPlayRecord($v->relation);
-                    if (!empty($v->relation)) {
-                        UserVideoProjectPlayRecordHandler::video($v->relation->user_play_record);
-                    }
-                    break;
-                case 'video':
-                    VideoHandler::user($v->relation);
-                    VideoHandler::userPlayRecord($v->relation);
-                    if (!empty($v->relation)) {
-                        UserVideoPlayRecordHandler::video($v->relation->user_play_record);
-                    }
-                    break;
-                case 'image':
-                    ImageHandler::user($v->relation);
-                    break;
-            }
-        }
+        Repository::withRelationUsePreloadByModuleAndCollectionSupportCollection($module , $res->data);
         return self::success('' , $res);
     }
 

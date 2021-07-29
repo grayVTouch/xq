@@ -14,7 +14,7 @@ use function core\convert_object;
 
 class VideoSeriesHandler extends Handler
 {
-    public static function handle(?Model $model): ?stdClass
+    public static function handle($model): ?stdClass
     {
         if (empty($model)) {
             return null;
@@ -31,7 +31,7 @@ class VideoSeriesHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
         $model->user = $user;
     }
@@ -41,7 +41,7 @@ class VideoSeriesHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
         $model->module = $module;
     }

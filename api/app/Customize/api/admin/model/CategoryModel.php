@@ -10,6 +10,22 @@ class CategoryModel extends Model
 {
     protected $table = 'xq_category';
 
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne(CategoryModel::class , 'id' , 'p_id');
+    }
+
+
     public static function getAll()
     {
         return self::orderBy('weight' , 'desc')
@@ -25,7 +41,7 @@ class CategoryModel extends Model
             ->get();
     }
 
-    public static function getByFilter(array $filter = []): Collection
+    public static function getByRelationAndFilter(array $relation = [] , array $filter = []): Collection
     {
         $filter['module_id']    = $filter['module_id'] ?? '';
         $filter['type']         = $filter['type'] ?? [];
@@ -37,7 +53,8 @@ class CategoryModel extends Model
         if ($filter['is_enabled'] !== '') {
             $where[] = ['is_enabled' , '=' , $filter['is_enabled']];
         }
-        $query = self::where($where);
+        $query = self::with($relation)
+            ->where($where);
 
         if (!empty($filter['type'])) {
             $query->whereIn('type' , $filter['type']);

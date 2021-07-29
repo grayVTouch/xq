@@ -34,7 +34,13 @@ class VideoProjectAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::index($param , $order , $size);
+        $res = VideoProjectModel::index([
+            'module' ,
+            'user' ,
+            'category' ,
+            'videoSeries' ,
+            'videoCompany' ,
+        ] , $param , $order , $size);
         $res = VideoProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {

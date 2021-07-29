@@ -23,13 +23,16 @@ class ImageAtPositionAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = ImageAtPositionModel::index($param , $order , $size);
+        $res = ImageAtPositionModel::index([
+            'module' ,
+            'position' ,
+        ] , $param , $order , $size);
         $res = ImageAtPositionHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
             // 附加：模块
             ImageAtPositionHandler::module($v);
-            // 附加：用户
+            // 附加：位置
             ImageAtPositionHandler::position($v);
         }
         return self::success('' , $res);

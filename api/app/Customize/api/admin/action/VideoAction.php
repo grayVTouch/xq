@@ -39,7 +39,13 @@ class VideoAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoModel::index($param , $order , $size);
+        $res = VideoModel::index([
+            'module' ,
+            'user' ,
+            'category' ,
+            'videoProject' ,
+            'videoSubtitles' ,
+        ] , $param , $order , $size);
         $res = VideoHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
@@ -51,8 +57,6 @@ class VideoAction extends Action
             VideoHandler::category($v);
             // 附加：视频专题
             VideoHandler::videoProject($v);
-            // 附加：视频
-            VideoHandler::videos($v);
             // 附加：视频字幕
             VideoHandler::videoSubtitles($v);
         }

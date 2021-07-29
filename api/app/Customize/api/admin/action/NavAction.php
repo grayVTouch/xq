@@ -22,7 +22,11 @@ class NavAction extends Action
 {
     public static function index(Base $context , array $param = [])
     {
-        $res = NavModel::getByFilter($param);
+        $res = NavModel::getByRelationAndFilter([
+            'module' ,
+            'category' ,
+            'parent' ,
+        ] , $param);
         $res = NavHandler::handleAll($res);
         foreach ($res as $v)
         {

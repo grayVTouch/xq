@@ -33,7 +33,7 @@ class ImageAtPositionHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
         $model->module = $module;
     }
@@ -43,7 +43,7 @@ class ImageAtPositionHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $position = PositionModel::find($model->position_id);
+        $position =  property_exists($model , 'position') ? $model->position : PositionModel::find($model->position_id);
         $position = PositionHandler::handle($position);
 
         $model->position = $position;

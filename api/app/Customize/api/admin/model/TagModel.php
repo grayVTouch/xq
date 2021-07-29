@@ -12,7 +12,17 @@ class TagModel extends Model
 {
     protected $table = 'xq_tag';
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id']           = $filter['id'] ?? '';
         $filter['name']         = $filter['name'] ?? '';
@@ -40,7 +50,8 @@ class TagModel extends Model
             $where[] = ['type' , '=' , $filter['type']];
         }
 
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

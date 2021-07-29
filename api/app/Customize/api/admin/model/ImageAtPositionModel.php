@@ -12,7 +12,17 @@ class ImageAtPositionModel extends Model
 {
     protected $table = 'xq_image_at_position';
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function position()
+    {
+        return $this->belongsTo(PositionModel::class , 'position_id' , 'id');
+    }
+
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id'] = $filter['id'] ?? '';
         $filter['name'] = $filter['name'] ?? '';
@@ -37,7 +47,8 @@ class ImageAtPositionModel extends Model
         if ($filter['position_id'] !== '') {
             $where[] = ['position_id' , '=' , $filter['position_id']];
         }
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

@@ -55,7 +55,7 @@ class AdminHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $role = RoleModel::find($model->role_id);
+        $role = property_exists($model , 'role') ? $model->role : RoleModel::find($model->role_id);
         $role = RoleHandler::handle($role);
         $model->role = $role;
     }

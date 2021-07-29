@@ -10,6 +10,11 @@ class AdminModel extends Model
 {
     protected $table = 'xq_admin';
 
+    public function role()
+    {
+        return $this->belongsTo(RoleModel::class , 'role_id' , 'id');
+    }
+
     public static function findByUsername(string $username = '')
     {
         return self::where('username' , $username)
@@ -25,7 +30,7 @@ class AdminModel extends Model
             ->get();
     }
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id']       = $filter['id'] ?? '';
         $filter['username'] = $filter['username'] ?? '';
@@ -67,7 +72,8 @@ class AdminModel extends Model
             $where[] = ['is_root' , '=' , $filter['is_root']];
         }
 
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

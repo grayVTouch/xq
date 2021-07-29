@@ -64,12 +64,14 @@ class AdminAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = AdminModel::index($param , $order , $size);
+        $res = AdminModel::index([
+            'role' ,
+        ] , $param , $order , $size);
         $res = AdminHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
             // 附加：权限
-            AdminHandler::permissions($v);
+//            AdminHandler::permissions($v);
             // 附加：角色
             AdminHandler::role($v);
         }

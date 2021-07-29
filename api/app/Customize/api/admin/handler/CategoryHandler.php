@@ -34,7 +34,7 @@ class CategoryHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
         $model->user = $user;
     }
@@ -44,7 +44,7 @@ class CategoryHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
         $model->module = $module;
     }
@@ -54,7 +54,12 @@ class CategoryHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $category = $model->p_id ? CategoryModel::find($model->p_id) : null;
+        $category = $model->p_id ?
+            (
+                property_exists($model , 'parent') ?
+                    $model->parent :
+                    CategoryModel::find($model->p_id))
+            : null;
         if ($deep) {
             self::parent($category , $deep);
         }

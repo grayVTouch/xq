@@ -37,12 +37,13 @@ class VideoHandler extends Handler
         return $model;
     }
 
+
     public static function user($model): void
     {
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
         $model->user = $user;
     }
@@ -52,7 +53,7 @@ class VideoHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
         $model->module = $module;
     }
@@ -62,8 +63,12 @@ class VideoHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $category = CategoryModel::find($model->category_id);
-        $category = CategoryHandler::handle($category);
+        if ($model->type === 'pro') {
+            $category = property_exists($model , 'category') ? $model->category : CategoryModel::find($model->category_id);
+            $category = CategoryHandler::handle($category);
+        } else {
+            $category = null;
+        }
         $model->category = $category;
     }
 
@@ -73,7 +78,7 @@ class VideoHandler extends Handler
             return ;
         }
         if ($model->type === 'pro') {
-            $video_project = VideoProjectModel::find($model->video_project_id);
+            $video_project = property_exists($model , 'video_project') ? $model->video_project : VideoProjectModel::find($model->video_project_id);
             $video_project = VideoProjectHandler::handle($video_project);
         } else {
             $video_project = null;
@@ -86,7 +91,7 @@ class VideoHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $videos = VideoSrcModel::getByVideoId($model->id);
+        $videos = property_exists($model , 'videos') ? $model->videos : VideoSrcModel::getByVideoId($model->id);
         $videos = VideoSrcHandler::handleAll($videos);
         $model->videos = $videos;
     }
@@ -96,7 +101,7 @@ class VideoHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $video_subtitles = VideoSubtitleModel::getByVideoId($model->id);
+        $video_subtitles = property_exists($model , 'video_subtitles') ? $model->video_subtitles : VideoSubtitleModel::getByVideoId($model->id);
         $video_subtitles = VideoSubtitleHandler::handleAll($video_subtitles);
         $model->video_subtitles = $video_subtitles;
     }

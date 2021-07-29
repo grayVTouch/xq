@@ -34,17 +34,22 @@ class NavHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
         $model->module = $module;
     }
 
-    public static function parent($model , bool $deep = false): void
+    public static function parent($model , bool $deep = true): void
     {
         if (empty($model)) {
             return ;
         }
-        $nav = $model->p_id ? NavModel::find($model->p_id) : null;
+        $nav = $model->p_id ?
+            (
+            property_exists($model , 'parent') ?
+                $model->parent :
+                NavModel::find($model->p_id))
+            : null;
         if ($deep) {
             self::parent($nav , $deep);
         }
@@ -53,7 +58,7 @@ class NavHandler extends Handler
 
     public static function category($model): void
     {
-        $category = CategoryModel::find($model->value);
+        $category = property_exists($model , 'category') ? $model->category : CategoryModel::find($model->value);
         $category = CategoryHandler::handle($category);
         $model->category = $category;
     }

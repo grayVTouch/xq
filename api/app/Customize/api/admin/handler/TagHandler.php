@@ -33,7 +33,7 @@ class TagHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $user = UserModel::find($model->user_id);
+        $user = property_exists($model , 'user') ? $model->user : UserModel::find($model->user_id);
         $user = UserHandler::handle($user);
         $model->user = $user;
     }
@@ -43,7 +43,7 @@ class TagHandler extends Handler
         if (empty($model)) {
             return ;
         }
-        $module = ModuleModel::find($model->module_id);
+        $module = property_exists($model , 'module') ? $model->module : ModuleModel::find($model->module_id);
         $module = ModuleHandler::handle($module);
         $model->module = $module;
     }

@@ -10,6 +10,21 @@ class NavModel extends Model
 {
     protected $table = 'xq_nav';
 
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function parent()
+    {
+        return $this->hasOne(NavModel::class , 'id' , 'p_id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class , 'value' , 'id');
+    }
+
     public static function getAll()
     {
         return self::orderBy('weight' , 'desc')
@@ -25,7 +40,7 @@ class NavModel extends Model
             ->get();
     }
 
-    public static function getByFilter(array $filter = []): Collection
+    public static function getByRelationAndFilter(array $relation = [] , array $filter = []): Collection
     {
         $filter['module_id']    = $filter['module_id'] ?? '';
         $filter['type']         = $filter['type'] ?? '';
@@ -40,7 +55,8 @@ class NavModel extends Model
             $where[] = ['type' , '=' , $filter['type']];
         }
 
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy('weight' , 'desc')
             ->orderBy('id' , 'asc')
             ->get();

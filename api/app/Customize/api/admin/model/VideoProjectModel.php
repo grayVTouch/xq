@@ -12,7 +12,37 @@ class VideoProjectModel extends Model
 {
     protected $table = 'xq_video_project';
 
-    public static function index(array $filter = [] , array $order = [] , int $size = 20): Paginator
+    public function user()
+    {
+        return $this->belongsTo(UserModel::class , 'user_id' , 'id');
+    }
+
+    public function module()
+    {
+        return $this->belongsTo(ModuleModel::class , 'module_id' , 'id');
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(CategoryModel::class , 'category_id' , 'id');
+    }
+
+    public function videoSeries()
+    {
+        return $this->belongsTo(VideoSeriesModel::class , 'video_series_id' , 'id');
+    }
+
+    public function videoCompany()
+    {
+        return $this->belongsTo(VideoCompanyModel::class , 'video_company_id' , 'id');
+    }
+
+    public function videos()
+    {
+        return $this->hasMany(VideoModel::class , 'video_project_id' , 'id');
+    }
+
+    public static function index(array $relation = [] , array $filter = [] , array $order = [] , int $size = 20): Paginator
     {
         $filter['id']               = $filter['id'] ?? '';
         $filter['name']             = $filter['name'] ?? '';
@@ -50,7 +80,8 @@ class VideoProjectModel extends Model
             $where[] = ['video_company_id' , '=' , $filter['video_company_id']];
         }
 
-        return self::where($where)
+        return self::with($relation)
+            ->where($where)
             ->orderBy($order['field'] , $order['value'])
             ->paginate($size);
     }

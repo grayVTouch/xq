@@ -23,7 +23,10 @@ class TagAction extends Action
     {
         $order = $param['order'] === '' ? [] : parse_order($param['order'] , '|');
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = TagModel::index($param , $order , $size);
+        $res = TagModel::index([
+            'module' ,
+            'user' ,
+        ] , $param , $order , $size);
         $res = TagHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {

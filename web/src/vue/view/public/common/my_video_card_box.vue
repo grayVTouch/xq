@@ -40,7 +40,7 @@
             <!-- 标签 -->
             <div class="tags m-b-5">
                 <span class="ico"><my-icon icon="icontag" size="18" /></span>
-                <a class="tag" target="_blank" v-for="tag in row.tags" :href="`#/video/search?tag_id=${tag.tag_id}`">{{ tag.name }}</a>
+                <a class="tag" target="_blank" v-for="tag in row.tags" :href="genUrl(`/video/search?tag_id=${tag.tag_id}`)">{{ tag.name }}</a>
             </div>
             <div class="name m-b-10">{{ row.name }}</div>
             <div class="desc">

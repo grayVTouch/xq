@@ -228,6 +228,13 @@ export default {
             this.getWithPager();
         } ,
 
+        resetSubjectFilter () {
+            this.imageSubjects = G.copy(imageSubjects);
+            this.getImageSubjects();
+            this.images.page = 1;
+            this.getWithPager();
+        } ,
+
         orderInImageProject (v) {
             this.closeOrderSelectorInHorizontal();
             this.closeOrderSelectorInVertical();

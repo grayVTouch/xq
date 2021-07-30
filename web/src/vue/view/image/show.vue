@@ -28,7 +28,7 @@
                     <div class="tags m-b-15">
                         <div class="left run-tags">
                             <span class="ico p-r-5"><my-icon icon="icontag" /></span>
-                            <my-link class="tag" target="_blank" v-for="v in data.tags" :key="v.id" :href="`#/image/search?tag_id=${v.tag_id}`">{{ v.name }}</my-link>
+                            <my-link class="tag" target="_blank" v-for="v in data.tags" :key="v.id" :href="genUrl(`/image/search?tag_id=${v.tag_id}`)">{{ v.name }}</my-link>
                         </div>
                         <div class="right">
                             <span class="number">

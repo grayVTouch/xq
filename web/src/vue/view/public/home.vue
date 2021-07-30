@@ -52,7 +52,7 @@
                                                     <div class="list">
                                                         <template v-for="v1 in v.data">
 
-                                                            <a class="item image" v-if="v1.relation_type === 'image_project'" target="_blank" :href="`#/image_project/${v1.relation_id}/show`">
+                                                            <a class="item image" v-if="v1.relation_type === 'image_project'" target="_blank" :href="genUrl(`/image_project/${v1.relation_id}/show`)">
                                                                 <div class="thumb"><img :data-src="v1.relation.thumb ? v1.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
                                                                 <div class="info">
                                                                     <div class="name f-14">【{{ v1.__relation_type__ }}】{{ v1.relation.name ?  v1.relation.name : '' }}</div>
@@ -62,7 +62,7 @@
                                                                 </div>
                                                             </a>
 
-                                                            <a class="item video-project" v-if="v1.relation_type === 'video_project'" target="_blank" :href="`#/video_project/${v1.relation_id}/show`">
+                                                            <a class="item video-project" v-if="v1.relation_type === 'video_project'" target="_blank" :href="genUrl(`/video_project/${v1.relation_id}/show`)">
                                                                 <div class="thumb">
                                                                     <img
                                                                         :data-src="v1.relation.user_play_record.video.__thumb__ ? v1.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
@@ -80,7 +80,7 @@
                                                                 </div>
                                                             </a>
 
-                                                            <a class="item image" v-if="v1.relation_type === 'image'" target="_blank" :href="`#/image/${v1.relation_id}/show`">
+                                                            <a class="item image" v-if="v1.relation_type === 'image'" target="_blank" :href="genUrl(`/image/${v1.relation_id}/show`)">
                                                                 <div class="thumb"><img :data-src="v1.relation.src ? v1.relation.src : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
                                                                 <div class="info">
                                                                     <div class="name f-14">【{{ v1.__relation_type__ }}】{{ v1.relation.name ?  v1.relation.name : '' }}</div>
@@ -90,7 +90,7 @@
                                                                 </div>
                                                             </a>
 
-                                                            <a class="item video" v-if="v1.relation_type === 'video'" target="_blank" :href="`#/video/${v1.relation_id}/show`">
+                                                            <a class="item video" v-if="v1.relation_type === 'video'" target="_blank" :href="genUrl(`/video/${v1.relation_id}/show`)">
                                                                 <div class="thumb">
                                                                     <img
                                                                             :data-src="v1.relation.user_play_record.video.__thumb__ ? v1.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
@@ -112,7 +112,7 @@
                                                 </div>
 
                                                 <div class="load-more" v-if="histories.length > 0">
-                                                    <my-link class="more" href="#/user/history" @click="hideHistoryCtrl">加载更多</my-link>
+                                                    <my-link class="more" :href="genUrl('/user/history')" @click="hideHistoryCtrl">加载更多</my-link>
                                                 </div>
                                             </div>
 
@@ -136,7 +136,7 @@
                                             <div class="list">
                                                 <template v-for="v in favorites.collection_group.collections">
 
-                                                    <a v-if="v.relation_type === 'image_project'" class="item image-project" target="_blank" :href="`#/image_project/${v.relation_id}/show`">
+                                                    <a v-if="v.relation_type === 'image_project'" class="item image-project" target="_blank" :href="genUrl(`/image_project/${v.relation_id}/show`)">
                                                         <div class="thumb"><img :data-src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
                                                         <div class="info">
                                                             <div class="name f-14">【{{ v.__relation_type__}}】{{ v.relation.name }}</div>
@@ -146,7 +146,7 @@
                                                         </div>
                                                     </a>
 
-                                                    <a v-if="v.relation_type === 'video_project'" class="item video-project" target="_blank" :href="`#/video_project/${v.relation_id}/show`">
+                                                    <a v-if="v.relation_type === 'video_project'" class="item video-project" target="_blank" :href="genUrl(`/video_project/${v.relation_id}/show`)">
                                                         <div class="thumb">
                                                             <img
                                                                     :data-src="v.relation.user_play_record.video.__thumb__ ? v.relation.user_play_record.video.__thumb__ : TopContext.res.notFound"
@@ -163,7 +163,7 @@
                                                         </div>
                                                     </a>
 
-                                                    <a v-if="v.relation_type === 'video'" class="item video" target="_blank" :href="`#/video/${v.relation_id}/show`">
+                                                    <a v-if="v.relation_type === 'video'" class="item video" target="_blank" :href="genUrl(`/video/${v.relation_id}/show`)">
                                                         <div class="thumb">
                                                             <img
                                                                     :data-src="v.relation.__thumb__ ? v.relation.__thumb__ : TopContext.res.notFound"
@@ -180,7 +180,7 @@
                                                         </div>
                                                     </a>
 
-                                                    <a v-if="v.relation_type === 'image'" class="item image-project" target="_blank" :href="`#/image/${v.relation_id}/show`">
+                                                    <a v-if="v.relation_type === 'image'" class="item image-project" target="_blank" :href="genUrl(`/image/${v.relation_id}/show`)">
                                                         <div class="thumb"><img :data-src="v.relation.src ? v.relation.src : TopContext.res.notFound" v-judge-img-size class="image judge-img-size" alt=""></div>
                                                         <div class="info">
                                                             <div class="name f-14">【{{ v.__relation_type__}}】{{ v.relation.name }}</div>

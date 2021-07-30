@@ -43,7 +43,7 @@ module.exports = {
                 // 'viewport': 'width=device-width, initial-scale=1' ,
             } ,
             inject: true ,
-            favicon: __dirname + '/src/asset/res/logo.png' ,
+            // favicon: __dirname + '/src/asset/res/logo.png' ,
             templateParameters: {
                 // resUrl: 'http://res.xq.test'
             } ,

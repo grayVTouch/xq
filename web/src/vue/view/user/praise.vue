@@ -13,7 +13,7 @@
                                 <template v-for="v in group.data">
 
                                     <!-- 图片专题 -->
-                                    <a v-if="v.relation_type === 'image_project'" class="item" target="_blank" :href="`#/image_project/${v.relation_id}/show`">
+                                    <a v-if="v.relation_type === 'image_project'" class="item" target="_blank" :href="genUrl(`/image_project/${v.relation_id}/show`)">
                                         <div class="thumb">
                                             <div class="mask"><img :data-src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
                                         </div>
@@ -32,7 +32,7 @@
                                         </div>
                                     </a>
 
-                                    <a v-if="v.relation_type === 'video_project'" class="item" target="_blank" :href="`#/video_project/${v.relation_id}/show`">
+                                    <a v-if="v.relation_type === 'video_project'" class="item" target="_blank" :href="genUrl(`/video_project/${v.relation_id}/show`)">
                                         <div class="thumb">
                                             <div class="mask">
                                                 <img
@@ -58,7 +58,7 @@
                                         </div>
                                     </a>
 
-                                    <a v-if="v.relation_type === 'video'" class="item" target="_blank" :href="`#/video/${v.relation_id}/show`">
+                                    <a v-if="v.relation_type === 'video'" class="item" target="_blank" :href="genUrl(`/video/${v.relation_id}/show`)">
                                         <div class="thumb">
                                             <div class="mask">
                                                 <img
@@ -83,7 +83,7 @@
                                         </div>
                                     </a>
 
-                                    <a v-if="v.relation_type === 'image'" class="item" target="_blank" :href="`#/image/${v.relation_id}/show`">
+                                    <a v-if="v.relation_type === 'image'" class="item" target="_blank" :href="genUrl(`/image/${v.relation_id}/show`)">
                                         <div class="thumb">
                                             <div class="mask"><img :data-src="v.relation.src ? v.relation.src : TopContext.res.notFound" v-judge-img-size class="image judge-img-size"></div>
                                         </div>

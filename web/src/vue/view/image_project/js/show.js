@@ -277,7 +277,6 @@ export default {
         linkToImageProject (imageSubject) {
             const link = this.genUrl(`/image_project/${imageSubject.id}/show`);
             this.openWindow(link , '_self');
-            this.reload();
         } ,
 
         focusHandle () {

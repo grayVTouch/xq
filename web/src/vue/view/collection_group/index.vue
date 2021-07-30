@@ -41,7 +41,7 @@
 <!--                    <div class="item card-box" v-for="v in collections.data"  :key="v.id">-->
 <!--                        &lt;!&ndash; 封面 &ndash;&gt;-->
 <!--                        <div class="thumb">-->
-<!--                            <a class="link" target="_blank" :href="`#/image_project/${v.relation.id}/show`">-->
+<!--                            <a class="link" target="_blank" :href="genUrl(`/image_project/${v.relation.id}/show`)">-->
 <!--                                <img :data-src="v.relation.thumb ? v.relation.thumb : TopContext.res.notFound" v-judge-img-size class="image judge-img-size">-->
 <!--                                <div class="mask">-->
 <!--                                    <div class="top">-->
@@ -63,10 +63,10 @@
 <!--                            <div class="tags">-->
 <!--                                <span class="ico"><my-icon icon="icontag" size="18" /></span>-->
 
-<!--                                <a class="tag" target="_blank" v-for="tag in v.relation.tags" :href="`#/image_project/search?tag_id=${tag.tag_id}`">{{ tag.name }}</a>-->
+<!--                                <a class="tag" target="_blank" v-for="tag in v.relation.tags" :href="genUrl(`/image_project/search?tag_id=${tag.tag_id}`)">{{ tag.name }}</a>-->
 <!--                            </div>-->
 <!--                            &lt;!&ndash; 标题 &ndash;&gt;-->
-<!--                            <div class="title"><a target="_blank" :href="`#/image_project/${v.relation.id}/show`">{{ v.relation.name }}</a></div>-->
+<!--                            <div class="title"><a target="_blank" :href="genUrl(`/image_project/${v.relation.id}/show`)">{{ v.relation.name }}</a></div>-->
 <!--                            &lt;!&ndash; 发布者 &ndash;&gt;-->
 <!--                            <div class="user">-->
 <!--                                <a class="sender" target="_blank" :href="genUrl(`/channel/${v.relation.user.id}`)">-->

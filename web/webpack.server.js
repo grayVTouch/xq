@@ -35,7 +35,18 @@ module.exports = merge(common, {
         proxy: {
             '/api': {
                 target: 'http://api.xq.test' ,
+                // 但凡是 域名 型的地址，必须设置成 true
                 changeOrigin: true ,
+            } ,
+            '/resource': {
+                target: 'http://res.xq.test' ,
+                // 但凡是 域名 型的地址，必须设置成 true
+                changeOrigin: true ,
+                // 不希望传递 /resource ，需要重写
+                // 具体参考：https://webpack.docschina.org/configuration/dev-server/#devserverproxy
+                pathRewrite: {
+                    '^/resource': ''
+                },
             } ,
         } ,
     } ,

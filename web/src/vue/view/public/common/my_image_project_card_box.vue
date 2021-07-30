@@ -35,7 +35,7 @@
                 >{{ tag.name }}</a>
             </div>
             <!-- 标题 -->
-            <div class="title"><a target="_blank" :href="`#/image_project/${row.id}/show`">{{ row.name }}</a></div>
+            <div class="title"><a target="_blank" :href="genUrl(`/image_project/${row.id}/show`)">{{ row.name }}</a></div>
             <!-- 发布者 -->
             <div class="user">
                 <div class="sender">

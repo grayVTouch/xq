@@ -21,7 +21,7 @@
                     <div class="tags m-b-15">
                         <div class="left run-tags">
                             <span class="ico p-r-5"><my-icon icon="icontag" /></span>
-                            <my-link class="tag" target="_blank" v-for="v in data.tags" :key="v.id" :href="`#/image_project/search?tag_id=${v.tag_id}`">{{ v.name }}</my-link>
+                            <my-link class="tag" target="_blank" v-for="v in data.tags" :key="v.id" :href="genUrl(`/image_project/search?tag_id=${v.tag_id}`)">{{ v.name }}</my-link>
                         </div>
                         <div class="right">
                             <span class="number">{{ data.images.length }}P</span>&nbsp;|&nbsp;<span class="praise"><my-icon icon="shoucang2" class="run-position-relative run-t--1" />{{ data.praise_count }}</span>&nbsp;|&nbsp;<span class="collect"><my-icon icon="shoucang5" class="run-position-relative run-t--1" />{{ data.collect_count }}</span>&nbsp;|&nbsp<span class="view-count"><my-icon icon="chakan" class="run-position-relative run-t--1" /> {{ data.view_count }}</span>&nbsp;|&nbsp;<span class="create-time"><my-icon icon="shijian" class="run-position-relative run-t--1" /> {{ data.created_at }}</span>

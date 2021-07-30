@@ -6,9 +6,6 @@ namespace App\Http\Controllers\api\admin;
 
 use App\Customize\api\admin\action\FileAction;
 use App\Customize\api\admin\facade\AliyunOss;
-use Illuminate\Http\Request;
-use OSS\Core\OssException;
-use OSS\OssClient;
 use function api\admin\error;
 use function api\admin\success;
 

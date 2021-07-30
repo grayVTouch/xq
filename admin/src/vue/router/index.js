@@ -1,7 +1,7 @@
 import routes from "./routes.js";
 
 const router = new VueRouter({
-    // mode: 'history',
+    mode: TopContext.routerMode ,
     routes ,
     // 初始化滚动条位置
     scrollBehavior (to, from, savedPosition) {

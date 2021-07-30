@@ -32,7 +32,7 @@
 
                 <div class="box">
                     <div class="inner">
-                        <a class="item" v-for="(v,k) in hotImages" :key="v.id" v-if="k < 6" target="_blank" :href="`#/image_project/${v.id}/show`">
+                        <a class="item" v-for="(v,k) in hotImages" :key="v.id" v-if="k < 6" target="_blank" :href="genUrl(`/image_project/${v.id}/show`)">
                             <img :data-src="v.thumb ? v.thumb : TopContext.res.notFound" alt="" v-judge-img-size class="image judge-img-size">
                             <div class="info">
                                 <h5 class="title">{{ v.name  }}</h5>

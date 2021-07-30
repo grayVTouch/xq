@@ -33,9 +33,9 @@ window.TopContext = {
         FormValidateFail: 400 ,
     } ,
     res: {
-        logo: resUrl + '/preset/ico/logo.png' ,
-        notFound: resUrl + '/preset/image/404.jpg' ,
-        avatar: resUrl + '/preset/ico/logo.png' ,
+        logo: resUrl + '/resource/preset/ico/logo.png' ,
+        notFound: resUrl + '/resource/preset/image/404.jpg' ,
+        avatar: resUrl + '/resource/preset/ico/logo.png' ,
     } ,
     business ,
     table ,

@@ -2,5 +2,5 @@
 export default {
     apiUrl: '' ,
     resUrl: '' ,
-    enabledHistoryMode: false ,
+    routerMode: 'history' ,
 };

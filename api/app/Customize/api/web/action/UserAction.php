@@ -29,6 +29,7 @@ use App\Customize\api\web\model\UserTokenModel;
 use App\Customize\api\web\model\VideoModel;
 use App\Customize\api\web\model\VideoProjectModel;
 use App\Customize\api\web\repository\CollectionGroupRepository;
+use App\Customize\api\web\repository\ResourceRepository;
 use App\Http\Controllers\api\web\Base;
 use Exception;
 use Illuminate\Support\Facades\DB;
@@ -221,19 +222,34 @@ class UserAction extends Action
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $user = user();
-        UserModel::updateById($user->id , array_unit($param , [
-            'nickname' ,
-            'sex' ,
-            'avatar' ,
-            'phone' ,
-            'email' ,
-            'description' ,
-            'birthday' ,
-            'channel_thumb' ,
-        ]));
-        $user = UserModel::find($user->id);
-        $user = UserHandler::handle($user);
-        return self::success('' , $user);
+        try {
+            DB::beginTransaction();
+            UserModel::updateById($user->id , array_unit($param , [
+                'nickname' ,
+                'sex' ,
+                'avatar' ,
+                'phone' ,
+                'email' ,
+                'description' ,
+                'birthday' ,
+                'channel_thumb' ,
+            ]));
+            if (user()->avatar !== $param['avatar']) {
+                ResourceRepository::delete(user()->avatar);
+            }
+            ResourceRepository::used($param['avatar']);
+            if (user()->channel_thumb !== $param['channel_thumb']) {
+                ResourceRepository::delete(user()->channel_thumb);
+            }
+            ResourceRepository::used($param['channel_thumb']);
+            $user = UserModel::find($user->id);
+            $user = UserHandler::handle($user);
+            DB::commit();
+            return self::success('' , $user);
+        } catch(Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 
 
@@ -357,18 +373,33 @@ class UserAction extends Action
         $param['description']   = $param['description'] === '' ? $user->description : $param['description'];
         $param['birthday']      = empty($param['birthday']) ? $user->birthday : $param['birthday'];
         $param['channel_thumb'] = $param['channel_thumb'] === '' ? $user->channel_thumb : $param['channel_thumb'];
-        UserModel::updateById($user->id , array_unit($param , [
-            'nickname' ,
-            'sex' ,
-            'avatar' ,
-            'phone' ,
-            'email' ,
-            'description' ,
-            'birthday' ,
-            'channel_thumb' ,
-        ]));
-        $user = UserModel::find($user->id);
-        $user = UserHandler::handle($user);
-        return self::success('' , $user);
+        try {
+            DB::beginTransaction();
+            UserModel::updateById($user->id , array_unit($param , [
+                'nickname' ,
+                'sex' ,
+                'avatar' ,
+                'phone' ,
+                'email' ,
+                'description' ,
+                'birthday' ,
+                'channel_thumb' ,
+            ]));
+            if (user()->avatar !== $param['avatar']) {
+                ResourceRepository::delete(user()->avatar);
+            }
+            ResourceRepository::used($param['avatar']);
+            if (user()->channel_thumb !== $param['channel_thumb']) {
+                ResourceRepository::delete(user()->channel_thumb);
+            }
+            ResourceRepository::used($param['channel_thumb']);
+            $user = UserModel::find($user->id);
+            $user = UserHandler::handle($user);
+            DB::commit();
+            return self::success('' , $user);
+        } catch(Exception $e) {
+            DB::rollBack();
+            throw $e;
+        }
     }
 }

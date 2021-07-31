@@ -1,5 +1,3 @@
-// import logo from "../res/logo.jpg";
-// import notFound from "../res/404.png";
 import business from './business.js';
 import table from './table.js';
 import config from './config.js';

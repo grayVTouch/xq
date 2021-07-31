@@ -1,0 +1,10 @@
+try_files $uri $uri/ /index.html?$query_string;
+
+location /api {
+	proxy_pass http://api.xq.test;
+}
+
+location /resource {
+	rewrite ^/resource/(.*)$ /$1 break;
+	proxy_pass http://res.xq.test;
+}

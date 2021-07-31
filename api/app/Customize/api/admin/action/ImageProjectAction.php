@@ -72,12 +72,10 @@ class ImageProjectAction extends Action
             ImageProjectHandler::category($v);
             // 附加：主体
             ImageProjectHandler::imageSubject($v);
-            // 附加：图片
+            // 附加：数量
             ImageProjectHandler::imageCount($v);
             // 附加：标签
             ImageProjectHandler::tags($v);
-
-            unset($v->images);
         }
         return self::success('' , $res);
     }

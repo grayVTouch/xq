@@ -251,7 +251,6 @@ export default {
         linkToImage (row) {
             const link = this.genUrl(`/image/${row.id}/show`);
             this.openWindow(link , '_self');
-            this.reload();
         } ,
 
         focusHandle () {

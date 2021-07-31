@@ -1,7 +1,6 @@
 // import loading from '@vue/view/public/common/loading.vue';
 import myAvatar from '@vue/view/public/common/my_avatar.vue';
 import mySwitch from '@vue/view/public/common/my_switch.vue';
-import myFullLoading from '@vue/view/public/common/my_full_loading.vue';
 import myIcon from '@vue/view/public/common/my_icon.vue';
 import myFormDrawer from '@vue/view/public/common/my_form_drawer.vue';
 import myFormModal from '@vue/view/public/common/my_form_modal.vue';
@@ -29,10 +28,8 @@ import myTooltip from '@vue/view/public/common/my_tooltip.vue';
 import myCategorySelector from '@vue/view/public/core/selector/my_category_selector.vue';
 
 Vue.component('my-base' , myBase);
-// Vue.component('my-loading' , loading);
 Vue.component('my-avatar' , myAvatar);
 Vue.component('my-switch' , mySwitch);
-Vue.component('my-full-loading' , myFullLoading);
 Vue.component('my-deep-select' , myDeepSelect);
 Vue.component('my-select' , mySelect);
 Vue.component('my-form-drawer' , myFormDrawer);

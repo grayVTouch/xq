@@ -29,7 +29,7 @@ export default {
             this.error();
             this.pending('submitEvent' , true);
             Api.user
-                .updatePasswordInLogged(this.form)
+                .updatePasswordInLogged(null , this.form)
                 .then((res) => {
                     this.pending('submitEvent' , false);
                     if (res.code !== TopContext.code.Success) {

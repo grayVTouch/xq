@@ -178,7 +178,7 @@ Vue.mixin({
             if (!route) {
                 return '';
             }
-            if (!TopContext.enabledHistoryMode) {
+            if (TopContext.routerMode === 'hash') {
                 route = route.replace(/^(\/?#)?\/?/ , '');
                 return '#/' + route;
             }

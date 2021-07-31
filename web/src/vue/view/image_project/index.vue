@@ -75,7 +75,7 @@
         </div>
 
         <!-- 标签列表 -->
-        <div class="run-tags vertical" ref="tags-selector-in-slidebar">
+        <div class="run-tags vertical hide" ref="tags-selector-in-slidebar">
             <my-button class="tag" :class="{cur: curTag === 'newest' && search.tags.length < 1}" @click="newestInImageProjects">最新</my-button>
             <my-button class="tag" :class="{cur: curTag === 'hot' && search.tags.length < 1}" @click="hotInImageProjects">热门</my-button>
             <my-button class="tag" v-for="v in partHotTags.data" :key="v.id" :class="{cur: curTag === 'tag_' + v.tag_id && search.tags.length < 1}" @click="getWithPagerByTagIdInImageProject(v.tag_id)">{{ v.name }}</my-button>

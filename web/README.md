@@ -43,6 +43,12 @@ server {
     index index.html;
     root /xinqu/admin;
     autoindex on;
+
+    gzip on;
+    gzip_static on;
+    gzip_types application/javascript application/json text/css;
+    gzip_vary on;
+
     
     # 伪静态 - 路由开启了 history 模式则必须
     location / {

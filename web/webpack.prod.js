@@ -1,6 +1,9 @@
 const merge = require('webpack-merge');
 const common = require('./webpack.common.js');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const CompressionPlugin = require("compression-webpack-plugin");
 
 module.exports = merge(common, {
     mode: 'production' ,
@@ -9,6 +12,21 @@ module.exports = merge(common, {
             filename: "css/[name]-[hash].css",
             chunkFilename: "css/chunk-[name]-[hash].css"
         }) ,
+        // 包体积分析工具
+        new BundleAnalyzerPlugin({
+            analyzerMode: 'static',
+            reportFilename: 'BundleReport.html',
+            logLevel: 'info'
+        }) ,
+        // 压缩包体积
+        new CompressionPlugin({
+            test: /\.js$/ ,
+            filename: "js/[name].gz" ,
+        }),
+        new CompressionPlugin({
+            test: /\.css$/ ,
+            filename: "css/[name].gz" ,
+        }),
     ] ,
     module: {
         rules: [

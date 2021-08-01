@@ -24,6 +24,9 @@ import {
     Menu ,
     MenuItem ,
     Submenu ,
+    Dropdown ,
+    DropdownMenu ,
+    DropdownItem ,
 } from 'view-design';
 
 
@@ -49,6 +52,9 @@ Vue.component('i-rate' , Rate);
 Vue.component('i-menu' , Menu);
 Vue.component('i-sub-menu' , Submenu);
 Vue.component('i-menu-item' , MenuItem);
+Vue.component('i-dropdown' , Dropdown);
+Vue.component('i-dropdown-menu' , DropdownMenu);
+Vue.component('i-dropdown-item' , DropdownItem);
 
 Vue.prototype.$Notice = Notice;
 Vue.prototype.$Modal = Modal;

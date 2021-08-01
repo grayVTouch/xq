@@ -55,6 +55,19 @@
             <my-table-button class="m-r-10" @click="addEvent"><my-icon icon="add" />添加</my-table-button>
             <my-table-button class="m-r-10" @click="editEventByButton"><my-icon icon="edit" />编辑</my-table-button>
             <my-table-button class="m-r-10" type="error" @click="destroyAllEvent" :loading="myValue.pending.destroyAll"><my-icon icon="shanchu" />删除选中项 <span v-if="selection.length > 0">（{{ selection.length }}）</span></my-table-button>
+            <i-dropdown @on-click="updateFileProcessStatusEvent">
+                <my-table-button type="primary" :loading="myValue.pending.updateFileProcessStatusEvent">
+                    文件处理状态
+                    <span v-if="selection.length > 0">（{{ selection.length }}）</span>
+                    <i-icon type="ios-arrow-down"></i-icon>
+                </my-table-button>
+                <i-dropdown-menu slot="list">
+                    <i-dropdown-item name="-1">处理失败</i-dropdown-item>
+                    <i-dropdown-item name="0">待处理</i-dropdown-item>
+                    <i-dropdown-item name="1">处理中</i-dropdown-item>
+                    <i-dropdown-item name="2">处理成功</i-dropdown-item>
+                </i-dropdown-menu>
+            </i-dropdown>
         </template>
 
         <template slot="page">

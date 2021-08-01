@@ -540,6 +540,46 @@ class VideoAction extends Action
         return self::success('操作成功' , $count);
     }
 
+    public static function updateFileProcessStatus(Base $context , array $param = []): array
+    {
+        $status_range   = my_config_keys('business.video_project_file_process_status');
+        $validator = Validator::make($param , [
+            'ids'  => 'required' ,
+            'status'        => ['required' , 'integer' , Rule::in($status_range)] ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first() , $validator->errors());
+        }
+        $ids = empty($param['ids']) ? '[]' : $param['ids'];
+        $ids = json_decode($ids , true);
+        if (empty($ids)) {
+            return self::error('请提供待处理项');
+        }
+        VideoModel::updateByIds($ids , [
+            'file_process_status' => $param['status']
+        ]);
+        return self::success('操作成功');
+    }
 
+    public static function updateVideoProcessStatus(Base $context , array $param = []): array
+    {
+        $status_range   = my_config_keys('business.video_process_status');
+        $validator = Validator::make($param , [
+            'ids'  => 'required' ,
+            'status'        => ['required' , 'integer' , Rule::in($status_range)] ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first() , $validator->errors());
+        }
+        $ids = empty($param['ids']) ? '[]' : $param['ids'];
+        $ids = json_decode($ids , true);
+        if (empty($ids)) {
+            return self::error('请提供待处理项');
+        }
+        VideoModel::updateByIds($ids , [
+            'video_process_status' => $param['status']
+        ]);
+        return self::success('操作成功');
+    }
 
 }

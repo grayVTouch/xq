@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Model\AdminPermissionModel;
+use App\Customize\api\admin\model\AdminPermissionModel;
 
 class AdminPermissionSeeder extends Command
 {

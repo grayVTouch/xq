@@ -13,7 +13,6 @@ import '@bootstrap/my_plugin.js';
 
 import '@config/context.js';
 import '@util/common.js';
-import '@util/request.js';
 import '@util/http.js';
 import '@util/api.js';
 //
@@ -23,18 +22,17 @@ import '@vue/directive/directive.js';
 import '@bootstrap/iview.js';
 
 import '@bootstrap/my_view.js';
-//
+
 import router from '@vue/router/index.js';
-//
+import store from '@vue/vuex';
+
 import app from './app.vue';
 
-const debug = true;
+Vue.config.debug = TopContext.debug;
 
-Vue.config.debug = debug;
+Vue.config.devtools = TopContext.debug;
 
-Vue.config.devtools = debug;
-
-Vue.config.productionTip = debug;
+Vue.config.productionTip = TopContext.debug;
 
 /**
  * ****************
@@ -43,6 +41,7 @@ Vue.config.productionTip = debug;
  */
 new Vue({
     el: '#app' ,
+    store ,
     router ,
     render (h) {
         return h(app);

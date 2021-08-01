@@ -15,7 +15,6 @@ const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
-
 module.exports = {
     entry: {
         // babel-polyfill，在 ie 环境下，vuex 需要用到！

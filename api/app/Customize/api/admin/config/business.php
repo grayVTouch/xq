@@ -79,7 +79,7 @@ return [
         'fix-height' ,
     ] ,
 
-    'image_process_status' => [
+    'image_project_process_status' => [
         -1 => '处理失败' ,
         0 => '待处理' ,
         1 => '处理中' ,

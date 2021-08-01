@@ -153,8 +153,10 @@ export default {
         } ,
 
         getData () {
+            this.selection = [];
             this.pending('getData' , true);
-            Api.user.index(this.search)
+            Api.user
+                .index(this.search)
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {
                         this.errorHandle(res.message);

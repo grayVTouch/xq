@@ -312,6 +312,7 @@ export default {
         } ,
 
         getData () {
+            this.selection = [];
             this.pending('getData' , true);
             Api.videoProject
                 .index(this.search)
@@ -521,6 +522,38 @@ export default {
             let url = settings.web_url + settings.show_for_video_project_at_web;
             url = url.replace('{id}' , row.id);
             this.openWindow(url , '_blank');
+        } ,
+
+        updateFileProcessStatusEvent (value) {
+            if (!this.hasSelection()) {
+                this.errorHandle('请选择处理项');
+                return ;
+            }
+            this.confirmModal('这将直接更改记录状态（将影响处理中的任务）！请确认是否操作？' , (keep) => {
+                if (!keep) {
+                    return ;
+                }
+                this.pending('updateFileProcessStatusEvent' , true);
+                const ids = this.selection.map((v) => {
+                    return v.id;
+                });
+                Api.videoProject
+                    .updateFileProcessStatus(null , {
+                        ids: G.jsonEncode(ids) ,
+                        status: value
+                    })
+                    .then((res) => {
+                        if (res.code !== TopContext.code.Success) {
+                            this.errorHandle(res.message);
+                            return ;
+                        }
+                        this.successHandle('操作成功');
+                        this.getData();
+                    })
+                    .finally(() => {
+                        this.pending('updateFileProcessStatusEvent' , false);
+                    });
+            });
         } ,
     } ,
 }

@@ -156,4 +156,30 @@ class video extends Base
         }
         return success($res['message'] , $res['data']);
     }
+
+    public function updateFileProcessStatus()
+    {
+        $param = $this->request->post();
+        $param['status'] = $param['status'] ?? '';
+        $param['ids'] = $param['ids'] ?? '';
+        $res = VideoAction::updateFileProcessStatus($this , $param);
+        if ($res['code'] != 0) {
+            return error($res['message'] , $res['data'] , $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
+
+    public function updateVideoProcessStatus()
+    {
+        $param = $this->request->post();
+        $param['status'] = $param['status'] ?? '';
+        $param['ids'] = $param['ids'] ?? '';
+        $res = VideoAction::updateVideoProcessStatus($this , $param);
+        if ($res['code'] != 0) {
+            return error($res['message'] , $res['data'] , $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
+
+
 }

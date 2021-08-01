@@ -459,4 +459,25 @@ class ImageProjectAction extends Action
         }
         return self::success('操作成功');
     }
+
+    public static function updateProcessStatus(Base $context , array $param = []): array
+    {
+        $status_range   = my_config_keys('business.image_project_process_status');
+        $validator = Validator::make($param , [
+            'ids'  => 'required' ,
+            'status'        => ['required' , 'integer' , Rule::in($status_range)] ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first() , $validator->errors());
+        }
+        $ids = empty($param['ids']) ? '[]' : $param['ids'];
+        $ids = json_decode($ids , true);
+        if (empty($ids)) {
+            return self::error('请提供待处理项');
+        }
+        ImageProjectModel::updateByIds($ids , [
+            'process_status' => $param['status']
+        ]);
+        return self::success('操作成功');
+    }
 }

@@ -5,9 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTimerLogTable extends Migration
+class CreateLogTable extends Migration
 {
-    private $table = 'xq_timer_task_log';
+    private $table = 'xq_log';
 
     /**
      * Run the migrations.
@@ -27,7 +27,7 @@ class CreateTimerLogTable extends Migration
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
         });
-        DB::statement("alter table {$this->table} comment '定时任务日志表'");
+        DB::statement("alter table {$this->table} comment '日志表'");
     }
 
     /**
@@ -37,6 +37,6 @@ class CreateTimerLogTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists($this->table);
+        Schema::dropIfExists('log');
     }
 }

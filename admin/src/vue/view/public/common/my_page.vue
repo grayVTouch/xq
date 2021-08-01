@@ -76,7 +76,7 @@
                 after: 4 ,
                 pageCopy: 1 ,
                 sizeCopy: 1 ,
-                showPage: 8 ,
+                showPage: 5 ,
             };
         } ,
 

@@ -55,4 +55,11 @@ export default {
         return Http.delete(destroyTag , null , data);
     } ,
 
+    updateFileProcessStatus (query , data) {
+        return Http.patch(`${TopContext.api}/update_video_file_process_status` , query , data);
+    } ,
+
+    updateVideoProcessStatus (query , data) {
+        return Http.patch(`${TopContext.api}/update_video_video_process_status` , query , data);
+    } ,
 };

@@ -296,6 +296,7 @@ export default {
         } ,
 
         getData () {
+            this.selection = [];
             this.pending('getData' , true);
             Api.imageProject
                 .index(this.search)
@@ -540,6 +541,38 @@ export default {
                 .finally(() => {
                     this.pending('retryProcess' , false);
                 });
+        } ,
+
+        updateProcessStatusEvent (value) {
+            if (!this.hasSelection()) {
+                this.errorHandle('请选择处理项');
+                return ;
+            }
+            this.confirmModal('这将直接更改记录状态（将影响处理中的任务）！请确认是否操作？' , (keep) => {
+                if (!keep) {
+                    return;
+                }
+                const ids = this.selection.map((v) => {
+                    return v.id;
+                });
+                this.pending('updateProcessStatusEvent' , true);
+                Api.imageProject
+                    .updateProcessStatus(null , {
+                        ids: G.jsonEncode(ids) ,
+                        status: value
+                    })
+                    .then((res) => {
+                        if (res.code !== TopContext.code.Success) {
+                            this.errorHandle(res.message);
+                            return ;
+                        }
+                        this.successHandle('操作成功');
+                        this.getData();
+                    })
+                    .finally(() => {
+                        this.pending('updateProcessStatusEvent' , false);
+                    });
+            });
         } ,
     } ,
 }

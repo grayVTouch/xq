@@ -81,7 +81,6 @@
                 G.s.json('module' , v);
                 const url = this.genUrl('/index');
                 this.openWindow(url , '_self');
-                this.reload();
             } ,
 
         } ,

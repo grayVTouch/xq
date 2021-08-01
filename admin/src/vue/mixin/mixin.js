@@ -1,6 +1,3 @@
-
-import store from '@vue/vuex';
-
 import route from './route.js';
 import api from './api.js';
 import message from './message.js';
@@ -12,9 +9,6 @@ import value from './value.js';
  * ****************
  */
 Vue.mixin({
-
-    store ,
-
     data () {
         return {
             TopContext ,
@@ -49,15 +43,6 @@ Vue.mixin({
             window.open(url , type);
         } ,
 
-
-        handleImageSubject () {
-
-        } ,
-
-        handleVideo () {
-
-        } ,
-
         getUsername (username , nickname) {
             return username ? username : (nickname ? nickname : '');
         } ,
@@ -67,8 +52,11 @@ Vue.mixin({
             return key + '|' + order;
         } ,
 
-        state () {
-            return this.$store.state;
+        state (key) {
+            if (G.isUndefined(key)) {
+                return this.$store.state;
+            }
+            return this.$store.state[key];
         } ,
 
         // 快捷方式：获取当前登录用户

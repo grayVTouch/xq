@@ -1,14 +1,12 @@
 <?php
 
-namespace App\Model;
+namespace App\Customize\api\admin\model;
 
 
-use Illuminate\Database\Eloquent\Collection;
-
-class TimerTaskLogModel extends Model
+class LogModel extends Model
 {
     //
-    protected $table = 'xq_timer_task_log';
+    protected $table = 'xq_log';
 
     public static function log(string $type , string $log , string $created_at): int
     {

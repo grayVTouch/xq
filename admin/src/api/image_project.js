@@ -54,4 +54,8 @@ export default {
         });
     } ,
 
+    updateProcessStatus (query , data) {
+        return Http.patch(`${TopContext.api}/update_image_project_process_status` , query , data);
+    } ,
+
 };

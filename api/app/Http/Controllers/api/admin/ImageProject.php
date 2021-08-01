@@ -149,4 +149,16 @@ class ImageProject extends Base
         }
         return success($res['message'] , $res['data']);
     }
+
+    public function updateProcessStatus()
+    {
+        $param = $this->request->post();
+        $param['status'] = $param['status'] ?? '';
+        $param['ids'] = $param['ids'] ?? '';
+        $res = ImageProjectAction::updateProcessStatus($this , $param);
+        if ($res['code'] != 0) {
+            return error($res['message'] , $res['data'] , $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
 }

@@ -3,6 +3,8 @@
 namespace App\Customize\api\admin\model;
 
 
+use Illuminate\Database\Eloquent\Collection;
+
 class ResourceModel extends Model
 {
     //
@@ -24,6 +26,20 @@ class ResourceModel extends Model
                     ->orWhere('path' , $value);
             })
             ->first();
+    }
+
+    public static function getWaitDeleteByLimitIdAndSize(int $limit_id = 0 , int $size = 20): Collection
+    {
+        return self::where(function($query){
+            $query->where('is_used' , 0)
+                ->orWhere('is_deleted' , 1);
+        })
+            ->where([
+                ['id' , '>' , $limit_id] ,
+                ['status' , '=' , 0] ,
+            ])
+            ->limit($size)
+            ->get();
     }
 
 }

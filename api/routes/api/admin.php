@@ -217,6 +217,8 @@ Route::prefix('admin')
             Route::delete('destroy_image_project_tag'           , [ImageProject::class , 'destroyTag']);
             Route::post('retry_process_image_project'   , [ImageProject::class , 'retry']);
 
+            Route::patch('update_image_project_process_status' , [ImageProject::class , 'updateProcessStatus']);
+
             /**
              * ******************
              * 系统位置
@@ -281,6 +283,8 @@ Route::prefix('admin')
             Route::delete('destroy_videos'      , [Video::class , 'destroyVideos']);
             Route::post('retry_process_video'   , [Video::class , 'retry']);
             Route::delete('destroy_video_tag'   , [Video::class , 'destroyTag']);
+            Route::patch('update_video_video_process_status' , [Video::class , 'updateVideoProcessStatus']);
+            Route::patch('update_video_file_process_status' , [Video::class , 'updateFileProcessStatus']);
 
             /**
              * ******************
@@ -298,6 +302,8 @@ Route::prefix('admin')
             Route::delete('video_project/{id}'          , [VideoProject::class , 'destroy']);
             Route::get('search_video_project'           , [VideoProject::class , 'search']);
             Route::delete('destroy_video_project_tag'   , [VideoProject::class , 'destroyTag']);
+
+            Route::patch('update_video_project_file_process_status' , [VideoProject::class , 'updateFileProcessStatus']);
 
             /**
              * ******************
@@ -388,5 +394,7 @@ Route::prefix('admin')
              */
             Route::get('common_settings' , [SystemSettings::class , 'data']);
             Route::put('common_settings' , [SystemSettings::class , 'update']);
+
+
         });
     });

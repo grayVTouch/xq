@@ -45,4 +45,8 @@ export default {
     destroyTag (data) {
         return Http.delete(destroyTag , null , data);
     } ,
+
+    updateFileProcessStatus (query , data) {
+        return Http.patch(`${TopContext.api}/update_video_project_file_process_status` , query , data);
+    } ,
 };

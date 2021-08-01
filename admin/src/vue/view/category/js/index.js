@@ -173,6 +173,7 @@ export default {
         } ,
 
         getData () {
+            this.selection = [];
             this.pending('getData' , true);
             Api.category
                 .index({

@@ -3,9 +3,8 @@
 namespace App\Console\Commands;
 
 use App\Customize\api\admin\facade\AliyunOss;
-use App\Model\DiskModel;
-use App\Model\ResourceModel;
-use App\Model\TimerTaskLogModel;
+use App\Customize\api\admin\model\LogModel;
+use App\Customize\api\admin\model\ResourceModel;
 use Core\Lib\File;
 
 class ResourceHandle extends Command
@@ -111,6 +110,6 @@ class ResourceHandle extends Command
         $end_log = "【end: {$end_time}】，删除完毕。耗费时间：{$duration}s；总待删除数：{$total_count}；实际删除：{$deleted_count}；失败数：{$failed_count}";
         $timer_task_log .= $end_log;
         echo PHP_EOL . $end_log . PHP_EOL;
-        TimerTaskLogModel::log($this->signature , $timer_task_log , date('Y-m-d H:i:s'));
+        LogModel::log($this->signature , $timer_task_log , date('Y-m-d H:i:s'));
     }
 }

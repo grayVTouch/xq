@@ -178,6 +178,7 @@ export default {
         } ,
 
         getData () {
+            this.selection = [];
             this.pending('getData' , true);
             Api.tag
                 .index(this.search)

@@ -1,6 +1,5 @@
 <?php
 
-use App\Model\PositionModel;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 

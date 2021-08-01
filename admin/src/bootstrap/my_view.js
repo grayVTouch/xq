@@ -1,4 +1,4 @@
-// import loading from '@vue/view/public/common/loading.vue';
+
 import myAvatar from '@vue/view/public/common/my_avatar.vue';
 import mySwitch from '@vue/view/public/common/my_switch.vue';
 import myIcon from '@vue/view/public/common/my_icon.vue';

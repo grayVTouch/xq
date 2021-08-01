@@ -29,7 +29,7 @@ class ImageProjectHandler extends Handler
 
         $model->__type__    = get_config_key_mapping_value('business.type_for_image_project' , $model->type);
         $model->__status__  = get_config_key_mapping_value('business.status_for_image_project' , $model->status);
-        $model->__process_status__  = get_config_key_mapping_value('business.image_process_status' , $model->process_status);
+        $model->__process_status__  = get_config_key_mapping_value('business.image_project_process_status' , $model->process_status);
 
         return $model;
     }

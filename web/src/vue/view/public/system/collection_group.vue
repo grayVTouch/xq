@@ -10,7 +10,7 @@
             <div class="create">
                 <div class="title m-b-15 run-weight">创建收藏夹</div>
                 <div class="content">
-                    收藏夹名称 <input type="text" class="input" placeholder="请输入收藏夹名称" v-model="collectionGroup.name" @keyup.enter="createAndJoinCollectionGroup"> <my-button class="button" @click="createAndJoinCollectionGroup"><my-loading size="16" v-if="val.pending.createAndJoinCollectionGroup" />&nbsp;创建并添加</my-button>
+                    收藏夹名称 <input type="text" class="input" placeholder="请输入收藏夹名称" v-model="collectionGroup.name" @keyup.stop.enter="createAndJoinCollectionGroup"> <my-button class="button" @click="createAndJoinCollectionGroup"><my-loading size="16" v-if="val.pending.createAndJoinCollectionGroup" />&nbsp;创建并添加</my-button>
                 </div>
             </div>
 

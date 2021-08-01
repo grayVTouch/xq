@@ -1,26 +1,13 @@
-// import adminIco from '@asset/res/nav/admin.png';
-// import categoryIco from '@asset/res/nav/category.png';
-// import imageIco from '@asset/res/nav/image.png';
-// import pannelIco from '@asset/res/nav/pannel.png';
-// import subjectIco from '@asset/res/nav/subject.png';
-// import systemIco from '@asset/res/nav/system.png';
-// import tagIco from '@asset/res/nav/tag.png';
-// import userIco from '@asset/res/nav/user.png';
-// import videoIco from '@asset/res/nav/video.png';
-// import moduleIco from '@asset/res/nav/module.png';
-// import permissionIco from '@asset/res/nav/permission.png';
-
 const adminIco = '/resource/preset/ico/admin.png';
 const categoryIco = '/resource/preset/ico/category.png';
 const imageIco = '/resource/preset/ico/image.png';
 const pannelIco = '/resource/preset/ico/pannel.png';
 const subjectIco = '/resource/preset/ico/subject.png';
-const systemIco = '/resource/preset/ico/tag.png';
-const tagIco = '/resource/preset/ico/image.png';
+const systemIco = '/resource/preset/ico/system.png';
+const tagIco = '/resource/preset/ico/tag.png';
 const userIco = '/resource/preset/ico/user.png';
 const videoIco = '/resource/preset/ico/video.png';
 const moduleIco = '/resource/preset/ico/module.png';
-const permissionIco = '/resource/preset/ico/permission.png';
 
 /**
  * 侧边菜单功能
@@ -190,44 +177,6 @@ export default [
         bIco: moduleIco ,
         children: [] ,
     } ,
-    // {
-    //
-    //     cn: '权限管理' ,
-    //     en: 'Permission' ,
-    //     // 路由路径
-    //     path: '' ,
-    //     hidden: false ,
-    //     view: false ,
-    //     sIco: permissionIco ,
-    //     bIco: permissionIco ,
-    //     children: [
-    //         {
-    //
-    //             cn: '角色列表' ,
-    //             en: '' ,
-    //             // 路由路径
-    //             path: '/role/index' ,
-    //             hidden: false ,
-    //             view: true ,
-    //
-    //             sIco: '' ,
-    //             bIco: '' ,
-    //             children: [] ,
-    //         } ,
-    //         {
-    //
-    //             cn: '权限列表' ,
-    //             en: '' ,
-    //             // 路由路径
-    //             path: '/admin_permission/index' ,
-    //             hidden: false ,
-    //             view: true ,
-    //             sIco: '' ,
-    //             bIco: '' ,
-    //             children: [] ,
-    //         } ,
-    //     ] ,
-    // } ,
     {
 
         cn: '系统管理' ,

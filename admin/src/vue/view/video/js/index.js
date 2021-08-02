@@ -60,7 +60,6 @@ export default {
                         width: 250,
                         align: TopContext.table.alignCenter,
                         fixed: 'left',
-                        resizable: true,
                         ellipsis: true,
                         // tooltip: true,
                     },
@@ -106,18 +105,21 @@ export default {
                         title: '用户【id】',
                         slot: 'user_id',
                         minWidth: TopContext.table.name,
+                        ellipsis: true,
                         align: TopContext.table.alignCenter
                     },
                     {
                         title: '模块【id】',
                         slot: 'module_id',
                         minWidth: TopContext.table.name,
+                        ellipsis: true,
                         align: TopContext.table.alignCenter
                     },
                     {
                         title: '分类【id】',
                         slot: 'category_id',
                         minWidth: TopContext.table.name,
+                        ellipsis: true,
                         align: TopContext.table.alignCenter
                     },
                     {
@@ -130,6 +132,7 @@ export default {
                         title: '关联主体【id】',
                         slot: 'video_project_id',
                         minWidth: TopContext.table.name,
+                        ellipsis: true,
                         align: TopContext.table.alignCenter
                     },
                     {

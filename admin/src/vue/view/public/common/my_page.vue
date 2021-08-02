@@ -12,7 +12,7 @@
             <div class="links">
                 <a class="link home" v-ripple :class="{'run-cursor-not-allow': page === 1}" @click="toPage(1)">首页</a>
                 <a class="link" :class="{'run-cursor-not-allow': page === 1}" v-ripple @click="toPage(pageCopy - 1)">上一页</a>
-                <a class="link" v-ripple v-for="v in pages" :class="{cur: pageCopy === v , 'run-cursor-not-allow': page === v}" :key="v" @click="toPage(v)">{{ v }}</a>
+                <a class="link" v-ripple v-for="v in pages" :class="{cur: pageCopy === v , 'run-cursor-not-allow': false && page === v}" :key="v" @click="toPage(v)">{{ v }}</a>
                 <a class="link" :class="{'run-cursor-not-allow': page === maxPage}" v-ripple @click="toPage(pageCopy + 1)">下一页</a>
                 <a class="link end" :class="{'run-cursor-not-allow': page === maxPage}" v-ripple @click="toPage(maxPage)">尾页</a>
             </div>
@@ -91,10 +91,13 @@
                     return ;
                 }
                 page = parseInt(page);
-                page = Math.max(this.minPage , Math.min(page , this.maxPage));
-                if (this.pageCopy === page) {
-                    return ;
+                if (page > this.maxPage || page < this.minPage) {
+                    return
                 }
+                page = Math.max(this.minPage , Math.min(page , this.maxPage));
+                // if (this.pageCopy === page) {
+                //     return ;
+                // }
                 this.pageCopy = page;
                 this.$emit('on-page-change' , this.pageCopy , this.sizeCopy);
             } ,

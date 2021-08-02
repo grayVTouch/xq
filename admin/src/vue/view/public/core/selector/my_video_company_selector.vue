@@ -24,9 +24,10 @@
                             :data="table.data"
                             :columns="table.field"
                             @on-row-click="rowClickEvent">
-                        <template v-slot:avatar="{row,index}">
-                            <my-table-image-preview :src="row.avatar"></my-table-image-preview>
+                        <template v-slot:thumb="{row,index}">
+                            <my-table-image-preview :src="row.thumb"></my-table-image-preview>
                         </template>
+                        <template v-slot:module_id="{row,index}">{{ row.module ? `${row.module.name}【${row.module.id}】` : `unknow【${row.module_id}】` }}</template>
                         <template v-slot:action="{row,index}">
                             <my-table-button @click="rowClickEvent(row,index)">选择</my-table-button>
                         </template>
@@ -58,6 +59,14 @@
             {
                 title: '名称' ,
                 key: 'name' ,
+            } ,
+            {
+                title: '封面' ,
+                slot: 'thumb' ,
+            } ,
+            {
+                title: '模块' ,
+                slot: 'module_id' ,
             } ,
             {
                 title: '创建时间' ,

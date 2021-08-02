@@ -234,7 +234,9 @@ class VideoCompanyAction extends Action
             return self::error('请提供 module_id');
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoCompanyModel::search($param['module_id'] , $param['value'] , $size);
+        $res = VideoCompanyModel::search([
+            'module'
+        ] , $param['module_id'] , $param['value'] , $size);
         $res = VideoCompanyHandler::handlePaginator($res);
         return self::success('' , $res);
     }

@@ -184,7 +184,9 @@ class VideoSeriesAction extends Action
             return self::error('请提供 module_id');
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoSeriesModel::search($param['module_id'] , $param['value'] , $size);
+        $res = VideoSeriesModel::search([
+            'module' ,
+        ] , $param['module_id'] , $param['value'] , $size);
         $res = VideoSeriesHandler::handlePaginator($res);
         return self::success('' , $res);
     }

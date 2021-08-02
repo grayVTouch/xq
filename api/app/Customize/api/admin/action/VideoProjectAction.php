@@ -401,22 +401,14 @@ class VideoProjectAction extends Action
             return self::error('请提供 module_id');
         }
         $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
-        $res = VideoProjectModel::search($param['module_id'] , $param['value'] , $size);
+        $res = VideoProjectModel::search([
+            'module' ,
+        ] , $param['module_id'] , $param['value'] , $size);
         $res = VideoProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
         {
             // 附加：模块
             VideoProjectHandler::module($v);
-            // 附加：用户
-            VideoProjectHandler::user($v);
-            // 附加：分类
-            VideoProjectHandler::category($v);
-            // 附加：系列
-            VideoProjectHandler::videoSeries($v);
-            // 附加：公司
-            VideoProjectHandler::videoCompany($v);
-            // 附加：标签
-            VideoProjectHandler::tags($v);
         }
         return self::success('' , $res);
     }

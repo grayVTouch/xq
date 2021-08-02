@@ -61,9 +61,10 @@ class VideoCompanyModel extends Model
             ->paginate($size);
     }
 
-    public static function search(int $module_id , string $value = '' , int $size = 20): Paginator
+    public static function search(array $relation , int $module_id , string $value = '' , int $size = 20): Paginator
     {
-        return self::where('module_id' , $module_id)
+        return self::with($relation)
+            ->where('module_id' , $module_id)
             ->where(function($query) use($value){
                 $query->where('id' , $value)
                     ->orWhere('name' , 'like' , "%{$value}%");

@@ -271,6 +271,7 @@ class VideoAction extends Action
             'module_id'             => 'required|integer' ,
             'category_id'           => 'sometimes|integer' ,
             'video_project_id'      => 'sometimes|integer' ,
+            'src'                   => 'required' ,
             'type'                  => ['required' , Rule::in($type_range)] ,
             'weight'                => 'sometimes|integer' ,
             'view_count'            => 'sometimes|integer' ,

@@ -138,7 +138,7 @@
                         <div class="info">
                             <div class="name">{{ v.name }}</div>
                             <div class="statistics">
-                                <div class="index-count">全{{ v.count }}话</div>
+                                <div class="index-count">全{{ v.max_index }}话</div>
                                 <div class="statistics">{{ v.play_count }}播放</div>
                             </div>
                         </div>

@@ -600,8 +600,16 @@ export default {
             if (!G.isNumeric(form.module_id)) {
                 error.module_id = '请选择模块';
             }
-            if (form.type === 'pro' && !G.isNumeric(form.video_project_id)) {
-                error.video_project_id = '请选择视频专题';
+            if (form.type === 'pro') {
+                if (!G.isNumeric(form.video_project_id) || form.video_project_id < 1) {
+                    error.video_project_id = '请选择视频专题';
+                }
+                if (!G.isNumeric(form.min_index) && form.min_index < 1) {
+                    error.min_index = '索引最小为1';
+                }
+                if (!G.isNumeric(form.max_index) && form.max_index < 1) {
+                    error.max_index = '索引最小为1';
+                }
             }
             if (form.type === 'misc' && !G.isNumeric(form.category_id)) {
                 error.category_id = '请选择分类';

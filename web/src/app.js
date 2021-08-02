@@ -27,7 +27,7 @@ import '@bootstrap/my_view.js';
 import '@bootstrap/plugin.js';
 
 
-import '@util/Http.js';
+import '@util/http.js';
 
 
 

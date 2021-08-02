@@ -13,7 +13,7 @@ import '@bootstrap/my_plugin.js';
 
 import '@config/context.js';
 import '@util/common.js';
-import '@util/./util/http.js';
+import '@util/http.js';
 import '@util/api.js';
 //
 import '@bootstrap/vue.js';

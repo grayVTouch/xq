@@ -30,6 +30,8 @@
 ```text
 // 安装依赖
 composer install
+// 生成key
+php artisan key:generate
 // 生成配置文件
 cp .env.example .env
 # 清理并缓存配置文件

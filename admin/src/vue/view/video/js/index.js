@@ -60,8 +60,7 @@ export default {
                         width: 250,
                         align: TopContext.table.alignCenter,
                         fixed: 'left',
-                        ellipsis: true,
-                        // tooltip: true,
+                        tooltip: true,
                     },
                     {
                         title: '视频索引',
@@ -105,21 +104,19 @@ export default {
                         title: '用户【id】',
                         slot: 'user_id',
                         minWidth: TopContext.table.name,
-                        ellipsis: true,
                         align: TopContext.table.alignCenter
                     },
                     {
                         title: '模块【id】',
                         slot: 'module_id',
                         minWidth: TopContext.table.name,
-                        ellipsis: true,
                         align: TopContext.table.alignCenter
                     },
                     {
                         title: '分类【id】',
                         slot: 'category_id',
                         minWidth: TopContext.table.name,
-                        ellipsis: true,
+                        tooltip: true,
                         align: TopContext.table.alignCenter
                     },
                     {
@@ -129,11 +126,11 @@ export default {
                         align: TopContext.table.alignCenter
                     },
                     {
-                        title: '关联主体【id】',
+                        title: '视频专题【id】',
                         slot: 'video_project_id',
                         minWidth: TopContext.table.name,
-                        ellipsis: true,
-                        align: TopContext.table.alignCenter
+                        align: TopContext.table.alignCenter,
+                        tooltip: true ,
                     },
                     {
                         title: '视频处理状态',
@@ -159,8 +156,10 @@ export default {
                     {
                         title: '失败原因',
                         key: 'fail_reason',
-                        minWidth: TopContext.table.desc,
-                        align: TopContext.table.alignCenter
+                        width: TopContext.table.desc,
+                        align: TopContext.table.alignCenter ,
+                        ellipsis: true ,
+                        tooltip: true ,
                     },
                     {
                         title: '浏览次数',
@@ -192,8 +191,6 @@ export default {
                         key: 'description',
                         minWidth: TopContext.table.desc,
                         align: TopContext.table.alignCenter,
-                        resizable: true,
-                        ellipsis: true,
                         tooltip: true,
                     },
                     {

@@ -117,16 +117,28 @@
                     <my-table-image-preview :src="row.thumb"></my-table-image-preview>
                 </template>
                 <template v-slot:user_id="{row,index}">
-                    {{ row.user ? `${row.user.username}【${row.user.id}】` : `unknow【${row.user_id}】` }}
+                    <my-table-text
+                            :text="row.user ? `${row.user.username}【${row.user.id}】` : `unknow【${row.user_id}】`"
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:module_id="{row,index}">
-                    {{ row.module ? `${row.module.name}【${row.module.id}】` : `unknow【${row.module_id}】` }}
+                    <my-table-text
+                            :text="row.module ? `${row.module.name}【${row.module.id}】` : `unknow【${row.module_id}】`"
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:category_id="{row,index}">
-                    {{ row.category ? `${row.category.name}【${row.category.id}】` : `unknow【${row.category_id}】` }}
+                    <my-table-text
+                            :text="row.category ? `${row.category.name}【${row.category.id}】` : `unknow【${row.category_id}】`"
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:image_subject_id="{row,index}">
-                    {{ row.type === 'pro' ? (row.image_subject ? `${row.image_subject.name}【${row.image_subject.id}】` : `unknow【${row.image_subject_id}】`) : null }}
+                    <my-table-text
+                            :text="row.type === 'pro' ? (row.image_subject ? `${row.image_subject.name}【${row.image_subject.id}】` : `unknow【${row.image_subject_id}】`) : ''"
+                            name="name"
+                    ></my-table-text>
                 </template>
 
                 <template v-slot:status="{row,index}">

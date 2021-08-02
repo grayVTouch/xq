@@ -222,7 +222,9 @@ class VideoHandleJob implements ShouldQueue
         $relative_first_frame_file  = $this->generateMediaSuffix($this->video->type , $video_name . '【第一帧】' , 'webp');
         $aliyun_first_frame_file    = $this->relativeDir . '/' . $relative_first_frame_file;
         $video_first_frame_file     = $this->generateRealPath($this->saveDir , $relative_first_frame_file);
-
+        if (File::exists($video_first_frame_file)) {
+            File::delete($video_first_frame_file);
+        }
         FFmpeg::create()
             ->input($video_resource->path)
             ->ss($video_first_frame_config['duration'], 'input')
@@ -266,7 +268,9 @@ class VideoHandleJob implements ShouldQueue
         {
             $cur_ts         = $this->tempDir . '/' . $datetime . random(6, 'letter', true) . '.ts';
             $start_duration = $avg_remain_duration + $avg_remain_duration * $i;
-
+            if (File::exists($cur_ts)) {
+                File::delete($cur_ts);
+            }
             FFmpeg::create()
                 ->input($video_resource->path)
                 ->ss($start_duration, 'input')
@@ -283,7 +287,9 @@ class VideoHandleJob implements ShouldQueue
         $relative_simple_preview_file   = $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' , 'mp4');
         $aliyun_simple_preview_file     = $this->relativeDir . '/' . $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' , 'mp4');
         $video_simple_preview_file      = $this->generateRealPath($this->saveDir , $relative_simple_preview_file);
-
+        if (File::exists($video_simple_preview_file)) {
+            File::delete($video_simple_preview_file);
+        }
         FFmpeg::create()
             ->input($input_command)
             ->quiet()
@@ -332,7 +338,9 @@ class VideoHandleJob implements ShouldQueue
             $datetime   = date('YmdHis');
             $image      = $this->tempDir . '/' . $datetime . random(6 , 'letter' , true) . '.webp';
             $timepoint  = $i * $video_preview_config['duration'];
-
+            if (File::exists($image)) {
+                File::delete($image);
+            }
             FFmpeg::create()
                 ->input($video_resource->path)
                 ->ss($timepoint , 'input')
@@ -349,6 +357,9 @@ class VideoHandleJob implements ShouldQueue
         $relative_preview_file  = $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' ,'jpeg');
         $aliyun_preview_file    = $this->relativeDir . '/' . $relative_preview_file;
         $preview_file           = $this->generateRealPath($this->saveDir , $relative_preview_file);
+        if (File::exists($preview_file)) {
+            File::delete($preview_file);
+        }
         imagejpeg($cav , $preview_file , 75);
         ResourceRepository::create('' , $preview_file , 'local' , 0 , 0);
         $preview_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $aliyun_preview_file , $preview_file);
@@ -416,7 +427,9 @@ class VideoHandleJob implements ShouldQueue
             $relative_transcoded_file = $this->generateVideoMediaSuffix($this->video->type , $k , $this->video->index , $this->video->name ,'mp4');
             $aliyun_transcoded_file  = $this->relativeDir . '/' . $relative_transcoded_file;
             $transcoded_file        = $this->generateRealPath($this->saveDir , $relative_transcoded_file);
-
+            if (File::exists($transcoded_file)) {
+                File::delete($transcoded_file);
+            }
             $ffmpeg = FFmpeg::create()->input($video_resource->path);
             if ($merge_video_subtitle) {
                 $ffmpeg->subtitle($first_video_subtitle_resource->path);
@@ -467,7 +480,9 @@ class VideoHandleJob implements ShouldQueue
             $relative_transcoded_file = $this->generateVideoMediaSuffix($this->video->type , $definition , $this->video->index , $this->video->name ,'mp4');
             $aliyun_transcoded_file  = $this->relativeDir . '/' . $relative_transcoded_file;
             $transcoded_file        = $this->generateRealPath($this->saveDir , $relative_transcoded_file);
-
+            if (File::exists($transcoded_file)) {
+                File::delete($transcoded_file);
+            }
             $ffmpeg = FFmpeg::create()
                 ->input($video_resource->path)
                 ->quiet();
@@ -525,6 +540,9 @@ class VideoHandleJob implements ShouldQueue
                 $relative_video_subtitle_convert_file = $this->generateMediaSuffix($this->video->type , "{$video_name}【{$v->name}】" , $video_subtitle_config['extension']);
                 $aliyun_video_subtitle_convert_file = $this->relativeDir . '/' . $relative_video_subtitle_convert_file;
                 $video_subtitle_convert_file        = $this->generateRealPath($this->saveDir , $relative_video_subtitle_convert_file);
+                if (File::exists($video_subtitle_convert_file)) {
+                    File::delete($video_subtitle_convert_file);
+                }
                 FFmpeg::create()
                     ->input($video_subtitle_resource->path)
                     ->quiet()
@@ -583,6 +601,9 @@ class VideoHandleJob implements ShouldQueue
         $video_first_frame_file = $this->generateRealPath($this->saveDir , $this->generateMediaSuffix($this->video->type , $video_name . '【第一帧】' , 'webp'));
         $video_first_frame_url  = FileRepository::generateUrlByRealPath($video_first_frame_file);
 
+        if (File::exists($video_first_frame_file)) {
+            File::delete($video_first_frame_file);
+        }
         FFmpeg::create()
             ->input($video_resource->path)
             ->ss($video_first_frame_config['duration'], 'input')
@@ -616,6 +637,9 @@ class VideoHandleJob implements ShouldQueue
             $cur_ts         = $this->tempDir . '/' . $datetime . random(6, 'letter', true) . '.ts';
             $start_duration = $avg_remain_duration + $avg_remain_duration * $i;
 
+            if (File::exists($cur_ts)) {
+                File::delete($cur_ts);
+            }
             FFmpeg::create()
                 ->input($video_resource->path)
                 ->ss($start_duration, 'input')
@@ -633,6 +657,9 @@ class VideoHandleJob implements ShouldQueue
         $video_simple_preview_file      = $this->generateRealPath($this->saveDir , $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' , 'mp4'));
         $video_simple_preview_url       = FileRepository::generateUrlByRealPath($video_simple_preview_file);
 
+        if (File::exists($video_simple_preview_file)) {
+            File::delete($video_simple_preview_file);
+        }
         FFmpeg::create()
             ->input($input_command)
             ->quiet()
@@ -675,6 +702,9 @@ class VideoHandleJob implements ShouldQueue
             $image      = $this->tempDir . '/' . $datetime . random(6 , 'letter' , true) . '.webp';
             $timepoint  = $i * $video_preview_config['duration'];
 
+            if (File::exists($image)) {
+                File::delete($image);
+            }
             FFmpeg::create()
                 ->input($video_resource->path)
                 ->ss($timepoint , 'input')
@@ -691,6 +721,10 @@ class VideoHandleJob implements ShouldQueue
         }
         $preview_file   = $this->generateRealPath($this->saveDir , $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' ,'jpeg'));
         $preview_url    = FileRepository::generateUrlByRealPath($preview_file);
+
+        if (File::exists($preview_file)) {
+            File::delete($preview_file);
+        }
 
         // jpeg 最大支持的像素有限！请务必使用 png
         // webp 是 jpeg 的升级版
@@ -754,6 +788,10 @@ class VideoHandleJob implements ShouldQueue
             $transcoded_file        = $this->generateRealPath($this->saveDir , $this->generateVideoMediaSuffix($this->video->type , $k , $this->video->index , $this->video->name ,'mp4'));
             $transcoded_access_url  = FileRepository::generateUrlByRealPath($transcoded_file);
 
+            if (File::exists($transcoded_file)) {
+                File::delete($transcoded_file);
+            }
+
             $ffmpeg = FFmpeg::create()->input($video_resource->path);
             if ($merge_video_subtitle) {
                 $ffmpeg->subtitle($first_video_subtitle_resource->path);
@@ -796,6 +834,9 @@ class VideoHandleJob implements ShouldQueue
             $definition             = '原画';
             $transcoded_file        = $this->generateRealPath($this->saveDir , $this->generateVideoMediaSuffix($this->video->type , $definition , $this->video->index , $this->video->name ,'mp4'));
             $transcoded_access_url  = FileRepository::generateUrlByRealPath($transcoded_file);
+            if (File::exists($transcoded_file)) {
+                File::delete($transcoded_file);
+            }
             $ffmpeg = FFmpeg::create()
                 ->input($video_resource->path)
                 ->quiet();
@@ -844,6 +885,9 @@ class VideoHandleJob implements ShouldQueue
                 }
                 $video_subtitle_convert_file        = $this->generateRealPath($this->saveDir , $this->generateMediaSuffix($this->video->type , "{$video_name}【{$v->name}】" , $video_subtitle_config['extension']));
                 $video_subtitle_convert_access_url  = FileRepository::generateUrlByRealPath($video_subtitle_convert_file);
+                if (File::exists($video_subtitle_convert_file)) {
+                    File::delete($video_subtitle_convert_file);
+                }
                 FFmpeg::create()
                     ->input($video_subtitle_resource->path)
                     ->quiet()

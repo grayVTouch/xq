@@ -18,7 +18,6 @@ import '@plugin/Uploader/css/Uploader.css';
 import '@plugin/Nav/css/Nav.css';
 import '@plugin/PicPlay_Transform/css/PicPlay_Transform.css';
 import '@plugin/PicPreview_Async/css/PicPreview_Async.css';
-import '@plugin/SlideSwitch/css/SlideSwitch.css';
 import '@plugin/VideoPlayer/css/VideoPlayer.css';
 
 import '@plugin/TouchFeedback_Transform/js/TouchFeedback_Transform.js';
@@ -28,6 +27,5 @@ import '@plugin/Uploader/js/Uploader.js';
 import '@plugin/Nav/js/Nav.js';
 import '@plugin/PicPlay_Transform/js/PicPlay_Transform.js';
 import '@plugin/PicPreview_Async/js/PicPreview_Async.js';
-import '@plugin/SlideSwitch/js/SlideSwitch.js';
 import '@plugin/VideoPlayer/js/VideoPlayer.js';
 import '@plugin/SmallJs/SmallJs.js';

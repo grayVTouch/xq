@@ -12,9 +12,10 @@ class ImageModel extends Model
 {
     protected $table = 'xq_image';
 
-    public static function getByImageProjectId(int $image_subject_id): Collection
+    public static function getByImageProjectId(int $image_project_id): Collection
     {
-        return self::where('image_project_id' , $image_subject_id)->get();
+        return self::where('image_project_id' , $image_project_id)
+            ->get();
     }
 
     public static function getNewestByFilterAndSize(array $filter = [] , int $size = 0): Collection

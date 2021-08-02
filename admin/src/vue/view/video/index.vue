@@ -135,16 +135,28 @@
                     <i-button @click.stop="openWindow(row.preview)">点击查看</i-button>
                 </template>
                 <template v-slot:user_id="{row,index}">
-                    {{ row.user ? `${row.user.username}【${row.user.id}】` : `unknow【${row.user_id}】` }}
+                    <my-table-text
+                            :text="row.user ? `${row.user.username}【${row.user.id}】` : `unknow【${row.user_id}】`"
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:module_id="{row,index}">
-                    {{ row.module ? `${row.module.name}【${row.module.id}】` : `unknow【${row.module_id}】` }}
+                    <my-table-text
+                            :text="row.module ? `${row.module.name}【${row.module.id}】` : `unknow【${row.module_id}】`"
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:category_id="{row,index}">
-                    {{ row.category ? `${row.category.name}【${row.category.id}】` : `unknow【${row.category_id}】` }}
+                    <my-table-text
+                            :text="row.category ? `${row.category.name}【${row.category.id}】` : `unknow【${row.category_id}】`"
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:video_project_id="{row,index}">
-                    {{ row.type === 'pro' ? (row.video_project ? `${row.video_project.name}【${row.video_project.id}】` : `unknow【${row.video_project_id}】`) : null }}
+                    <my-table-text
+                            :text="row.type === 'pro' ? (row.video_project ? `${row.video_project.name}【${row.video_project.id}】` : `unknow【${row.video_project_id}】`) : null "
+                            name="name"
+                    ></my-table-text>
                 </template>
                 <template v-slot:status="{row,index}">
                     <b :class="{'run-red': row.status === -1 , 'run-gray': row.status === 0 , 'run-green': row.status === 1}">{{ row.__status__ }}</b>

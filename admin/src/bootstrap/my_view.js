@@ -9,6 +9,7 @@ import mySelect from '@vue/view/public/common/my_select.vue';
 import myTableButton from '@vue/view/public/common/my_table_button.vue';
 import myLoading from '@vue/view/public/common/my_loading.vue';
 import myPage from '@vue/view/public/common/my_page.vue';
+import myTableText from '@vue/view/public/common/my_table_text.vue';
 import myTableImagePreview from '@vue/view/public/common/my_table_image_preview.vue';
 import myTableImagePreviewByButton from '@vue/view/public/common/my_table_image_preview_by_button.vue';
 import myTableVideoPreview from '@vue/view/public/common/my_table_video_preview.vue';
@@ -41,6 +42,7 @@ Vue.component('my-table-image-preview' , myTableImagePreview);
 Vue.component('my-table-image-preview-by-button' , myTableImagePreviewByButton);
 Vue.component('my-table-video-preview' , myTableVideoPreview);
 Vue.component('my-table-button' , myTableButton);
+Vue.component('my-table-text' , myTableText);
 
 Vue.component('my-user-selector' , myUserSelector);
 Vue.component('my-image-subject-selector' , myImageSubjectSelector);

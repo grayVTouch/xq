@@ -68,9 +68,7 @@ export default {
         } ,
 
         initIns () {
-            // this.ins.slideSwitch = new SlideSwitch(this.dom.navMappingItem.get(0) , {
-            //     id: this.val.nav ,
-            // });
+
         } ,
 
         moveLineInNavByIndex (index) {

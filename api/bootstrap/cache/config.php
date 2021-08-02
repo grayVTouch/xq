@@ -627,6 +627,7 @@
   'my' => 
   array (
     'res_url' => 'http://res.xq.test',
+    'res_dir' => 'D:/web/xinqu/resource',
     'admin_username' => 'admin',
     'admin_password' => 'admin',
     'client_username' => 'admin',

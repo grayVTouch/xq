@@ -13,7 +13,10 @@
 return [
 
     // 资源路径
-    'res_url' => env('APP_RES_URL' , 'http://localhost') ,
+    'res_url' => env('APP_RES_URL' , '') ,
+
+    // 内部访问资源
+    'res_dir' => env('APP_RES_DIR' , __DIR__ . '/../../resource') ,
 
     // 后台用户：用户名
     'admin_username' => env('ADMIN_USERNAME' , 'admin') ,

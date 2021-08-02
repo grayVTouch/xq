@@ -185,8 +185,8 @@ class DiskAction extends Action
             }
             DB::commit();
             if ($param['is_linked'] == 1) {
-                $res_dir    = my_config('app.res_dir');
-                $res_dir    = rtrim($res_dir , '/');
+                $res_dir    = config('my.res_dir');
+                $res_dir    = format_path($res_dir);
                 // 创建软连接
                 $link   = $res_dir . '/' . $param['prefix'];
                 $status = 0;
@@ -246,8 +246,8 @@ class DiskAction extends Action
             }
             $disks[] = $disk;
         }
-        $res_dir    = my_config('app.res_dir');
-        $res_dir    = rtrim($res_dir , '/');
+        $res_dir    = config('my.res_dir');
+        $res_dir    = format_path($res_dir);
         $failed     = [];
         foreach ($disks as $v)
         {

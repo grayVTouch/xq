@@ -1,11 +1,6 @@
 <?php
 
 return [
-    // 资源URL：disk=local 必须提供
-    'res_url' => 'http://res.xq.test' ,
-    // 资源的映射目录：disk=local 必须提供
-    'res_dir' => base_path() . '/../resource' ,
-
     /**
      * 当前的磁盘存储方式
      *

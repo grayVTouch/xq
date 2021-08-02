@@ -156,7 +156,7 @@ class FileRepository
      */
     public static function generateUrlByRelativePath(string $relative_path): string
     {
-        $res_url        = my_config('app.res_url');
+        $res_url        = config('my.res_url');
         $res_url        = rtrim($res_url , '/');
         $relative_path  = ltrim($relative_path , '/');
         return $res_url . '/' . $relative_path;
@@ -172,7 +172,7 @@ class FileRepository
     {
         $real_path                      = format_path($real_path);
         $relative_path_with_prefix      = self::generateWithPrefixRelativePath($real_path);
-        $res_url                        = my_config('app.res_url');
+        $res_url                        = config('my.res_url');
         $res_url                        = rtrim($res_url , '/');
         return $res_url . '/' . $relative_path_with_prefix;
     }

@@ -3,7 +3,7 @@
         <my-form-modal
                 v-model="myValue.show"
                 :title="title"
-                :loading="myValue.pending.submitEvent"
+                :loading="myValue.pending.submitEvent || myValue.pending.findById"
                 @on-ok="submitEvent"
                 @on-cancel="closeFormModal"
         >
@@ -78,7 +78,7 @@
                 </form>
             </template>
             <template slot="footer">
-                <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent" @click="submitEvent">确认</i-button>
+                <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent || myValue.pending.findById" @click="submitEvent">确认</i-button>
             </template>
         </my-form-modal>
 

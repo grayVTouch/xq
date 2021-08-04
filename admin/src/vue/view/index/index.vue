@@ -93,6 +93,14 @@
                                 </div>
                             </div>
 
+                            <a target="_blank" :href="state().settings.web_url" class="common-item website">
+                                <div class="in">
+                                    <i-tooltip :transfer="true" placement="bottom" content="跳转到 web 网站">
+                                        <my-icon icon="web" size="24"></my-icon>
+                                    </i-tooltip>
+                                </div>
+                            </a>
+
                             <!--用户控制-->
                             <div class="user" @mouseenter="showUserCtrl" @mouseleave="hideUserCtrl">
                                 <div class="ctrl">

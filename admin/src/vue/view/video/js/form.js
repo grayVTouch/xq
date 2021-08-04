@@ -615,12 +615,14 @@ export default {
                 error.category_id = '请选择分类';
             }
             // 检查是否有未提供名称的字幕
-            for (let i = 0; i < form.video_subtitles.length; ++i)
-            {
-                const cur = form.video_subtitles[i];
-                if (G.isEmptyString(cur.name)) {
-                    error.none = '存在未提供名称的字幕';
-                    break;
+            if (!form.merge_video_subtitle) {
+                for (let i = 0; i < form.video_subtitles.length; ++i)
+                {
+                    const cur = form.video_subtitles[i];
+                    if (G.isEmptyString(cur.name)) {
+                        error.none = '存在未提供名称的字幕';
+                        break;
+                    }
                 }
             }
             return {
@@ -651,16 +653,6 @@ export default {
                 this.error(filterRes.error , true);
                 this.errorHandle(G.getObjectFirstKeyMappingValue(filterRes.error));
                 return ;
-            }
-            if (form.merge_video_subtitle) {
-                if (form.video_subtitles.length === 0) {
-                    this.errorHandle('请提供要合并的字幕');
-                    return ;
-                }
-                if (form.video_subtitles.length > 1) {
-                    this.errorHandle('仅允许合成单个字幕');
-                    return ;
-                }
             }
             form.video_subtitles = G.jsonEncode(form.video_subtitles);
             const thenCallback = (res) => {

@@ -30,7 +30,7 @@ trait VideoTrait
             // 其他
         }
         $name = empty($name) ? $index : $name;
-        return $name . '【' . $definition . '】 ' . '.' . $extension;
+        return $name . '【' . $definition . '】' . '.' . $extension;
     }
 
     private function getVideoName($type , $name , $index)

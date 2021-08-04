@@ -11,6 +11,7 @@ use Exception;
 use Illuminate\Http\UploadedFile;
 use stdClass;
 use function api\admin\my_config;
+use function core\format_capacity;
 use function core\format_path;
 use function core\get_extension;
 use function core\random;
@@ -90,7 +91,7 @@ class FileRepository
         $target     = $save_dir . '/' . $file;
         File::mkdir($save_dir  , 0755 , true);
         if (!File::moveUploadedFile($source , $target)) {
-            return false;
+            throw new Exception("将上传文件【{$source}】移动到新位置【{$target}】失败");
         }
         return self::generateWithPrefixRelativePath($target);
     }

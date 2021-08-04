@@ -140,6 +140,22 @@ class VideoAction extends Action
             $param['video_project_id']  = 0;
             $param['index']             = 0;
         }
+        $my_video_subtitles = VideoSubtitleModel::getByVideoId($video->id);
+        $video_subtitles = $param['video_subtitles'] === '' ? [] : json_decode($param['video_subtitles'] , true);
+        if ($param['merge_video_subtitle'] == 1) {
+            if ($my_video_subtitles->isEmpty()) {
+                if (empty($video_subtitles)) {
+                    return self::error('请提供要合并的字幕文件');
+                }
+                if (count($video_subtitles) > 1) {
+                    return self::error('请仅提供单个字幕文件');
+                }
+            } else {
+                if (!empty($video_subtitles)) {
+                    return self::error('已经存在字幕文件，请勿在添加！');
+                }
+            }
+        }
         $user = UserModel::find($param['user_id']);
         if (empty($user)) {
             return self::error('用户不存在');
@@ -156,7 +172,6 @@ class VideoAction extends Action
         $param['praise_count']  = $param['praise_count'] === '' ? 0 : $param['praise_count'];
         $param['file_process_status'] = 0;
         $param['updated_at']    = $datetime;
-        $video_subtitles        = $param['video_subtitles'] === '' ? [] : json_decode($param['video_subtitles'] , true);
         $is_video_need_handle   = false;
         try {
             DB::beginTransaction();
@@ -324,6 +339,15 @@ class VideoAction extends Action
         if ($param['status'] !== '' && $param['status'] == -1 && $param['fail_reason'] === '') {
             return self::error('请提供失败原因');
         }
+        $video_subtitles = $param['video_subtitles'] === '' ? [] : json_decode($param['video_subtitles'] , true);
+        if ($param['merge_video_subtitle'] == 1) {
+            if (empty($video_subtitles)) {
+                return self::error('请提供要合并的字幕文件');
+            }
+            if (count($video_subtitles) > 1) {
+                return self::error('请仅提供单个字幕文件');
+            }
+        }
         $datetime               = date('Y-m-d H:i:s');
         $tags                   = empty($param['tags']) ? [] : json_decode($param['tags'] , true);
         $param['weight']        = $param['weight'] === '' ? 0 : $param['weight'];
@@ -333,7 +357,6 @@ class VideoAction extends Action
         $param['praise_count']  = $param['praise_count'] === '' ? 0 : $param['praise_count'];
         $param['updated_at']    = $datetime;
         $param['created_at']    = $param['created_at'] === '' ? $datetime : $param['created_at'];
-        $video_subtitles        = $param['video_subtitles'] === '' ? [] : json_decode($param['video_subtitles'] , true);
         $param['video_process_status']  = 0;
         $param['file_process_status']   = 0;
         try {

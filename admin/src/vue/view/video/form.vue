@@ -6,7 +6,7 @@
             <div class="run-action-title">
                 <div class="left">{{ title }}</div>
                 <div class="right">
-                    <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
+                    <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent || myValue.pending.findById" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
                     <i-button v-ripple type="error" @click="closeFormModal"><my-icon icon="guanbi" />关闭</i-button>
                 </div>
             </div>
@@ -275,7 +275,7 @@
                             <tr>
                                 <td colspan="2">
                                     <button class="hide" type="submit"><my-icon icon="tijiao" />提交</button>
-                                    <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
+                                    <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent || myValue.pending.findById" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
                                 </td>
                             </tr>
 
@@ -349,7 +349,13 @@
                                                     <i-radio v-for="(v,k) in TopContext.business.bool.integer" :key="k" :label="parseInt(k)">{{ v }}</i-radio>
                                                 </i-radio-group>
                                                 <span class="need">*</span>
-                                                <div class="msg">默认：否；<br>当选择合并字幕的时候服务端会将字幕列表中的首个字幕合并到视频并删除其他字幕，合并完成也会删除合并字幕仅保留合并后的视频文件</div>
+                                                <div class="msg">默认：否；
+                                                    <br>
+                                                    当选择合并字幕的时候服务端会将字幕列表中的首个字幕合并到视频并删除其他字幕，合并完成也会删除合并字幕仅保留合并后的视频文件
+                                                    <br>
+                                                    <br>
+                                                    当字幕文件编码非utf8格式的时候，服务端会尝试转码后合成，但仍有概率失败！强烈建议手动将字幕文件转成utf8格式编码
+                                                </div>
                                                 <div class="e-msg">{{ form.merge_video_subtitle }}</div>
                                             </td>
                                         </tr>

@@ -76,6 +76,7 @@ class FileAction extends Action
             'h' => 'sometimes|integer' ,
             'is_upload_to_cloud' => ['sometimes' , 'integer' , Rule::in($bool_range)] ,
 //            'file' => 'required|mimes:jpg,jpeg,png,gif,webp' ,
+            'file' => 'required' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
@@ -180,6 +181,7 @@ class FileAction extends Action
     {
         $validator = Validator::make($param , [
 //            'file' => 'required|mimes:mp4,mov,mkv,avi,flv,rm,rmvb,ts,webm' ,
+            'file' => 'required' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
@@ -210,6 +212,7 @@ class FileAction extends Action
     {
         $validator = Validator::make($param , [
 //            'file' => 'required|mimes:ass,idx,sub,srt,vtt,ssa' ,
+            'file' => 'required' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());

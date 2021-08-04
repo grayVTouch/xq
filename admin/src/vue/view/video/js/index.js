@@ -46,14 +46,14 @@ export default {
                         align: TopContext.table.alignCenter,
                         fixed: 'left',
                     },
-                    {
-                        title: 'id',
-                        key: 'id',
-                        minWidth: TopContext.table.id,
-                        align: TopContext.table.alignCenter,
-                        fixed: 'left',
-                        sortable: 'custom' ,
-                    },
+                    // {
+                    //     title: 'id',
+                    //     key: 'id',
+                    //     minWidth: TopContext.table.id,
+                    //     align: TopContext.table.alignCenter,
+                    //     fixed: 'left',
+                    //     sortable: 'custom' ,
+                    // },
                     {
                         title: '名称',
                         key: 'name',
@@ -208,7 +208,7 @@ export default {
                     {
                         title: '操作' ,
                         slot: 'action' ,
-                        minWidth: TopContext.table.action - 100 ,
+                        minWidth: TopContext.table.action - 20 ,
                         align: TopContext.table.alignCenter ,
                         fixed: 'right' ,
                     } ,

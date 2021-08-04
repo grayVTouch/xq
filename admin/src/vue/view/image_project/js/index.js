@@ -64,9 +64,7 @@ export default {
                         width: TopContext.table.name,
                         align: TopContext.table.alignCenter,
                         fixed: 'left',
-                        resizable: true,
-                        ellipsis: true,
-                        // tooltip: true ,
+                        tooltip: true ,
                     },
                     {
                         title: '封面',
@@ -179,7 +177,7 @@ export default {
                     {
                         title: '操作',
                         slot: 'action',
-                        minWidth: TopContext.table.action - 40,
+                        minWidth: TopContext.table.action ,
                         align: TopContext.table.alignCenter,
                         fixed: 'right',
                     },

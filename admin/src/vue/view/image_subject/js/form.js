@@ -118,17 +118,23 @@ export default {
 
         findById (id) {
             return new Promise((resolve , reject) => {
-               Api.imageSubject.show(id).then((res) => {
-                   if (res.code !== TopContext.code.Success) {
-                       this.errorHandle(res.message);
-                       reject();
-                       return ;
-                   }
-                   const data = res.data;
-                   delete data.password;
-                   this.form = data;
-                   resolve();
-               });
+                this.pending('findById' , true);
+               Api.imageSubject
+                   .show(id)
+                   .then((res) => {
+                       if (res.code !== TopContext.code.Success) {
+                           this.errorHandle(res.message);
+                           reject();
+                           return ;
+                       }
+                       const data = res.data;
+                       delete data.password;
+                       this.form = data;
+                       resolve();
+                    })
+                   .finally(() => {
+                       this.pending('findById' , false);
+                   });
             });
         } ,
 

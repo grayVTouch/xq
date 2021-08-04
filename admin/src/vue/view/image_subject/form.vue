@@ -4,7 +4,7 @@
         <my-form-drawer
                 v-model="myValue.show"
                 :title="title"
-                :loading="myValue.pending.submitEvent"
+                :loading="myValue.pending.submitEvent || myValue.pending.findById"
                 @on-ok="submitEvent"
                 @on-cancel="closeFormModal"
         >
@@ -12,7 +12,7 @@
             <div class="run-action-title" slot="header">
                 <div class="left">{{ title }}</div>
                 <div class="right">
-                    <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
+                    <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent || myValue.pending.findById" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
                     <i-button v-ripple type="error" @click="closeFormModal"><my-icon icon="guanbi" />关闭</i-button>
                 </div>
             </div>
@@ -165,7 +165,7 @@
 
                     <tr>
                         <td colspan="2">
-                            <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
+                            <i-button v-ripple type="primary" :loading="myValue.pending.submitEvent || myValue.pending.findById" @click="submitEvent"><my-icon icon="tijiao" />提交</i-button>
                             <button v-show="false" type="submit"></button>
                         </td>
                     </tr>

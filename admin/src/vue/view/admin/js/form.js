@@ -76,6 +76,7 @@ export default {
 
         findById (id) {
             return new Promise((resolve , reject) => {
+                this.pending('findById' , true);
                Api.admin
                    .show(id)
                    .then((res) => {
@@ -88,7 +89,9 @@ export default {
                        delete data.password;
                        this.form = data;
                        resolve();
-                 });
+                 }).finally(() => {
+                   this.pending('findById' , false);
+               });
             });
         } ,
 

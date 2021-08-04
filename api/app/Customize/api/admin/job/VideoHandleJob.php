@@ -28,6 +28,7 @@ use Illuminate\Queue\SerializesModels;
 use App\Customize\api\admin\repository\FileRepository;
 use function api\admin\my_config;
 use function core\random;
+use function core\detect_encoding;
 
 class VideoHandleJob implements ShouldQueue
 {
@@ -215,6 +216,22 @@ class VideoHandleJob implements ShouldQueue
         $video_name = $get_video_name($this->video->type , $this->video->name , $this->video->index);
 
         /**
+         * ************************
+         * 字幕文件编码转换
+         * ************************
+         */
+        if ($merge_video_subtitle) {
+            $origin_str = file_get_contents($first_video_subtitle_resource->path);
+            $from_encoding = detect_encoding($origin_str);
+            $to_encoding = 'UTF-8';
+            if ($from_encoding !== $to_encoding) {
+                $convert_str = mb_convert_encoding($origin_str , $to_encoding , $from_encoding);
+                // 覆盖内容
+                file_put_contents($first_video_subtitle_resource->path , $convert_str);
+            }
+        }
+
+        /**
          * *****************************************
          * 视频第一帧
          * *****************************************
@@ -229,7 +246,6 @@ class VideoHandleJob implements ShouldQueue
             ->input($video_resource->path)
             ->ss($video_first_frame_config['duration'], 'input')
             ->frames(1)
-            ->quiet()
             ->save($video_first_frame_file);
         ResourceRepository::create('' , $video_first_frame_file , 'local' , 0 , 0);
         // 图片处理
@@ -276,7 +292,6 @@ class VideoHandleJob implements ShouldQueue
                 ->ss($start_duration, 'input')
                 ->size($video_simple_preview_config['width'], $video_simple_preview_config['height'])
                 ->disabledAudio()
-                ->quiet()
                 ->duration($video_simple_preview_config['duration'], 'output')
                 ->save($cur_ts);
 
@@ -292,7 +307,6 @@ class VideoHandleJob implements ShouldQueue
         }
         FFmpeg::create()
             ->input($input_command)
-            ->quiet()
             ->save($video_simple_preview_file);
         ResourceRepository::create('' , $video_simple_preview_file , 'local' , 0 , 0);
         $simple_preview_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $aliyun_simple_preview_file , $video_simple_preview_file);
@@ -346,7 +360,6 @@ class VideoHandleJob implements ShouldQueue
                 ->ss($timepoint , 'input')
                 ->size($video_preview_config['width'] , $video_preview_config['width'] / ($video_info['width'] / $video_info['height']))
                 ->frames(1)
-                ->quiet()
                 ->save($image);
             $image_cav  = imagecreatefromwebp($image);
             $x          = $i % $video_preview_config['count'] * $video_preview_config['width'];
@@ -436,7 +449,6 @@ class VideoHandleJob implements ShouldQueue
             }
             $ffmpeg->size($v['w'] , $v['h'])
                 ->codec($video_transcoding_config['codec'] , 'video')
-                ->quiet()
                 ->save($transcoded_file);
             ResourceRepository::create('' , $transcoded_file , 'local' , 0 , 0);
             $transcode_file_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $aliyun_transcoded_file , $transcoded_file);
@@ -485,7 +497,7 @@ class VideoHandleJob implements ShouldQueue
             }
             $ffmpeg = FFmpeg::create()
                 ->input($video_resource->path)
-                ->quiet();
+                ->codec($video_transcoding_config['codec'] , 'video');
             if ($merge_video_subtitle) {
                 $ffmpeg->subtitle($first_video_subtitle_resource->path);
             }
@@ -545,7 +557,6 @@ class VideoHandleJob implements ShouldQueue
                 }
                 FFmpeg::create()
                     ->input($video_subtitle_resource->path)
-                    ->quiet()
                     ->save($video_subtitle_convert_file);
                 ResourceRepository::create('' , $video_subtitle_convert_file , 'local' , 0 , 0);
                 $video_subtitle_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $aliyun_video_subtitle_convert_file , $video_subtitle_convert_file);
@@ -595,6 +606,22 @@ class VideoHandleJob implements ShouldQueue
             return $name;
         };
         $video_name = $get_video_name($this->video->type , $this->video->name , $this->video->index);
+
+        /**
+         * ************************
+         * 字幕文件编码转换
+         * ************************
+         */
+        if ($merge_video_subtitle) {
+            $origin_str = file_get_contents($first_video_subtitle_resource->path);
+            $from_encoding = detect_encoding($origin_str);
+            $to_encoding = 'UTF-8';
+            if ($from_encoding !== $to_encoding) {
+                $convert_str = mb_convert_encoding($origin_str , $to_encoding , $from_encoding);
+                // 覆盖内容
+                file_put_contents($first_video_subtitle_resource->path , $convert_str);
+            }
+        }
         /**
          * 视频第一帧
          */
@@ -608,7 +635,6 @@ class VideoHandleJob implements ShouldQueue
             ->input($video_resource->path)
             ->ss($video_first_frame_config['duration'], 'input')
             ->frames(1)
-            ->quiet()
             ->save($video_first_frame_file);
         // 图片处理
         $image_processor = new ImageProcessor($this->saveDir);
@@ -645,7 +671,6 @@ class VideoHandleJob implements ShouldQueue
                 ->ss($start_duration, 'input')
                 ->size($video_simple_preview_config['width'], $video_simple_preview_config['height'])
                 ->disabledAudio()
-                ->quiet()
                 ->duration($video_simple_preview_config['duration'], 'output')
                 ->save($cur_ts);
 
@@ -662,7 +687,6 @@ class VideoHandleJob implements ShouldQueue
         }
         FFmpeg::create()
             ->input($input_command)
-            ->quiet()
             ->save($video_simple_preview_file);
 
         VideoModel::updateById($this->video->id , [
@@ -710,7 +734,6 @@ class VideoHandleJob implements ShouldQueue
                 ->ss($timepoint , 'input')
                 ->size($video_preview_config['width'] , $video_preview_config['width'] / ($video_info['width'] / $video_info['height']))
                 ->frames(1)
-                ->quiet()
                 ->save($image);
             $previews[] = $image;
             $image_cav  = imagecreatefromwebp($image);
@@ -798,7 +821,6 @@ class VideoHandleJob implements ShouldQueue
             }
             $ffmpeg->size($v['w'] , $v['h'])
                 ->codec($video_transcoding_config['codec'] , 'video')
-                ->quiet()
                 ->save($transcoded_file);
             $info = FFprobe::create($transcoded_file)->coreInfo();
             VideoSrcModel::insert([
@@ -834,34 +856,36 @@ class VideoHandleJob implements ShouldQueue
             $definition             = '原画';
             $transcoded_file        = $this->generateRealPath($this->saveDir , $this->generateVideoMediaSuffix($this->video->type , $definition , $this->video->index , $this->video->name ,'mp4'));
             $transcoded_access_url  = FileRepository::generateUrlByRealPath($transcoded_file);
-            if (File::exists($transcoded_file)) {
-                File::delete($transcoded_file);
+            if ($video_resource->path !== $transcoded_file) {
+                if (File::exists($transcoded_file)) {
+                    File::delete($transcoded_file);
+                }
+                $ffmpeg = FFmpeg::create()
+                    ->input($video_resource->path)
+                    ->codec($video_transcoding_config['codec'] , 'video');
+                if ($merge_video_subtitle) {
+                    $ffmpeg->subtitle($first_video_subtitle_resource->path);
+                }
+                $ffmpeg->save($transcoded_file);
+                $video_info = FFprobe::create($transcoded_file)->coreInfo();
+                VideoSrcModel::insert([
+                    'video_id'      => $this->video->id ,
+                    'src'           => $transcoded_access_url ,
+                    'duration'      => $video_info['duration'] ,
+                    'width'         => $video_info['width'] ,
+                    'height'        => $video_info['height'] ,
+                    'size'          => $video_info['size'] ,
+                    'definition'    => $definition ,
+                    'created_at'   => date('Y-m-d H:i:s') ,
+                ]);
+                // 删除源文件
+                ResourceRepository::delete($this->video->src);
+                ResourceRepository::create($transcoded_access_url , $transcoded_file , 'local' , 1 , 0);
+                // 更新原视频
+                VideoModel::updateById($this->video->id , [
+                    'src' => $transcoded_access_url ,
+                ]);
             }
-            $ffmpeg = FFmpeg::create()
-                ->input($video_resource->path)
-                ->quiet();
-            if ($merge_video_subtitle) {
-                $ffmpeg->subtitle($first_video_subtitle_resource->path);
-            }
-            $ffmpeg->save($transcoded_file);
-            $video_info = FFprobe::create($transcoded_file)->coreInfo();
-            VideoSrcModel::insert([
-                'video_id'      => $this->video->id ,
-                'src'           => $transcoded_access_url ,
-                'duration'      => $video_info['duration'] ,
-                'width'         => $video_info['width'] ,
-                'height'        => $video_info['height'] ,
-                'size'          => $video_info['size'] ,
-                'definition'    => $definition ,
-                'created_at'   => date('Y-m-d H:i:s') ,
-            ]);
-            // 删除源文件
-            ResourceRepository::delete($this->video->src);
-            ResourceRepository::create($transcoded_access_url , $transcoded_file , 'local' , 1 , 0);
-            // 更新原视频
-            VideoModel::updateById($this->video->id , [
-                'src' => $transcoded_access_url ,
-            ]);
         } else {
             // 删除原视频文件
             ResourceRepository::delete($this->video->src);
@@ -890,7 +914,6 @@ class VideoHandleJob implements ShouldQueue
                 }
                 FFmpeg::create()
                     ->input($video_subtitle_resource->path)
-                    ->quiet()
                     ->save($video_subtitle_convert_file);
                 VideoSubtitleModel::updateById($v->id , [
                     'src' => $video_subtitle_convert_access_url

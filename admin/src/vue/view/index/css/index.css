@@ -605,6 +605,32 @@
     -o-transform: translateX(50%);
 }
 
+
+/**
+ * ******************
+ * 右侧- 功能项
+ * ******************
+ */
+.main > .content > .inner > .nav > .toolbar > .right > .common-item {
+    width: 50px;
+    transition: all 0.3s linear;
+    -webkit-transition: all 0.3s linear;
+    -moz-transition: all 0.3s linear;
+    -ms-transition: all 0.3s linear;
+    -o-transition: all 0.3s linear;
+}
+
+.main > .content > .inner > .nav > .toolbar > .right > .common-item:hover {
+    background-color: #797d84;
+}
+
+.main > .content > .inner > .nav > .toolbar > .right > .common-item > .in {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
 /**
  * **************************
  * 文档右边：底部

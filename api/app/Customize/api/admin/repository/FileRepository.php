@@ -89,7 +89,9 @@ class FileRepository
         $filename   = self::filename();
         $file       = $filename . '.' . $extension;
         $target     = $save_dir . '/' . $file;
-        File::mkdir($save_dir  , 0755 , true);
+        if (!file_exists($save_dir)) {
+            File::mkdir($save_dir  , 0755 , true);
+        }
         if (!File::moveUploadedFile($source , $target)) {
             throw new Exception("将上传文件【{$source}】移动到新位置【{$target}】失败");
         }

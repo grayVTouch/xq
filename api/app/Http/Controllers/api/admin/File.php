@@ -48,7 +48,11 @@ class File extends Base
     public function uploadVideo()
     {
         $param = $this->request->post();
-        $param['file'] = $this->request->file('file');
+        $param['name'] = $param['name'] ?? '';
+        $param['size'] = $param['size'] ?? '';
+        $param['total'] = $param['total'] ?? '';
+        $param['index'] = $param['index'] ?? '';
+        $param['file'] = $this->request->file('file' , null);
         $res = FileAction::uploadVideo($this , $param['file'] , $param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);

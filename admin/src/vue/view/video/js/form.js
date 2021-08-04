@@ -292,12 +292,15 @@ export default {
                 mode: 'override' ,
                 multiple: false ,
                 clear: true ,
+                // 单位：MB
+                blockSize: 100 ,
+                // 启用分块上传
+                isEnabledBlock: true ,
+                // 检查单个块上传是否成功
+                isBlockUploadOk (res , code) {
+                    return code === TopContext.code.Success;
+                } ,
                 uploaded (file , data , code) {
-                    if (code !== TopContext.code.Success) {
-                        this.status(file.id , false);
-                        return ;
-                    }
-                    this.status(file.id , true);
                     self.form.src = data.data;
                 } ,
                 cleared () {

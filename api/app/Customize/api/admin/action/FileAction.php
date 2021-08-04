@@ -18,6 +18,8 @@ use Illuminate\Validation\Rule;
 use function api\admin\my_config;
 use function api\admin\get_form_error;
 use function api\admin\my_config_keys;
+use function core\get_extension;
+use function core\get_filename;
 use function core\random;
 
 class FileAction extends Action
@@ -182,12 +184,16 @@ class FileAction extends Action
         $validator = Validator::make($param , [
 //            'file' => 'required|mimes:mp4,mov,mkv,avi,flv,rm,rmvb,ts,webm' ,
             'file' => 'required' ,
+            'name' => 'required' ,
+            'size' => 'required' ,
+            'total' => 'required' ,
+            'index' => 'required' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
         }
         $mime_range = ['mp4','mov','mkv','avi','flv','rm','rmvb','ts','webm' , 'mpg' , '3gp' , 'wmv'];
-        $extension = $file->getClientOriginalExtension();
+        $extension = get_extension($param['name']);
         $extension = strtolower($extension);
         if (!in_array($extension , $mime_range)) {
             return self::error("不支持的格式【{$extension}】，当前支持的格式有：" . implode(',' , $mime_range));
@@ -195,10 +201,40 @@ class FileAction extends Action
         try {
             Util::systemPowerUp();
             $dir        = date('Ymd');
-            $path       = FileRepository::upload($file , $dir);
-            $real_path  = FileRepository::generateRealPathByWithPrefixRelativePath($path);
-            $url        = FileRepository::generateUrlByRelativePath($path);
-            ResourceRepository::create($url , $real_path , 'local' , 0 , 0);
+            $save_dir = FileRepository::dir('system' , $dir);
+            if (!file_exists($save_dir)) {
+                mkdir($save_dir , 0777 , true);
+            }
+            $filename = str_replace(".{$extension}" , '' , $param['name']);
+            $filename .=  '-upload-temp-file';
+            $target   = $save_dir . '/' . $filename . '.' . $extension;
+            if ($param['index'] == 1 && file_exists($target)) {
+                // 首个块文件且目标文件存在，则删除（之前失败导致过）
+                unlink($target);
+            }
+            // 合并块
+            file_put_contents($target , $file->getContent() , FILE_APPEND);
+            ResourceRepository::create('' , $target , 'local' , 0 , 0);
+            if ($param['index'] < $param['total']) {
+                // 仍是块结构
+                Util::systemPowerDown();
+                return self::success('块上传成功');
+            }
+            $source = $target;
+            $filename = FileRepository::filename();
+            $target = $save_dir . '/' . $filename . '.' . $extension;
+            if ($source == $target) {
+                // 移动到指定位置
+                throw new Exception("临时块文件【{$source}】 和 合并后新文件【{$target}】名称一致！这会产生不可预料的后果");
+            }
+            $size = filesize($source);
+            if ($size != $param['size']) {
+                ResourceRepository::delete($source);
+                return self::error("块合并后文件校验失败！源文件大小：【{$param['size']}】；合并后文件大小：【{$size}】");
+            }
+            rename($source , $target);
+            $url        = FileRepository::generateUrlByRealPath($target);
+            ResourceRepository::create($url , $target , 'local' , 0 , 0);
             Util::systemPowerDown();
             return self::success('' , $url);
         } catch(Exception $e) {

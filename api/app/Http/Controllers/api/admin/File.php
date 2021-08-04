@@ -49,9 +49,6 @@ class File extends Base
     {
         $param = $this->request->post();
         $param['file'] = $this->request->file('file');
-
-        print_r($_FILES['file'] ?? 'UNKNOW');
-
         $res = FileAction::uploadVideo($this , $param['file'] , $param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);

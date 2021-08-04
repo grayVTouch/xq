@@ -10,6 +10,13 @@ class Test extends Base
 {
     public function index()
     {
-        TestJob::dispatch();
+//        TestJob::dispatch();
+        $d = 10;
+        $i = 0;
+        while ($i++ < $d)
+        {
+            sleep(1);
+        }
+        echo '30s 过去，你看到我了';
     }
 }

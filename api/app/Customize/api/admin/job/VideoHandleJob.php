@@ -278,8 +278,6 @@ class VideoHandleJob implements ShouldQueue
         $remain_duration        = $video_info['duration'] - $avg_duration * 2;
         $avg_remain_duration    = $remain_duration / $video_simple_preview_config['count'];
         $ts                     = [];
-        $input_command          = 'concat:';
-
         for ($i = 0; $i < $video_simple_preview_config['count']; ++$i)
         {
             $cur_ts         = $this->tempDir . '/' . $datetime . random(6, 'letter', true) . '.ts';
@@ -294,11 +292,8 @@ class VideoHandleJob implements ShouldQueue
                 ->disabledAudio()
                 ->duration($video_simple_preview_config['duration'], 'output')
                 ->save($cur_ts);
-
-            $input_command .= $cur_ts . '|';
             $ts[] = $cur_ts;
         }
-        $input_command                  = rtrim($input_command, '|');
         $relative_simple_preview_file   = $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' , 'mp4');
         $aliyun_simple_preview_file     = $this->relativeDir . '/' . $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' , 'mp4');
         $video_simple_preview_file      = $this->generateRealPath($this->saveDir , $relative_simple_preview_file);
@@ -306,7 +301,7 @@ class VideoHandleJob implements ShouldQueue
             File::delete($video_simple_preview_file);
         }
         FFmpeg::create()
-            ->input($input_command)
+            ->concat($ts)
             ->save($video_simple_preview_file);
         ResourceRepository::create('' , $video_simple_preview_file , 'local' , 0 , 0);
         $simple_preview_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $aliyun_simple_preview_file , $video_simple_preview_file);
@@ -351,7 +346,8 @@ class VideoHandleJob implements ShouldQueue
         {
             $datetime   = date('YmdHis');
             $image      = $this->tempDir . '/' . $datetime . random(6 , 'letter' , true) . '.webp';
-            $timepoint  = $i * $video_preview_config['duration'];
+            // 不能超过视频长度
+            $timepoint  = min($i * $video_preview_config['duration'] , $video_info['duration']);
             if (File::exists($image)) {
                 File::delete($image);
             }
@@ -656,8 +652,6 @@ class VideoHandleJob implements ShouldQueue
         $remain_duration        = $video_info['duration'] - $avg_duration * 2;
         $avg_remain_duration    = $remain_duration / $video_simple_preview_config['count'];
         $ts                     = [];
-        $input_command          = 'concat:';
-
         for ($i = 0; $i < $video_simple_preview_config['count']; ++$i)
         {
             $cur_ts         = $this->tempDir . '/' . $datetime . random(6, 'letter', true) . '.ts';
@@ -674,11 +668,8 @@ class VideoHandleJob implements ShouldQueue
                 ->duration($video_simple_preview_config['duration'], 'output')
                 ->save($cur_ts);
 
-            $input_command .= $cur_ts . '|';
             $ts[] = $cur_ts;
         }
-
-        $input_command                  = rtrim($input_command, '|');
         $video_simple_preview_file      = $this->generateRealPath($this->saveDir , $this->generateMediaSuffix($this->video->type , $video_name . '【预览】' , 'mp4'));
         $video_simple_preview_url       = FileRepository::generateUrlByRealPath($video_simple_preview_file);
 
@@ -686,7 +677,7 @@ class VideoHandleJob implements ShouldQueue
             File::delete($video_simple_preview_file);
         }
         FFmpeg::create()
-            ->input($input_command)
+            ->concat($ts)
             ->save($video_simple_preview_file);
 
         VideoModel::updateById($this->video->id , [
@@ -724,7 +715,7 @@ class VideoHandleJob implements ShouldQueue
         {
             $datetime   = date('YmdHis');
             $image      = $this->tempDir . '/' . $datetime . random(6 , 'letter' , true) . '.webp';
-            $timepoint  = $i * $video_preview_config['duration'];
+            $timepoint  = min($i * $video_preview_config['duration'] , $video_info['duration']);
 
             if (File::exists($image)) {
                 File::delete($image);

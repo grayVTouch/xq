@@ -43,7 +43,6 @@ Route::prefix('admin')
         Route::middleware([])
             ->group(function(){
                 Route::any('test' , [Test::class , 'index']);
-                Route::any('test' , [Test::class , 'index']);
 
                 Route::any('test_file' , [File::class , 'test']);
 

@@ -1,69 +1,87 @@
 <?php
 
-var_dump(file_exists("G:/resource/系统资源/20210802/20210802223128homHvo.ass"));
-exit;
+require_once __DIR__ . '/app/Customize/api/admin/plugin/extra/app.php';
 
-// gb2312
-//$gbk_file = 'D:\web\xinqu\resource\upload\系统资源\20210802\test\test.ass';
-//$utf8_file = 'D:\web\xinqu\resource\upload\系统资源\20210802\test\test_utf8.ass';
+$p_m1 = __DIR__ . '/pornhub_master.m3u8';
+$p_m2 = __DIR__ . '/pornhub_videos.m3u8';
 
-$gbk_file = __DIR__ . '/gbk_test.ass';
-$utf8_file = __DIR__ . '/utf8_test.ass';
-$vtt_file = __DIR__ . '/test.vtt';
-$c_file = __DIR__ . '/test_utf8.ass';
-$a_file = __DIR__ . '/a_gbk.ass';
+$m_tool = new M3U8Tool($p_m1);
 
-//$str = file_get_contents($gbk_file);
-//$charset = detect_encoding($str);
-
-//var_dump($charset);
-
-//$convert_str = mb_convert_encoding($str , 'UTF-8' , $charset);
-//file_put_contents($gbk_file , $convert_str);
-
-//var_dump(detect_encoding($vtt_file));
-
-var_dump(detect_encoding($c_file));
-var_dump(detect_encoding($a_file));
-
-//
-//var_dump(detect_encoding($gbk_file));
-//var_dump(detect_encoding($utf8_file));
-
-//var_dump(mb_detect_encoding($gbk_file , [
-//    'ASCII' ,
-//    'GBK' ,
-//    'UTF-8' ,
-//]));
-//var_dump(mb_detect_encoding($utf8_file , [
-//    'ASCII' ,
-//    'GBK' ,
-//    'UTF-8' ,
-//]));
-
+//$m_tool->getDefinitions();
+$m_tool->getSequences();
 
 
 /**
- * 检测文件编码
- * @param string $file 文件名称 或 纯字符串
- * @return string|null 返回 编码名 或 null
+ * m3u8 工具类
+ * Class M3U8Parser
  */
-function detect_encoding(string $file): string
+class M3U8Tool
 {
-    $list = [
-        'UTF-8',
-        'GBK' ,
-        'ISO-8859-1'
-    ];
-    var_dump($file);
-    $str = file_exists($file) ? file_get_contents($file) : $file;
+    /**
+     * 内容
+     *
+     * @var string
+     */
+    private $content;
 
-    foreach ($list as $item)
+    /**
+     * 清晰度
+     *
+     * @var array
+     */
+    private $definition = [];
+
+    public function __construct(string $file)
     {
-        $tmp = mb_convert_encoding($str, $item, $item);
-        if (md5($tmp) == md5($str)) {
-            return $item;
+        $this->content = file_exists($file) ? file_get_contents($file) : $file;
+        if (!$this->isM3u8()) {
+            throw new Exception('提供文件或内容非M3U8格式');
         }
     }
-    return false;
+
+
+    public function isM3u8(): bool
+    {
+        return preg_match('/^#EXTM3U/' , $this->content) > 0;
+    }
+
+    /**
+     * 获取文件类型
+     * source - 视频源（不同清晰度的视频源）
+     * playlist - 切片列表
+     * @return string source | sequence
+     */
+    public function getType(): string
+    {
+        if (preg_match('/#EXT-X-STREAM-INF:/' , $this->content) > 0) {
+            return 'source';
+        }
+        if (preg_match('/#EXTINF:/' , $this->content) > 0) {
+            return 'sequence';
+        }
+        throw new Exception('未知的文件类型');
+    }
+
+    /**
+     * 获取视频清晰度
+     * @return array
+     */
+    public function getDefinitions(): array
+    {
+        preg_match_all('/#EXT-X-STREAM-INF:(.*?)RESOLUTION=(\w+x\w+)/' , $this->content , $matches);
+        $definition = $matches[2];
+        return $definition;
+    }
+
+    /**
+     * 获取切片列表
+     * @return array
+     */
+    public function getSequences(): array
+    {
+        preg_match_all('/#EXTINF:.*(\n|\r|\n\r|\r\n)(.*?)\1/' , $this->content , $matches);
+        $definition = $matches[2];
+        return $definition;
+    }
+
 }

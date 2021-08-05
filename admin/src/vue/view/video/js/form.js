@@ -293,7 +293,7 @@ export default {
                 multiple: false ,
                 clear: true ,
                 // 单位：MB
-                blockSize: 100 ,
+                blockSize: 10 ,
                 // 启用分块上传
                 isEnabledBlock: true ,
                 // 检查单个块上传是否成功

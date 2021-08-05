@@ -347,7 +347,7 @@ class VideoHandleJob implements ShouldQueue
             $datetime   = date('YmdHis');
             $image      = $this->tempDir . '/' . $datetime . random(6 , 'letter' , true) . '.webp';
             // 不能超过视频长度
-            $timepoint  = min($i * $video_preview_config['duration'] , $video_info['duration']);
+            $timepoint  = $i * $video_preview_config['duration'];
             if (File::exists($image)) {
                 File::delete($image);
             }
@@ -715,7 +715,7 @@ class VideoHandleJob implements ShouldQueue
         {
             $datetime   = date('YmdHis');
             $image      = $this->tempDir . '/' . $datetime . random(6 , 'letter' , true) . '.webp';
-            $timepoint  = min($i * $video_preview_config['duration'] , $video_info['duration']);
+            $timepoint  = $i * $video_preview_config['duration'];
 
             if (File::exists($image)) {
                 File::delete($image);

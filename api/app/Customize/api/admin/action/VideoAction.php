@@ -140,22 +140,22 @@ class VideoAction extends Action
             $param['video_project_id']  = 0;
             $param['index']             = 0;
         }
-        $my_video_subtitles = VideoSubtitleModel::getByVideoId($video->id);
+//        $my_video_subtitles = VideoSubtitleModel::getByVideoId($video->id);
         $video_subtitles = $param['video_subtitles'] === '' ? [] : json_decode($param['video_subtitles'] , true);
-        if ($param['merge_video_subtitle'] == 1) {
-            if ($my_video_subtitles->isEmpty()) {
-                if (empty($video_subtitles)) {
-                    return self::error('请提供要合并的字幕文件');
-                }
-                if (count($video_subtitles) > 1) {
-                    return self::error('请仅提供单个字幕文件');
-                }
-            } else {
-                if (!empty($video_subtitles)) {
-                    return self::error('已经存在字幕文件，请勿在添加！');
-                }
-            }
-        }
+//        if ($param['merge_video_subtitle'] == 1) {
+//            if ($my_video_subtitles->isEmpty()) {
+//                if (empty($video_subtitles)) {
+//                    return self::error('请提供要合并的字幕文件');
+//                }
+//                if (count($video_subtitles) > 1) {
+//                    return self::error('请仅提供单个字幕文件');
+//                }
+//            } else {
+//                if (!empty($video_subtitles)) {
+//                    return self::error('已经存在字幕文件，请勿在添加！');
+//                }
+//            }
+//        }
         $user = UserModel::find($param['user_id']);
         if (empty($user)) {
             return self::error('用户不存在');

@@ -52,6 +52,7 @@ class File extends Base
         $param['size'] = $param['size'] ?? '';
         $param['total'] = $param['total'] ?? '';
         $param['index'] = $param['index'] ?? '';
+        $param['md5'] = $param['md5'] ?? '';
         $param['file'] = $this->request->file('file' , null);
         $res = FileAction::uploadVideo($this , $param['file'] , $param);
         if ($res['code'] != 0) {

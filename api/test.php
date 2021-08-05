@@ -17,7 +17,8 @@ require_once __DIR__ . '/app/Customize/api/admin/plugin/extra/app.php';
 
 
 $file = 'D:\web\xinqu\resource\upload\开发模式\专题视频\魔法少女 梅露露\0001【原画】.mp4';
+$file = 'E:\myself\human\二次元\魔法少女梅露露\魔法少女 梅露露 (1).mkv';
 $info = FFprobe::create($file)
-        ->info();
+        ->coreInfo();
 
-//print_r($info);
+print_r($info);

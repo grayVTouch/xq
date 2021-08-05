@@ -1,7 +1,7 @@
 /***
- * ***************
- * css 通用依赖
- * ***************
+ * *******************
+ * Run - running 插件
+ * *******************
  **/
 import '@plugin/Run/base.css';
 import '@plugin/Run/color.css';
@@ -29,3 +29,10 @@ import '@plugin/MultipleTab/js/MultipleTab.js';
 import '@plugin/Uploader/js/Uploader.js';
 
 import '@plugin/SmallJs/SmallJs.js';
+
+/**
+ * 第三方插件
+ */
+import SparkMD5 from 'spark-md5/spark-md5.min.js';
+
+window.SparkMD5 = SparkMD5;

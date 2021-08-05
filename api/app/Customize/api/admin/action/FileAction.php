@@ -188,6 +188,7 @@ class FileAction extends Action
             'size' => 'required' ,
             'total' => 'required' ,
             'index' => 'required' ,
+            'md5' => 'required' ,
         ]);
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
@@ -212,8 +213,13 @@ class FileAction extends Action
                 // 首个块文件且目标文件存在，则删除（之前失败导致过）
                 unlink($target);
             }
+            $content = $file->getContent();
+            $content_md5 = md5($content);
+            if ($content_md5 !== $param['md5']) {
+                return self::error("块MD5校验失败【客户端：{$param['md5']}】【服务端：{$content_md5}】");
+            }
             // 合并块
-            file_put_contents($target , $file->getContent() , FILE_APPEND);
+            file_put_contents($target , $content , FILE_APPEND);
             ResourceRepository::create('' , $target , 'local' , 0 , 0);
             if ($param['index'] < $param['total']) {
                 // 仍是块结构

@@ -44,6 +44,25 @@
                     ></i-input>
                 </my-search-form-item>
 
+                <my-search-form-item name="审核状态">
+                    <i-select v-model="search.status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.videoProject.status" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
+                <my-search-form-item name="文件处理状态">
+                    <i-select v-model="search.file_process_status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.videoProject.fileProcessStatus" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
+                <my-search-form-item name="完结状态">
+                    <i-select v-model="search.end_status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.videoProject.endStatus" :key="k" :value="k">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
+
                 <my-search-form-item :show-separator="false">
                     <my-table-button @click="searchEvent"><my-icon icon="search" mode="right" />搜索</my-table-button>
                     <my-table-button @click="resetEvent" class="m-l-10"><my-icon icon="reset" mode="right" />重置</my-table-button>

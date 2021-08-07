@@ -14,7 +14,7 @@
                         <tr :class="{error: myValue.error.path}">
                             <td>目录真实路径</td>
                             <td>
-                                <input type="text" v-model="form.path" @input="myValue.error.path = ''" class="form-text">
+                                <input type="text" v-model="form.path" @input="myValue.error.path = ''" class="form-text run-cursor-not-allow" readonly>
                                 <span class="need">*</span>
                                 <div class="m-t-5"><i-button v-ripple @click="showResourceSelector">资源管理器</i-button></div>
                                 <div class="msg">例如：windows: d:/test ；linux: /myself/resource</div>

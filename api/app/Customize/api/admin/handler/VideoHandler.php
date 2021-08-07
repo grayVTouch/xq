@@ -33,6 +33,7 @@ class VideoHandler extends Handler
         $model->__status__            = get_config_key_mapping_value('business.status_for_video' , $model->status);
         $model->__video_process_status__    = get_config_key_mapping_value('business.video_process_status' , $model->video_process_status);
         $model->__file_process_status__    = get_config_key_mapping_value('business.video_file_process_status' , $model->file_process_status);
+        $model->__thumb__  = empty($model->thumb) ? $model->thumb_for_program : $model->thumb;
 
         return $model;
     }

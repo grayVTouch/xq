@@ -52,6 +52,8 @@ class VideoModel extends Model
         $filter['video_project_id']     = $filter['video_project_id'] ?? '';
         $filter['type']         = $filter['type'] ?? '';
         $filter['status']       = $filter['status'] ?? '';
+        $filter['file_process_status']       = $filter['file_process_status'] ?? '';
+        $filter['video_process_status']       = $filter['video_process_status'] ?? '';
 
         $order['field'] = $order['field'] ?? 'id';
         $order['value'] = $order['value'] ?? 'desc';
@@ -88,6 +90,14 @@ class VideoModel extends Model
 
         if ($filter['status'] !== '') {
             $where[] = ['status' , '=' , $filter['status']];
+        }
+
+        if ($filter['file_process_status'] !== '') {
+            $where[] = ['file_process_status' , '=' , $filter['file_process_status']];
+        }
+
+        if ($filter['video_process_status'] !== '') {
+            $where[] = ['video_process_status' , '=' , $filter['video_process_status']];
         }
 
         return self::with($relation)

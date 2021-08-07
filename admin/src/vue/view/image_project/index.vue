@@ -53,11 +53,18 @@
                     ></i-input>
                 </my-search-form-item>
 
-                <my-search-form-item name="状态">
-                    <i-radio-group v-model="search.status">
-                        <i-radio v-for="(v,k) in TopContext.business.imageProject.status" :key="k" :label="parseInt(k)">{{ v }}</i-radio>
-                    </i-radio-group>
+                <my-search-form-item name="审核状态">
+                    <i-select v-model="search.status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.imageProject.status" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
                 </my-search-form-item>
+
+                <my-search-form-item name="处理状态">
+                    <i-select v-model="search.file_process_status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.imageProject.processStatus" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
 
                 <my-search-form-item :show-separator="false">
                     <my-table-button @click="searchEvent"><my-icon icon="search" mode="right" />搜索</my-table-button>

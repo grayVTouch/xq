@@ -22,6 +22,7 @@ class ImageProject extends Base
         $param['image_subject_id']   = $param['image_subject_id'] ?? '';
         $param['type']         = $param['type'] ?? '';
         $param['status']       = $param['status'] ?? '';
+        $param['process_status'] = $param['process_status'] ?? '';
         $param['order']        = $param['order'] ?? '';
         $param['size']        = $param['size'] ?? '';
 

@@ -63,6 +63,28 @@
                             </table>
                         </div>
 
+                        <div class="block m-t-10">
+                            <div class="run-title">
+                                <div class="left">代理设置</div>
+                                <div class="right"></div>
+                            </div>
+                            <table class="input-table">
+                                <tbody>
+
+                                <tr :class="{error: myValue.error.proxy_pass}">
+                                    <td>http(s)代理设置</td>
+                                    <td>
+                                        <input type="text" class="form-text" v-model="systemSettings.proxy_pass">
+                                        <span class="need"></span>
+                                        <div class="msg">范例：http://127.0.0.1:10009</div>
+                                        <div class="e-msg">{{ myValue.error.proxy_pass }}</div>
+                                    </td>
+                                </tr>
+
+                                </tbody>
+                            </table>
+                        </div>
+
                         <div class="actions m-t-10">
                             <i-button
                                     type="primary"

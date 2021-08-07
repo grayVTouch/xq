@@ -4,8 +4,7 @@
 <!--        <option v-for="v in data" :value="v[attr.id]" :key="v[attr.id]">{{ v[attr.name] }}</option>-->
 <!--    </select>-->
 
-    <i-select v-model="valueCopy" :class="className" filterable @on-change="changeEvent" :style="`width: ${width}px`" :disabled="disabled">
-        <i-option v-if="clear" value="">所有</i-option>
+    <i-select v-model="valueCopy" :class="className" filterable @on-change="changeEvent" :style="`width: ${width}px`" :disabled="disabled" :clearable="clearable">
         <i-option v-for="v in data" :value="v[attr.id]" :key="v[attr.id]">{{ v[attr.name] }}</i-option>
     </i-select>
 </template>
@@ -60,7 +59,7 @@
                 default: false ,
             } ,
 
-            clear: {
+            clearable : {
                 type: Boolean ,
                 default: false ,
             } ,

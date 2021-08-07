@@ -15,6 +15,7 @@ use App\Http\Controllers\api\admin\Misc;
 use App\Http\Controllers\api\admin\Module;
 use App\Http\Controllers\api\admin\Nav;
 use App\Http\Controllers\api\admin\Pannel;
+use App\Http\Controllers\api\admin\Pornhub;
 use App\Http\Controllers\api\admin\Position;
 use App\Http\Controllers\api\admin\Region;
 use App\Http\Controllers\api\admin\Role;
@@ -27,6 +28,7 @@ use App\Http\Controllers\api\admin\VideoCompany;
 use App\Http\Controllers\api\admin\VideoProject;
 use App\Http\Controllers\api\admin\VideoSeries;
 use App\Http\Controllers\api\admin\VideoSubtitle;
+use App\Http\Controllers\api\admin\Xvideos;
 use Illuminate\Support\Facades\Route;
 
 
@@ -394,6 +396,13 @@ Route::prefix('admin')
             Route::get('common_settings' , [SystemSettings::class , 'data']);
             Route::put('common_settings' , [SystemSettings::class , 'update']);
 
+            /**
+             * 下载内容
+             */
+            Route::post('parse_pornhub_video' , [Pornhub::class , 'parse']);
+            Route::post('download_pornhub_video' , [Pornhub::class , 'download']);
 
+            Route::post('parse_xvideos_video' , [Xvideos::class , 'parse']);
+            Route::post('download_xvideos_video' , [Xvideos::class , 'download']);
         });
     });

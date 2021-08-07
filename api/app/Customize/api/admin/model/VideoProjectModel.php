@@ -50,6 +50,9 @@ class VideoProjectModel extends Model
         $filter['category_id']  = $filter['category_id'] ?? '';
         $filter['video_series_id']  = $filter['video_series_id'] ?? '';
         $filter['video_company_id'] = $filter['video_company_id'] ?? '';
+        $filter['status'] = $filter['status'] ?? '';
+        $filter['file_process_status'] = $filter['file_process_status'] ?? '';
+        $filter['end_status'] = $filter['end_status'] ?? '';
 
         $order['field'] = $order['field'] ?? 'id';
         $order['value'] = $order['value'] ?? 'desc';
@@ -78,6 +81,18 @@ class VideoProjectModel extends Model
 
         if ($filter['video_company_id'] !== '') {
             $where[] = ['video_company_id' , '=' , $filter['video_company_id']];
+        }
+
+        if ($filter['file_process_status'] !== '') {
+            $where[] = ['file_process_status' , '=' , $filter['file_process_status']];
+        }
+
+        if ($filter['end_status'] !== '') {
+            $where[] = ['end_status' , '=' , $filter['end_status']];
+        }
+
+        if ($filter['status'] !== '') {
+            $where[] = ['status' , '=' , $filter['status']];
         }
 
         return self::with($relation)

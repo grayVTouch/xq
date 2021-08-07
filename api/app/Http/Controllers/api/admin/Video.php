@@ -21,6 +21,9 @@ class video extends Base
         $param['video_project_id']     = $param['video_project_id'] ?? '';
         $param['type']         = $param['type'] ?? '';
         $param['status']       = $param['status'] ?? '';
+        $param['file_process_status']       = $param['file_process_status'] ?? '';
+        $param['video_process_status']       = $param['video_process_status'] ?? '';
+        $param['status']       = $param['status'] ?? '';
         $param['order'] = $param['order'] ?? '';
         $param['size'] = $param['size'] ?? '';
 

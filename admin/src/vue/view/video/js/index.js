@@ -46,21 +46,34 @@ export default {
                         align: TopContext.table.alignCenter,
                         fixed: 'left',
                     },
-                    // {
-                    //     title: 'id',
-                    //     key: 'id',
-                    //     minWidth: TopContext.table.id,
-                    //     align: TopContext.table.alignCenter,
-                    //     fixed: 'left',
-                    //     sortable: 'custom' ,
-                    // },
+                    {
+                        title: 'id',
+                        key: 'id',
+                        minWidth: TopContext.table.id,
+                        align: TopContext.table.alignCenter,
+                        fixed: 'left',
+                        sortable: 'custom' ,
+                    },
                     {
                         title: '名称',
                         key: 'name',
                         width: 250,
                         align: TopContext.table.alignCenter,
-                        fixed: 'left',
+                        // fixed: 'left',
                         tooltip: true,
+                    },
+                    {
+                        title: '类型',
+                        key: '__type__',
+                        minWidth: TopContext.table.type,
+                        align: TopContext.table.alignCenter
+                    },
+                    {
+                        title: '视频专题【id】',
+                        slot: 'video_project_id',
+                        minWidth: TopContext.table.name,
+                        align: TopContext.table.alignCenter,
+                        tooltip: true ,
                     },
                     {
                         title: '视频索引',
@@ -75,12 +88,12 @@ export default {
                         minWidth: TopContext.table.name,
                         align: TopContext.table.alignCenter,
                     },
-                    {
-                        title: '程序截取封面',
-                        slot: 'thumb_for_program',
-                        minWidth: TopContext.table.name,
-                        align: TopContext.table.alignCenter,
-                    },
+                    // {
+                    //     title: '程序截取封面',
+                    //     slot: 'thumb_for_program',
+                    //     minWidth: TopContext.table.name,
+                    //     align: TopContext.table.alignCenter,
+                    // },
                     {
                         title: '简略预览',
                         slot: 'simple_preview',
@@ -120,19 +133,6 @@ export default {
                         align: TopContext.table.alignCenter
                     },
                     {
-                        title: '类型',
-                        key: '__type__',
-                        minWidth: TopContext.table.type,
-                        align: TopContext.table.alignCenter
-                    },
-                    {
-                        title: '视频专题【id】',
-                        slot: 'video_project_id',
-                        minWidth: TopContext.table.name,
-                        align: TopContext.table.alignCenter,
-                        tooltip: true ,
-                    },
-                    {
                         title: '视频处理状态',
                         slot: 'video_process_status',
                         minWidth: TopContext.table.status + 30,
@@ -151,7 +151,7 @@ export default {
                         slot: 'status',
                         minWidth: TopContext.table.status,
                         align: TopContext.table.alignCenter,
-                        fixed: 'right',
+                        // fixed: 'right',
                     },
                     {
                         title: '失败原因',

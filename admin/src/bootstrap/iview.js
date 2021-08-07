@@ -27,6 +27,8 @@ import {
     Dropdown ,
     DropdownMenu ,
     DropdownItem ,
+    Anchor   ,
+    AnchorLink  ,
 } from 'view-design';
 
 
@@ -55,6 +57,8 @@ Vue.component('i-menu-item' , MenuItem);
 Vue.component('i-dropdown' , Dropdown);
 Vue.component('i-dropdown-menu' , DropdownMenu);
 Vue.component('i-dropdown-item' , DropdownItem);
+Vue.component('i-anchor' , Anchor);
+Vue.component('i-anchor-link' , AnchorLink);
 
 Vue.prototype.$Notice = Notice;
 Vue.prototype.$Modal = Modal;

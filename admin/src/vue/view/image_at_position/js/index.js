@@ -45,7 +45,7 @@ export default {
                     {
                         title: 'id' ,
                         key: 'id' ,
-                        minWidth: TopContext.table.id ,
+                        width: TopContext.table.id ,
                         align: TopContext.table.alignCenter ,
                         fixed: 'left' ,
                     } ,
@@ -54,14 +54,14 @@ export default {
                         slot: 'position_id' ,
                         minWidth: TopContext.table.name ,
                         align: TopContext.table.alignCenter ,
-                        fixed: 'left' ,
+                        // fixed: 'left' ,
                     } ,
                     {
                         title: '图片' ,
                         slot: 'src' ,
                         minWidth: TopContext.table.image ,
                         align: TopContext.table.alignCenter ,
-                        fixed: 'left' ,
+                        // fixed: 'left' ,
                     } ,
                     {
                         title: '模块【id】' ,

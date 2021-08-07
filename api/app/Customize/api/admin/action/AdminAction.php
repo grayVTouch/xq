@@ -22,6 +22,7 @@ use function api\admin\my_config_keys;
 use function api\admin\parse_order;
 use function api\admin\user;
 use function core\array_unit;
+use function core\object_to_array;
 
 class AdminAction extends Action
 {
@@ -31,15 +32,13 @@ class AdminAction extends Action
         $settings = SystemSettingsModel::first();
         return self::success('' , [
             'user' => user() ,
-            'settings' => [
+            'settings' => array_merge(object_to_array($settings) , [
                 'is_init_disk' => $disk_count > 0 ? 1 : 0 ,
-                'web_url' => $settings->web_url ,
-                'disk' => $settings->disk ,
                 'show_for_image_project_at_web' => WebRouteMappingModel::findBySymbol('ImageProject::show')->url ,
                 'show_for_video_project_at_web' => WebRouteMappingModel::findBySymbol('VideoProject::show')->url ,
                 'show_for_video_at_web' => WebRouteMappingModel::findBySymbol('Video::show')->url ,
                 'show_for_image_at_web' => WebRouteMappingModel::findBySymbol('Image::show')->url ,
-            ]
+            ]) ,
         ]);
     }
 

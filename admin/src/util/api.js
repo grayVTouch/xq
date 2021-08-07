@@ -15,6 +15,8 @@ import file from '@api/file.js';
 import job from '@api/job.js';
 import systemDisk from '@api/system_disk.js';
 import systemSettings from '@api/system_settings.js';
+import pornhub from '@api/pornhub.js';
+import xvideos from '@api/xvideos.js';
 
 /**
  * 图片
@@ -59,4 +61,6 @@ window.Api = {
     videoSubtitle ,
     job ,
     systemSettings ,
+    pornhub ,
+    xvideos ,
 };

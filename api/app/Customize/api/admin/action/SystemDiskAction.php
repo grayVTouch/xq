@@ -52,9 +52,11 @@ class SystemDiskAction extends Action
                 $total_space = format_capacity($total_space);
                 $free_space = disk_free_space($v);
                 $free_space = format_capacity($free_space);
+                $children = $res = File::getDirs($v , false);
                 $suitable_res[] = [
                     'name'          => sprintf('%30s 【总容量：%30s】 【可用容量：%30s】' , $v , $total_space , $free_space) ,
                     'path'          => format_path($v) ,
+                    'is_empty'      => (int) empty($children) ,
                 ];
             }
         } else {
@@ -62,9 +64,11 @@ class SystemDiskAction extends Action
             $res = File::getDirs($param['parent_path'] , false);
             foreach ($res as $v)
             {
+                $children = $res = File::getDirs($v , false);
                 $suitable_res[] = [
                     'name' => $v ,
                     'path' => $v ,
+                    'is_empty' => (int) empty($children) ,
                 ];
             }
         }

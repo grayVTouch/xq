@@ -39,7 +39,7 @@ const videos = {
         {
             title: 'id' ,
             key: 'id' ,
-            minWidth: TopContext.table.id ,
+            width: TopContext.table.id ,
             center: TopContext.table.alignCenter ,
             fixed: 'left' ,
         } ,
@@ -75,7 +75,7 @@ const videoSubtitles = {
         {
             title: 'id' ,
             key: 'id' ,
-            minWidth: TopContext.table.id ,
+            width: TopContext.table.id ,
             center: TopContext.table.alignCenter ,
             fixed: 'left' ,
         } ,
@@ -347,7 +347,7 @@ export default {
                 this.findById(this.id)
                     .then(() => {
                         // 做一些额外处理
-                        this.ins.thumb.render(this.form.thumb);
+                        this.ins.thumb.render(this.form.__thumb__);
 
                         this.owner                  = this.form.user ? this.form.user : G.copy(owner);
                         this.videoProject           = this.form.video_project ? this.form.video_project : G.copy(videoProject);

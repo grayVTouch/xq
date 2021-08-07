@@ -9,11 +9,8 @@ const path = require('path');
 // 目前猜测是因为没有默认导出，允许自定义接收
 // 自己需要的部分
 // const CleanWebpackPlugin = require('clean-webpack-plugin');
-
-
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
-const VueLoaderPlugin = require('vue-loader/lib/plugin');
+
 
 module.exports = {
     entry: {
@@ -22,14 +19,6 @@ module.exports = {
         app: ['@babel/polyfill' , './src/app.js']
     },
     plugins: [
-        // 这个用法错了
-        // new CleanWebpackPlugin(['compiled']),
-        new CleanWebpackPlugin({
-            // 仅删除陈旧的资源
-            cleanStaleWebpackAssets: false ,
-            // 排除
-            exclude: ['*.htaccess'] ,
-        }) ,
         new HtmlWebpackPlugin({
             title: '兴趣部落' ,
             filename: 'index.html' ,
@@ -43,7 +32,6 @@ module.exports = {
                 // resUrl: 'http://res.xq.test'
             } ,
         }) ,
-        new VueLoaderPlugin() ,
     ],
     output: {
         filename: 'js/[name]-[hash].js',

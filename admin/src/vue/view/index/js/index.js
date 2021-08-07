@@ -346,6 +346,7 @@ export default {
         // 新开一个标签页
         createTab (routeId) {
             const route = this.findRouteById(routeId);
+
             document.title = route.cn + '-' + this.myValue.title;
             if (TopContext.reuseTab) {
                 // 标签复用
@@ -358,6 +359,7 @@ export default {
             }
             const tabId = this.ins.tab.create({
                 text: route.cn ,
+                ico: route.sIco ,
                 attr: {
                     routeId ,
                 } ,

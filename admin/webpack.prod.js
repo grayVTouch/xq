@@ -4,6 +4,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
+const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 module.exports = merge(common, {
     mode: 'production' ,
@@ -12,15 +13,21 @@ module.exports = merge(common, {
         minimizer: [new TerserPlugin()],
     },
     plugins: [
-        new MiniCssExtractPlugin({
-            filename: "css/[name]-[hash].css",
-            chunkFilename: "css/chunk-[name]-[hash].css"
+        new CleanWebpackPlugin({
+            // 仅删除陈旧的资源
+            cleanStaleWebpackAssets: false ,
+            // 排除
+            exclude: ['*.htaccess'] ,
         }) ,
         // 包体积分析工具
         new BundleAnalyzerPlugin({
             analyzerMode: 'static',
             reportFilename: 'BundleReport.html',
             logLevel: 'info'
+        }) ,
+        new MiniCssExtractPlugin({
+            filename: "css/[name]-[hash].css",
+            chunkFilename: "css/chunk-[name]-[hash].css"
         }) ,
         // 压缩包体积
         new CompressionPlugin({

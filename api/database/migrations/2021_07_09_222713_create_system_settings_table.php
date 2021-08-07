@@ -25,6 +25,7 @@ class CreateSystemSettingsTable extends Migration
             $table->string('aliyun_endpoint' , 255)->default('')->comment('阿里云 endpoint');
             $table->string('aliyun_bucket' , 255)->default('')->comment('阿里云 bucket');
             $table->string('disk' , 255)->default('local')->comment('存储介质：local-本地磁盘 aliyun-阿里云');
+            $table->string('proxy_pass' , 255)->default('')->comment('默认-代理地址');
 
             $table->timestamps();
 

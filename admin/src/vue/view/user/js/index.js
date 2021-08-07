@@ -39,7 +39,7 @@ export default {
                     {
                         title: 'id' ,
                         key: 'id' ,
-                        minWidth: TopContext.table.id ,
+                        width: TopContext.table.id ,
                         align: TopContext.table.alignCenter ,
                         sortable: 'custom' ,
                         fixed: 'left' ,

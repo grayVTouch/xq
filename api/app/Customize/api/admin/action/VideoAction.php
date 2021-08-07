@@ -140,22 +140,25 @@ class VideoAction extends Action
             $param['video_project_id']  = 0;
             $param['index']             = 0;
         }
-//        $my_video_subtitles = VideoSubtitleModel::getByVideoId($video->id);
         $video_subtitles = $param['video_subtitles'] === '' ? [] : json_decode($param['video_subtitles'] , true);
-//        if ($param['merge_video_subtitle'] == 1) {
-//            if ($my_video_subtitles->isEmpty()) {
-//                if (empty($video_subtitles)) {
-//                    return self::error('请提供要合并的字幕文件');
-//                }
-//                if (count($video_subtitles) > 1) {
-//                    return self::error('请仅提供单个字幕文件');
-//                }
-//            } else {
-//                if (!empty($video_subtitles)) {
-//                    return self::error('已经存在字幕文件，请勿在添加！');
-//                }
-//            }
-//        }
+        if ($param['merge_video_subtitle'] == 1) {
+            if ($video->merge_video_subtitle_status != 1) {
+                // 此前未合并过字幕，进行判断
+                $my_video_subtitles = VideoSubtitleModel::getByVideoId($video->id);
+                if ($my_video_subtitles->isEmpty()) {
+                    if (empty($video_subtitles)) {
+                        return self::error('请提供要合并的字幕文件');
+                    }
+                    if (count($video_subtitles) > 1) {
+                        return self::error('请仅提供单个字幕文件');
+                    }
+                } else {
+                    if (!empty($video_subtitles)) {
+                        return self::error('已经存在字幕文件，请勿在添加！');
+                    }
+                }
+            }
+        }
         $user = UserModel::find($param['user_id']);
         if (empty($user)) {
             return self::error('用户不存在');
@@ -196,6 +199,9 @@ class VideoAction extends Action
                 $param['video_process_status']  = 0;
                 $is_video_need_handle           = true;
             }
+            if ($param['merge_video_subtitle'] != $video->merge_video_subtitle) {
+                $param['merge_video_subtitle_status']  = 0;
+            }
             VideoModel::updateById($video->id , array_unit($param , [
                 'name' ,
                 'user_id' ,
@@ -213,6 +219,7 @@ class VideoAction extends Action
                 'praise_count' ,
                 'against_count' ,
                 'merge_video_subtitle' ,
+                'merge_video_subtitle_status' ,
                 'status' ,
                 'fail_reason' ,
                 'video_process_status' ,
@@ -359,6 +366,7 @@ class VideoAction extends Action
         $param['created_at']    = $param['created_at'] === '' ? $datetime : $param['created_at'];
         $param['video_process_status']  = 0;
         $param['file_process_status']   = 0;
+        $param['merge_video_subtitle_status']   = 0;
         try {
             DB::beginTransaction();
             $video_id = VideoModel::insertGetId(array_unit($param , [
@@ -379,6 +387,7 @@ class VideoAction extends Action
                 'against_count' ,
                 'status' ,
                 'merge_video_subtitle' ,
+                'merge_video_subtitle_status' ,
                 'fail_reason' ,
                 'video_process_status' ,
                 'file_process_status' ,

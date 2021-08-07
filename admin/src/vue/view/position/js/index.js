@@ -41,7 +41,7 @@ export default {
                     {
                         title: 'id' ,
                         key: 'id' ,
-                        minWidth: TopContext.table.id ,
+                        width: TopContext.table.id ,
                         align: TopContext.table.alignCenter ,
                         fixed: 'left' ,
                     } ,
@@ -50,7 +50,7 @@ export default {
                         key: 'value' ,
                         minWidth: TopContext.table.name ,
                         align: TopContext.table.alignCenter ,
-                        fixed: 'left' ,
+                        // fixed: 'left' ,
                     } ,
                     {
                         title: '名称' ,
@@ -64,7 +64,7 @@ export default {
                         key: '__platform__',
                         minWidth: TopContext.table.name ,
                         align: TopContext.table.alignCenter,
-                        fixed: 'left' ,
+                        // fixed: 'left' ,
                     },
                     {
                         title: '描述' ,

@@ -48,7 +48,7 @@ export default {
                     {
                         title: 'id' ,
                         key: 'id' ,
-                        minWidth: TopContext.table.id ,
+                        width: TopContext.table.id ,
                         align: TopContext.table.alignCenter ,
                         fixed: 'left' ,
                     } ,
@@ -56,7 +56,7 @@ export default {
                         title: '名称' ,
                         slot: 'name' ,
                         width: 600 ,
-                        fixed: 'left' ,
+                        // fixed: 'left' ,
                     } ,
                     {
                         title: '类型' ,

@@ -10,12 +10,12 @@
                 </my-search-form-item>
 
                 <my-search-form-item name="类型">
-                    <i-radio-group v-model="search.type">
-                        <i-radio v-for="(v,k) in TopContext.business.video.type" :key="k" :label="k">{{ v }}</i-radio>
-                    </i-radio-group>
+                    <i-select v-model="search.type" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.video.type" :key="k" :value="k">{{ v }}</i-option>
+                    </i-select>
                 </my-search-form-item>
 
-                <my-search-form-item name="分类" v-if="search.type === 'misc'">
+                <my-search-form-item name="分类" v-show="search.type === 'misc'">
                     <my-deep-select :data="categories" v-model="search.category_id" :has="false" empty=""></my-deep-select>
                     <my-loading v-if="myValue.pending.getCategories"></my-loading>
                     <span class="msg">请选择模块后操作</span>
@@ -51,10 +51,22 @@
                     ></i-input>
                 </my-search-form-item>
 
-                <my-search-form-item name="状态">
-                    <i-radio-group v-model="search.status">
-                        <i-radio v-for="(v,k) in TopContext.business.video.status" :key="k" :label="parseInt(k)">{{ v }}</i-radio>
-                    </i-radio-group>
+                <my-search-form-item name="审核状态">
+                    <i-select v-model="search.status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.video.status" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
+                <my-search-form-item name="视频处理状态">
+                    <i-select v-model="search.video_process_status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.video.videoProcessStatus" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
+                </my-search-form-item>
+
+                <my-search-form-item name="文件处理状态">
+                    <i-select v-model="search.file_process_status" class="w-200">
+                        <i-option v-for="(v,k) in TopContext.business.video.fileProcessStatus" :key="k" :value="parseInt(k)">{{ v }}</i-option>
+                    </i-select>
                 </my-search-form-item>
 
                 <my-search-form-item :show-separator="false">
@@ -126,8 +138,8 @@
                     @on-row-dblclick="rowDblclickEvent"
                     @on-sort-change="sortChangeEvent"
             >
-                <template v-slot:thumb="{row,index}"><my-table-image-preview :src="row.thumb"></my-table-image-preview></template>
-                <template v-slot:thumb_for_program="{row,index}"><my-table-image-preview :src="row.thumb_for_program"></my-table-image-preview></template>
+                <template v-slot:thumb="{row,index}"><my-table-image-preview :src="row.__thumb__"></my-table-image-preview></template>
+<!--                <template v-slot:thumb_for_program="{row,index}"><my-table-image-preview :src="row.thumb_for_program"></my-table-image-preview></template>-->
                 <template v-slot:simple_preview="{row,index}">
                     <my-table-video-preview :src="row.simple_preview"></my-table-video-preview>
                 </template>

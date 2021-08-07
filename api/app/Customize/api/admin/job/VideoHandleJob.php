@@ -536,6 +536,9 @@ class VideoHandleJob implements ShouldQueue
                 ResourceRepository::delete($v->src);
             }
             VideoSubtitleModel::delByVideoId($this->video->id);
+            VideoModel::updateById($this->video->id , [
+                'merge_video_subtitle_status' => 1 ,
+            ]);
         } else {
             // 字幕转换
             foreach ($this->video->video_subtitles as $v)
@@ -889,6 +892,9 @@ class VideoHandleJob implements ShouldQueue
                 ResourceRepository::delete($v->src);
             }
             VideoSubtitleModel::delByVideoId($this->video->id);
+            VideoModel::updateById($this->video->id , [
+                'merge_video_subtitle_status' => 1 ,
+            ]);
         } else {
             // 字幕转换
             foreach ($this->video->video_subtitles as $v)

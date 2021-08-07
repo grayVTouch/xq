@@ -1,4 +1,3 @@
-import MyFormButton from '../my_form_button.vue';
 
 const systemSettings = {
     disk: 'local' ,

@@ -47,6 +47,7 @@ class ImageProjectModel extends Model
         $filter['image_subject_id']   = $filter['image_subject_id'] ?? '';
         $filter['type']         = $filter['type'] ?? '';
         $filter['status']       = $filter['status'] ?? '';
+        $filter['process_status']       = $filter['process_status'] ?? '';
 
         $order['field'] = $order['field'] ?? 'id';
         $order['value'] = $order['value'] ?? 'desc';
@@ -83,6 +84,10 @@ class ImageProjectModel extends Model
 
         if ($filter['status'] !== '') {
             $where[] = ['status' , '=' , $filter['status']];
+        }
+
+        if ($filter['process_status'] !== '') {
+            $where[] = ['process_status' , '=' , $filter['process_status']];
         }
 
         return self::with($relation)

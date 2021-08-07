@@ -8,6 +8,7 @@ const tagIco = '/resource/preset/ico/tag.png';
 const userIco = '/resource/preset/ico/user.png';
 const videoIco = '/resource/preset/ico/video.png';
 const moduleIco = '/resource/preset/ico/module.png';
+const toolboxIco = '/resource/preset/ico/toolbox.png';
 
 /**
  * 侧边菜单功能
@@ -179,6 +180,17 @@ export default [
     } ,
     {
 
+        cn: '工具箱',
+        en: 'System',
+        // 路由路径
+        path: '/toolbox/index',
+        hidden: false,
+        view: true,
+        sIco: toolboxIco,
+        bIco: toolboxIco,
+        children: []
+    } ,
+    {
         cn: '系统管理' ,
         en: 'System' ,
         // 路由路径

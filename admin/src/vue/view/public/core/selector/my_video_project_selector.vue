@@ -55,7 +55,7 @@
             {
                 title: 'id' ,
                 key: 'id' ,
-                minWidth: TopContext.table.id ,
+                width: TopContext.table.id ,
                 center: TopContext.table.alignCenter ,
             } ,
             {

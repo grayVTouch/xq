@@ -5,9 +5,10 @@
 const index = () => import('@vue/view/index/index.vue');
 
 export default [
+
     {
         name: '404' ,
-        path: '/404' ,
+        path: '*' ,
         component: () => import('@vue/view/error/404.vue') ,
         async: false ,
     } ,
@@ -116,7 +117,6 @@ export default [
             } ,
         ] ,
     } ,
-
     {
         path: '/system' ,
         component: index ,
@@ -143,5 +143,14 @@ export default [
             } ,
         ] ,
     } ,
-
+    {
+        path: '/toolbox' ,
+        component: index ,
+        children: [
+            {
+                path: 'index' ,
+                component: () => import('@vue/view/toolbox/index.vue') ,
+            } ,
+        ] ,
+    } ,
 ];

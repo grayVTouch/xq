@@ -5,6 +5,7 @@ const TerserPlugin = require("terser-webpack-plugin");
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CompressionPlugin = require("compression-webpack-plugin");
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
+const VueLoaderPlugin = require('vue-loader/lib/plugin');
 
 module.exports = merge(common, {
     mode: 'production' ,
@@ -38,6 +39,7 @@ module.exports = merge(common, {
             test: /\.css$/ ,
             filename: "css/[name].gz" ,
         }),
+        new VueLoaderPlugin() ,
     ] ,
     module: {
         rules: [
@@ -45,6 +47,7 @@ module.exports = merge(common, {
                 // test: /\.s?[ac]ss$/,
                 test: /\.css$/ ,
                 use: [
+                    'vue-style-loader' ,
                     {
                         loader: MiniCssExtractPlugin.loader,
                         options: {

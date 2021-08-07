@@ -37,5 +37,4 @@ class Xvideos extends Base
         }
         return success($res['message'] , $res['data']);
     }
-
 }

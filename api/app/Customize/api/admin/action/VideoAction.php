@@ -125,6 +125,10 @@ class VideoAction extends Action
                 return self::error('索引已经存在');
             }
             $param['category_id'] = 0;
+            $index = (int) $param['index'];
+            if ($index < $video_project->min_index || $index > $video_project->max_index) {
+                return self::error("不支持的索引【{$index}】，支持的索引范围：【{$video_project->min_index} - {$video_project->max_index}】");
+            }
         } else {
             // 杂项
             if ($param['name'] === '') {
@@ -323,6 +327,11 @@ class VideoAction extends Action
             }
             $param['category_id'] = 0;
             $param['disk'] = $video_project->disk;
+            // 检查索引范围
+            $index = (int) $param['index'];
+            if ($index < $video_project->min_index || $index > $video_project->max_index) {
+                return self::error("不支持的索引【{$index}】，支持的索引范围：【{$video_project->min_index} - {$video_project->max_index}】");
+            }
         } else {
             if ($param['name'] === '') {
                 return self::error('名称尚未提供');

@@ -4,17 +4,10 @@
 namespace App\Customize\api\admin\action;
 
 use App\Customize\api\admin\job\M3U8DownloadJob;
-use App\Customize\api\admin\model\SystemSettingsModel;
-use App\Customize\api\admin\model\WebRouteMappingModel;
 use App\Http\Controllers\api\admin\Base;
 use Core\Lib\M3U8;
-use Exception;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
-use Illuminate\Validation\Rule;
-use function api\admin\my_config_keys;
 use function core\array_to_object;
-use function core\array_unit;
 
 class XvideosAction extends Action
 {

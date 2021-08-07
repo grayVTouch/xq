@@ -232,6 +232,9 @@ export default {
             myVideoSeries: G.copy(myVideoSeries) ,
 
             myVideoCompany: G.copy(myVideoCompany) ,
+
+            // 分类
+            categories: [] ,
         };
     } ,
 

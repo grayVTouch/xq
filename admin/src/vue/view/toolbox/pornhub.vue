@@ -50,7 +50,7 @@
                             <td>
                                 <input type="text" v-model="form.proxy_pass" class="form-text" @input="myValue.error.proxy_pass = ''">
                                 <i-button type="info" v-if="recentProxyPass" @click="form.proxy_pass = recentProxyPass">使用最近一次设置代理</i-button>
-<!--                                <i-button type="info" @click="form.proxy_pass = state().settings.proxy_pass">使用系统设置默认代理</i-button>-->
+                                <i-button type="info" @click="form.proxy_pass = state().settings.proxy_pass">使用系统设置默认代理</i-button>
                                 <span class="need"></span>
                                 <div class="msg">如不想用代理，则留空;范例：http://127.0.0.1:10009</div>
                                 <div class="e-msg">{{ myValue.error.proxy_pass }}</div>
@@ -100,13 +100,12 @@
             </div>
             <div class="right my-anchor">
                 <i-anchor show-ink container="#anchor-tab-content">
-                    <i-anchor-link href="#save_dir" title="第一步：选择保存目录" />
-                    <i-anchor-link href="#filename" title="第二步：可选输入文件名称" />
-                    <i-anchor-link href="#video_source" title="第三步：输入视频源，点击解析按钮" />
-                    <i-anchor-link href="#url" title="第四步：输入 url" />
-                    <i-anchor-link href="#definition" title="第五步：如果存在多画质，则选择画质；否则跳过" />
-                    <i-anchor-link href="#proxy" title="第六步：可选输入http(s)代理" />
-                    <i-anchor-link href="#download" title="第七步：点击下载开始下载" />
+                    <i-anchor-link href="#video_source" title="第一步：输入视频源，点击解析按钮" />
+                    <i-anchor-link href="#definition" title="第二步：如果存在多画质，则选择画质；否则跳过" />
+                    <i-anchor-link href="#proxy" title="第三步：可选输入http(s)代理" />
+                    <i-anchor-link href="#save_dir" title="第四步：选择保存目录" />
+                    <i-anchor-link href="#filename" title="第五步：可选输入文件名称" />
+                    <i-anchor-link href="#download" title="第六步：点击下载开始下载" />
                 </i-anchor>
             </div>
         </div>
@@ -240,6 +239,11 @@
                             this.errorHandle(res.message);
                             return ;
                         }
+                        // 重置内容
+                        this.form.src = '';
+                        this.form.definition = '';
+                        this.form.filename = '';
+                        this.definitions = [];
                         this.modal('success' , '下载任务添加成功！请到保存目录下查看');
                     })
                     .finally(() => {

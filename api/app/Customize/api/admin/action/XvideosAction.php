@@ -19,7 +19,9 @@ class XvideosAction extends Action
         if ($validator->fails()) {
             return self::error($validator->errors()->first() , $validator->errors());
         }
-        $m3u8 = new M3U8($param['src']);
+        $m3u8 = new M3U8($param['src'] , [
+            'proxy_pass' => $param['proxy_pass']
+        ]);
         $definitions = $m3u8->getDefinitions();
         $definitions = array_keys($definitions);
         return self::success('' , $definitions);

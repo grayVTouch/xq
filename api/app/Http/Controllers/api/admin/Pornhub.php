@@ -15,6 +15,7 @@ class Pornhub extends Base
     public function parse(): JsonResponse
     {
         $param = $this->request->post();
+        $param['proxy_pass']= $param['proxy_pass'] ?? '';
         $param['src']       = $param['src'] ?? '';
         $res = PornhubAction::parse($this , $param);
         if ($res['code'] != 0) {

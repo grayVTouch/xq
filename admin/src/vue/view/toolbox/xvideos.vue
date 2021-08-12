@@ -15,7 +15,8 @@
                                 <span class="need">*</span>
                                 <div class="msg">
 <pre>
-获取方式：通过 fiddler 等代理工具捕获；这边提供 fiddler 获取方式：
+获取方式1：浏览器F12打开控制台，切换到 Network 面板，过滤 m3u8
+获取方式2：通过 fiddler 等代理工具捕获；这边提供 fiddler 获取方式：
 1. 启动 fiddler ，设置全局代理
 2. 安装 https 证书
 3. filters 选项卡 -> hosts -> show only the following hosts，增加以下域名
@@ -178,7 +179,8 @@
                 this.pending('parseEvent' , true);
                 Api.xvideos
                     .parse(null , {
-                       src: this.form.src ,
+                        src: this.form.src ,
+                        proxy_pass: this.form.proxy_pass ,
                     })
                     .then((res) => {
                         if (res.code !== TopContext.code.Success) {

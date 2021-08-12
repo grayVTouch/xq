@@ -15,6 +15,7 @@ class Xvideos extends Base
     public function parse(): JsonResponse
     {
         $param = $this->request->post();
+        $param['proxy_pass']= $param['proxy_pass'] ?? '';
         $param['src']       = $param['src'] ?? '';
         $res = XvideosAction::parse($this , $param);
         if ($res['code'] != 0) {

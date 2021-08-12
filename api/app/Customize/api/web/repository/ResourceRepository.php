@@ -42,7 +42,7 @@ class ResourceRepository
             'path'          => $path ,
             'disk'          => $disk ,
             'is_used'       => $is_used ,
-            'is_deleted'    => $is_deleted ,
+            'status'    => 0 ,
             'updated_at'    => $datetime ,
         ]);
     }

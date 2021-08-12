@@ -32,6 +32,7 @@ import videoProject from '@api/video_project.js';
 import videoSeries from '@api/video_series.js';
 import videoCompany from '@api/video_company.js';
 import videoSubtitle from '@api/video_subtitle.js';
+import videoSubject from '@api/video_subject.js';
 
 import imageAtPosition from '@api/image_at_position.js';
 
@@ -53,6 +54,7 @@ window.Api = {
     video ,
     videoProject ,
     videoSeries ,
+    videoSubject ,
     region ,
     videoCompany ,
     pannel ,

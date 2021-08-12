@@ -209,7 +209,9 @@
                         </div>
                         <div class="list run-tags horizontal" :class="{loading: val.pending.getTags}">
                             <div class="mask" v-if="val.pending.getTags"><my-loading></my-loading></div>
-                            <div class="empty" v-if="!val.pending.getTags && tags.total <= 0">暂无相关记录</div>
+                            <div class="empty" v-if="!val.pending.getTags && tags.total <= 0">
+                                <my-icon icon="empty" size="40"></my-icon>
+                            </div>
                             <my-button class="tag" v-for="v in tags.data" :class="{selected: tags.selectedIds.indexOf(v.tag_id) >= 0}" :key="v.id" @click="filterByTag(v)">{{ v.name }}</my-button>
                         </div>
                         <div class="pager" v-if="tags.total > 0">

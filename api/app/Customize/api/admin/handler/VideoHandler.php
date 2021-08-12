@@ -10,6 +10,7 @@ use App\Customize\api\admin\model\RelationTagModel;
 use App\Customize\api\admin\model\VideoSrcModel;
 use App\Customize\api\admin\model\VideoProjectModel;
 use App\Customize\api\admin\model\UserModel;
+use App\Customize\api\admin\model\VideoSubjectModel;
 use App\Customize\api\admin\model\VideoSubtitleModel;
 use App\Customize\api\admin\model\Model;
 use stdClass;
@@ -114,5 +115,15 @@ class VideoHandler extends Handler
         }
         $tags = RelationTagModel::getByRelationTypeAndRelationId('video' , $model->id);
         $model->tags = $tags;
+    }
+
+    public static function videoSubject($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $video_subject = property_exists($model , 'video_subject') ? $model->video_subject : VideoSubjectModel::find($model->video_subject_id);
+        $video_subject = VideoSubjectHandler::handle($video_subject);
+        $model->video_subject = $video_subject;
     }
 }

@@ -44,6 +44,17 @@
                     ></i-input>
                 </my-search-form-item>
 
+                <my-search-form-item name="视频主体">
+                    <i-input
+                            :value="myVideoSubject.id > 0 ? `${myVideoSubject.name}【${myVideoSubject.id}】` : ''"
+                            class="w-200 run-cursor"
+                            suffix="ios-search"
+                            placeholder="请选择"
+                            :readonly="true"
+                            @click.native="openVideoSubjectSelector"
+                    ></i-input>
+                </my-search-form-item>
+
                 <my-search-form-item name="审核状态">
                     <i-select v-model="search.status" class="w-200">
                         <i-option v-for="(v,k) in TopContext.business.videoProject.status" :key="k" :value="parseInt(k)">{{ v }}</i-option>
@@ -120,6 +131,7 @@
                 <template v-slot:category_id="{row,index}">{{ row.category ? `${row.category.name}【${row.category.id}】` : `unknow【${row.category_id}】` }}</template>
                 <template v-slot:video_series_id="{row,index}">{{ row.video_series ? `${row.video_series.name}【${row.video_series.id}】` : `unknow【${row.video_series_id}】` }}</template>
                 <template v-slot:video_company_id="{row,index}">{{ row.video_company ? `${row.video_company.name}【${row.video_company.id}】` : `unknow【${row.video_company_id}】` }}</template>
+                <template v-slot:video_subject_id="{row,index}">{{ row.video_subject ? `${row.video_subject.name}【${row.video_subject.id}】` : `unknow【${row.video_subject_id}】` }}</template>
                 <template v-slot:user_id="{row,index}">{{ row.user ? `${row.user.username}【${row.user.id}】` : `unknow【${row.user_id}】` }}</template>
                 <template v-slot:status="{row,index}"><b :class="{'run-red': row.status === -1 , 'run-gray': row.status === 0 , 'run-green': row.status === 1}">{{ row.__status__ }}</b></template>
                 <template v-slot:end_status="{row,index}"><b :class="{'run-red': row.end_status === 'making' , 'run-gray': row.end_status === 'terminated' , 'run-green': row.end_status === 'completed'}">{{ row.__end_status__ }}</b></template>
@@ -169,6 +181,12 @@
                 :module-id="search.module_id"
                 @on-change="videoCompanyChangedEvent"
         ></my-video-company-selector>
+
+        <my-video-subject-selector
+                ref="video-subject-selector"
+                :module-id="search.module_id"
+                @on-change="videoSubjectChangedEvent"
+        ></my-video-subject-selector>
     </my-base>
 </template>
 

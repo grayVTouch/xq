@@ -23,8 +23,7 @@ const imageSubjects = {
     selectedIds: [] ,
     data: [] ,
     page: 1 ,
-    size: TopContext.size ,
-    sizes: TopContext.sizes ,
+    size: 12 ,
     total: 0 ,
     value: '' ,
 };
@@ -553,6 +552,7 @@ export default {
                     this.imageSubjects.total = data.total;
                     this.imageSubjects.page = data.current_page;
                     this.imageSubjects.maxPage = data.last_page;
+                    this.imageSubjects.size = data.per_page;
                     this.imageSubjects.data = data.data;
                 })
                 .finally(() => {

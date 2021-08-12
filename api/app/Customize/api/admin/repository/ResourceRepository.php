@@ -36,6 +36,7 @@ class ResourceRepository
                 'is_used'       => $is_used ,
                 'is_deleted'    => $is_deleted ,
                 'aliyun_bucket'    => $aliyun_bucket ,
+                'status'        => 0 ,
                 'created_at'    => $datetime ,
             ]);
             return ;
@@ -45,6 +46,7 @@ class ResourceRepository
             'disk'          => $disk ,
             'is_used'       => $is_used ,
             'is_deleted'    => $is_deleted ,
+            'status'    => 0 ,
             'aliyun_bucket'    => $aliyun_bucket ,
             'updated_at'    => $datetime ,
         ]);

@@ -23,8 +23,7 @@ const videoSeries = {
     selectedIds: [] ,
     data: [] ,
     page: 1 ,
-    size: TopContext.size ,
-    sizes: TopContext.sizes ,
+    size: 12 ,
     total: 0 ,
     value: '' ,
 };
@@ -34,8 +33,7 @@ const videoCompanies = {
     selectedIds: [] ,
     data: [] ,
     page: 1 ,
-    size: TopContext.size ,
-    sizes: TopContext.sizes ,
+    size: 12 ,
     total: 0 ,
     value: '' ,
 };

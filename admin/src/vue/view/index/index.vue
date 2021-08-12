@@ -69,7 +69,7 @@
                                     <my-icon icon="qingkong"></my-icon>
                                 </div>
                             </Tooltip>
-                            <Tooltip content="重试失败队列">
+                            <Tooltip content="重试失败队列" v-if="false">
                                 <div v-ripple @click="retryFailedJobs">
                                     <my-icon icon="lianjie1"></my-icon>
                                 </div>

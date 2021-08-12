@@ -29,6 +29,7 @@ use App\Customize\api\admin\repository\FileRepository;
 use function api\admin\my_config;
 use function core\random;
 use function core\detect_encoding;
+use function core\remove_bom_header;
 
 class VideoHandleJob implements ShouldQueue
 {
@@ -222,12 +223,15 @@ class VideoHandleJob implements ShouldQueue
          */
         if ($merge_video_subtitle) {
             $origin_str = file_get_contents($first_video_subtitle_resource->path);
+            $origin_str = remove_bom_header($origin_str);
             $from_encoding = detect_encoding($origin_str);
             $to_encoding = 'UTF-8';
             if ($from_encoding !== $to_encoding) {
                 $convert_str = mb_convert_encoding($origin_str , $to_encoding , $from_encoding);
                 // 覆盖内容
                 file_put_contents($first_video_subtitle_resource->path , $convert_str);
+            } else {
+                file_put_contents($first_video_subtitle_resource->path , $origin_str);
             }
         }
 
@@ -420,10 +424,14 @@ class VideoHandleJob implements ShouldQueue
         }
         foreach ($video_transcoding_config['specification'] as $k => $v)
         {
-            if ($video_info['width'] < $v['w']) {
+            if ($video_info['height'] < $v['h']) {
                 continue ;
             }
-            if ($max_video_transcode_specification['w'] === $v['w']) {
+            // 特别 - 宽高必须是偶数
+            $adjust_h = $v['h'];
+            // 找到最接近的偶数 - ffmpeg h.264 格式的视频处理要求 宽高都必须是 2 的倍数
+            $adjust_w = ceil($adjust_h / $video_info['height'] * $video_info['width'] / 2) * 2;
+            if (!empty($max_video_transcode_specification) && $max_video_transcode_specification['w'] === $v['w']) {
                 $max_definition = [
                     'name'       => $k ,
                     'definition' => $v ,
@@ -439,11 +447,12 @@ class VideoHandleJob implements ShouldQueue
             if (File::exists($transcoded_file)) {
                 File::delete($transcoded_file);
             }
-            $ffmpeg = FFmpeg::create()->input($video_resource->path);
+            $ffmpeg = FFmpeg::create()
+                ->input($video_resource->path);
             if ($merge_video_subtitle) {
                 $ffmpeg->subtitle($first_video_subtitle_resource->path);
             }
-            $ffmpeg->size($v['w'] , $v['h'])
+            $ffmpeg->size($adjust_w , $adjust_h)
                 ->codec($video_transcoding_config['codec'] , 'video')
                 ->save($transcoded_file);
             ResourceRepository::create('' , $transcoded_file , 'local' , 0 , 0);
@@ -613,12 +622,15 @@ class VideoHandleJob implements ShouldQueue
          */
         if ($merge_video_subtitle) {
             $origin_str = file_get_contents($first_video_subtitle_resource->path);
+            $origin_str = remove_bom_header($origin_str);
             $from_encoding = detect_encoding($origin_str);
             $to_encoding = 'UTF-8';
             if ($from_encoding !== $to_encoding) {
                 $convert_str = mb_convert_encoding($origin_str , $to_encoding , $from_encoding);
                 // 覆盖内容
                 file_put_contents($first_video_subtitle_resource->path , $convert_str);
+            } else {
+                file_put_contents($first_video_subtitle_resource->path , $origin_str);
             }
         }
         /**
@@ -784,15 +796,19 @@ class VideoHandleJob implements ShouldQueue
         $video_transcode_specification = array_filter($video_transcode_specification , function($v) use($video_info){
             return $video_info['width'] >= $v['w'];
         });
+        $max_video_transcode_specification = null;
         if (count($video_transcode_specification) > 0) {
             $max_video_transcode_specification = $video_transcode_specification[0];
         }
         foreach ($video_transcoding_config['specification'] as $k => $v)
         {
-            if ($video_info['width'] < $v['w']) {
+            if ($video_info['height'] < $v['h']) {
                 continue ;
             }
-            if ($max_video_transcode_specification['w'] === $v['w']) {
+            $adjust_h = $v['h'];
+            // 找到最接近的偶数 - ffmpeg h.264 格式的视频处理要求 宽高都必须是 2 的倍数
+            $adjust_w = ceil($adjust_h / $video_info['height'] * $video_info['width'] / 2) * 2;
+            if (!empty($max_video_transcode_specification) && $max_video_transcode_specification['w'] === $v['w']) {
                 $max_definition = [
                     'name'       => $k ,
                     'definition' => $v ,
@@ -808,12 +824,12 @@ class VideoHandleJob implements ShouldQueue
             if (File::exists($transcoded_file)) {
                 File::delete($transcoded_file);
             }
-
             $ffmpeg = FFmpeg::create()->input($video_resource->path);
             if ($merge_video_subtitle) {
                 $ffmpeg->subtitle($first_video_subtitle_resource->path);
             }
-            $ffmpeg->size($v['w'] , $v['h'])
+
+            $ffmpeg->size($adjust_w , $adjust_h)
                 ->codec($video_transcoding_config['codec'] , 'video')
                 ->save($transcoded_file);
             $info = FFprobe::create($transcoded_file)->coreInfo();

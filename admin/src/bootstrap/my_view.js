@@ -15,6 +15,7 @@ import myTableImagePreviewByButton from '@vue/view/public/common/my_table_image_
 import myTableVideoPreview from '@vue/view/public/common/my_table_video_preview.vue';
 import myUserSelector from '@vue/view/public/core/selector/my_user_selector.vue';
 import myImageSubjectSelector from '@vue/view/public/core/selector/my_image_subject_selector.vue';
+import myVideoSubjectSelector from '@vue/view/public/core/selector/my_video_subject_selector.vue';
 import myCountrySelector from '@vue/view/public/core/selector/my_country_selector.vue';
 import myVideoSeriesSelector from '@vue/view/public/core/selector/my_video_series_selector.vue';
 import myVideoCompanySelector from '@vue/view/public/core/selector/my_video_company_selector.vue';
@@ -46,6 +47,7 @@ Vue.component('my-table-text' , myTableText);
 
 Vue.component('my-user-selector' , myUserSelector);
 Vue.component('my-image-subject-selector' , myImageSubjectSelector);
+Vue.component('my-video-subject-selector' , myVideoSubjectSelector);
 Vue.component('my-country-selector' , myCountrySelector);
 Vue.component('my-video-series-selector' , myVideoSeriesSelector);
 Vue.component('my-video-company-selector' , myVideoCompanySelector);

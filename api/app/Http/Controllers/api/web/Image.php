@@ -64,6 +64,19 @@ class Image extends Base
         return success($res['message'] , $res['data']);
     }
 
+    public function hotTagsWithPager()
+    {
+        $param = $this->request->query();
+        $param['module_id'] = $param['module_id'] ?? '';
+        $param['size'] = $param['size'] ?? '';
+        $param['value'] = $param['value'] ?? '';
+        $res = ImageAction::hotTagsWithPager($this , $param);
+        if ($res['code'] !== 0) {
+            return error($res['message'] , $res['data'], $res['code']);
+        }
+        return success($res['message'] , $res['data']);
+    }
+
     public function show($id)
     {
         $param = $this->request->query();

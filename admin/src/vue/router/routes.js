@@ -78,6 +78,10 @@ export default [
                 component: () => import('@vue/view/video_company/index.vue') ,
             } ,
             {
+                path: 'subject' ,
+                component: () => import('@vue/view/video_subject/index.vue') ,
+            } ,
+            {
                 path: 'project' ,
                 component: () => import('@vue/view/video_project/index.vue') ,
             } ,

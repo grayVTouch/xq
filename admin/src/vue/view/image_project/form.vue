@@ -157,7 +157,7 @@
                                                             <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                                                             <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                                                         </div>
-                                                        <div class="text">请选择要上传的文件</div>
+                                                        <div class="text">请选择要上传的文件或拖拽文件到此</div>
                                                     </div>
 
                                                 </div>
@@ -274,7 +274,7 @@
                                                                         <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                                                                         <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                                                                     </div>
-                                                                    <div class="text">请选择要上传的文件</div>
+                                                                    <div class="text">请选择要上传的文件或拖拽文件到此</div>
                                                                 </div>
 
                                                             </div>

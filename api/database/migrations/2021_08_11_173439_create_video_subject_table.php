@@ -5,10 +5,9 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 
-class CreateImageSubjectTable extends Migration
+class CreateVideoSubjectTable extends Migration
 {
-
-    public $table = 'xq_image_subject';
+    public $table = 'xq_video_subject';
 
     /**
      * Run the migrations.
@@ -32,14 +31,13 @@ class CreateImageSubjectTable extends Migration
 
             $table->timestamps();
 
-
             $table->unique('name');
 
             $table->engine = 'InnoDB';
             $table->charset = 'utf8mb4';
             $table->collation = 'utf8mb4_unicode_ci';
         });
-        DB::statement("alter table {$this->table} comment '图片 - 主体表'");
+        DB::statement("alter table {$this->table} comment '视频 - 主体表'");
     }
 
     /**

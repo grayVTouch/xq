@@ -230,6 +230,7 @@
                     <div class="pager">
                         <my-page
                                 class="run-page-center"
+                                :show-sizes="false"
                                 :total="imageSubjects.total"
                                 :size="imageSubjects.size"
                                 :sizes="imageSubjects.sizes"

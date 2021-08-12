@@ -12,6 +12,7 @@ use App\Customize\api\admin\model\VideoCompanyModel;
 use App\Customize\api\admin\model\VideoModel;
 use App\Customize\api\admin\model\VideoSeriesModel;
 use App\Customize\api\admin\model\Model;
+use App\Customize\api\admin\model\VideoSubjectModel;
 use stdClass;
 
 use function api\admin\get_config_key_mapping_value;
@@ -75,6 +76,15 @@ class VideoProjectHandler extends Handler
         $model->video_company = $video_company;
     }
 
+    public static function videoSubject($model): void
+    {
+        if (empty($model)) {
+            return ;
+        }
+        $video_subject = property_exists($model , 'video_subject') ? $model->video_subject : VideoSubjectModel::find($model->video_subject_id);
+        $video_subject = VideoSubjectHandler::handle($video_subject);
+        $model->video_subject = $video_subject;
+    }
 
     public static function category($model): void
     {

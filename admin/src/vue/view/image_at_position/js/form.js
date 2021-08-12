@@ -101,6 +101,7 @@ export default {
                 api: this.imageApi(true) ,
                 mode: 'override' ,
                 clear: true ,
+                mimeLimit: 'image' ,
                 uploaded (file , data , code) {
                     if (code !== TopContext.code.Success) {
                         this.status(file.id , false);

@@ -32,6 +32,11 @@ class VideoModel extends Model
         return $this->belongsTo(VideoProjectModel::class , 'video_project_id' , 'id');
     }
 
+    public function videoSubject()
+    {
+        return $this->belongsTo(VideoSubjectModel::class , 'video_subject_id' , 'id');
+    }
+
     public function videos()
     {
         return $this->hasMany(VideoSrcModel::class , 'video_id' , 'id');
@@ -50,6 +55,7 @@ class VideoModel extends Model
         $filter['module_id']    = $filter['module_id'] ?? '';
         $filter['category_id']          = $filter['category_id'] ?? '';
         $filter['video_project_id']     = $filter['video_project_id'] ?? '';
+        $filter['video_subject_id']     = $filter['video_subject_id'] ?? '';
         $filter['type']         = $filter['type'] ?? '';
         $filter['status']       = $filter['status'] ?? '';
         $filter['file_process_status']       = $filter['file_process_status'] ?? '';
@@ -82,6 +88,10 @@ class VideoModel extends Model
 
         if ($filter['video_project_id'] !== '') {
             $where[] = ['video_project_id' , '=' , $filter['video_project_id']];
+        }
+
+        if ($filter['video_subject_id'] !== '') {
+            $where[] = ['video_subject_id' , '=' , $filter['video_subject_id']];
         }
 
         if ($filter['type'] !== '') {

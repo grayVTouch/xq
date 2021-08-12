@@ -21,6 +21,17 @@
                     <span class="msg">请选择模块后操作</span>
                 </my-search-form-item>
 
+                <my-search-form-item name="视频主体" v-show="search.type === 'misc'">
+                    <i-input
+                            :value="videoSubject.id > 0 ? `${videoSubject.name}【${videoSubject.id}】` : ''"
+                            class="w-200 run-cursor"
+                            suffix="ios-search"
+                            placeholder="请选择"
+                            :readonly="true"
+                            @click.native="showVideoSubjectSelector"
+                    ></i-input>
+                </my-search-form-item>
+
                 <my-search-form-item name="ID">
                     <input type="text" class="form-text" v-model="search.id" />
                 </my-search-form-item>
@@ -158,6 +169,12 @@
                             name="name"
                     ></my-table-text>
                 </template>
+                <template v-slot:video_subject_id="{row,index}">
+                    <my-table-text
+                            :text="row.video_subject ? `${row.video_subject.name}【${row.video_subject.id}】` : `unknow【${row.video_subject_id}】`"
+                            name="name"
+                    ></my-table-text>
+                </template>
                 <template v-slot:category_id="{row,index}">
                     <my-table-text
                             :text="row.category ? `${row.category.name}【${row.category.id}】` : `unknow【${row.category_id}】`"
@@ -226,6 +243,12 @@
                 ref="user-selector"
                 @on-change="userChangedEvent"
         ></my-user-selector>
+
+        <my-video-subject-selector
+                ref="video-subject-selector"
+                :module-id="search.module_id"
+                @on-change="videoSubjectChangedEvent"
+        ></my-video-subject-selector>
     </my-base>
 </template>
 

@@ -32,6 +32,7 @@ class CreateVideoProjectTable extends Migration
 
             $table->string('description' , 1000)->default('')->comment('描述');
             $table->unsignedBigInteger('video_series_id')->default(0)->comment('xq_video_series.id');
+            $table->unsignedBigInteger('video_subject_id')->default(0)->comment('xq_video_subject.id');
             $table->unsignedBigInteger('category_id')->default(0)->comment('xq_category.id');
             $table->unsignedBigInteger('video_company_id')->default(0)->comment('xq_video_company.id');
             $table->unsignedBigInteger('module_id')->default(0)->comment('xq_module.id');

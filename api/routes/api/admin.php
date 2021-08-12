@@ -27,6 +27,7 @@ use App\Http\Controllers\api\admin\video;
 use App\Http\Controllers\api\admin\VideoCompany;
 use App\Http\Controllers\api\admin\VideoProject;
 use App\Http\Controllers\api\admin\VideoSeries;
+use App\Http\Controllers\api\admin\VideoSubject;
 use App\Http\Controllers\api\admin\VideoSubtitle;
 use App\Http\Controllers\api\admin\Xvideos;
 use Illuminate\Support\Facades\Route;
@@ -352,6 +353,22 @@ Route::prefix('admin')
             Route::get('month_data' , [Pannel::class , 'monthData']);
             Route::get('quarter_data' , [Pannel::class , 'quarterData']);
             Route::get('year_data' , [Pannel::class , 'yearData']);
+
+            /**
+             * ******************
+             * 视频 - 关联主体
+             * ******************
+             */
+            Route::get('video_subject'          , [VideoSubject::class , 'index']);
+            Route::get('video_subject/{id}'     , [VideoSubject::class , 'show']);
+            Route::patch('video_subject/{id}'   , [VideoSubject::class , 'localUpdate']);
+            Route::put('video_subject/{id}'     , [VideoSubject::class , 'update']);
+            Route::post('video_subject'         , [VideoSubject::class , 'store']);
+            // 特别注意，这边这个顺序不能更换
+            // 如果更换会导致 路由匹配出现不是期望的现象
+            Route::delete('destroy_all_video_subject'   , [VideoSubject::class , 'destroyAll']);
+            Route::delete('video_subject/{id}'          , [VideoSubject::class , 'destroy']);
+            Route::get('search_video_subject'           , [VideoSubject::class , 'search']);
 
             /**
              * ******************

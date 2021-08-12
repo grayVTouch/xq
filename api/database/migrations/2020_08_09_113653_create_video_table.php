@@ -24,6 +24,7 @@ class CreateVideoTable extends Migration
             $table->unsignedBigInteger('user_id')->default(0)->comment('xq_user.id');
             $table->unsignedBigInteger('module_id')->default(0)->comment('xq_module.id');
             $table->unsignedBigInteger('category_id')->default(0)->comment('xq_category.id');
+            $table->unsignedBigInteger('video_subject_id')->default(0)->comment('xq_video_subject.id，仅在 type = misc 有效');
             $table->string('thumb' , 1000)->default('')->comment('用户设置封面');
             $table->string('thumb_for_program' , 1000)->default('')->comment('程序智能截取封面');
             $table->unsignedBigInteger('praise_count')->default(0)->comment('点赞数');

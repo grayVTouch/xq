@@ -19,6 +19,7 @@ const form = {
 const owner         = {id: 0 , username: 'unknow'};
 // 所属专题
 const videoProject  = {id: 0 , name: 'unknow'};
+const videoSubject  = {id: 0 , name: 'unknow'};
 
 // 字幕
 // const subtitle = {
@@ -87,8 +88,8 @@ const videoSubtitles = {
         } ,
         {
             title: '字幕源' ,
+            slot: 'src' ,
             minWidth: TopContext.table.src ,
-            key: 'src' ,
         } ,
         {
             title: '操作' ,
@@ -123,6 +124,8 @@ export default {
 
             // 关联主体
             videoProject: G.copy(videoProject , true),
+
+            videoSubject: G.copy(videoSubject , true),
 
             // 标签
             tags: [] ,
@@ -274,6 +277,7 @@ export default {
                 api: this.thumbApi(),
                 mode: 'override' ,
                 clear: true ,
+                mimeLimit: 'image' ,
                 uploaded (file , data , code) {
                     if (code !== TopContext.code.Success) {
                         this.status(file.id , false);
@@ -292,6 +296,7 @@ export default {
                 mode: 'override' ,
                 multiple: false ,
                 clear: true ,
+                mimeLimit: 'video' ,
                 // 单位：MB
                 blockSize: 10 ,
                 // 启用分块上传
@@ -351,6 +356,7 @@ export default {
 
                         this.owner                  = this.form.user ? this.form.user : G.copy(owner);
                         this.videoProject           = this.form.video_project ? this.form.video_project : G.copy(videoProject);
+                        this.videoSubject           = this.form.video_subject ? this.form.video_subject : G.copy(videoSubject);
                         this.videos.data            = this.form.videos;
                         this.videoSubtitles.data    = this.form.video_subtitles;
 
@@ -706,6 +712,15 @@ export default {
             this.$refs['video-project-selector'].show();
         } ,
 
+        videoSubjectChangeEvent (res) {
+            this.error({video_subject_id: ''} , false);
+            this.form.video_subject_id      = res.id;
+            this.videoSubject               = res;
+        } ,
+
+        showVideoSubjectSelector () {
+            this.$refs['video-subject-selector'].show();
+        } ,
 
         isExistTagByTagId (tagId) {
             for (let i = 0; i < this.form.tags.length; ++i)

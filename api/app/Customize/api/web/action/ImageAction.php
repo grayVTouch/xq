@@ -166,6 +166,24 @@ class ImageAction extends Action
         return self::success('' , $res);
     }
 
+    public static function hotTagsWithPager(Base $context , array $param = [])
+    {
+        $validator = Validator::make($param , [
+            'module_id' => 'required|integer' ,
+        ]);
+        if ($validator->fails()) {
+            return self::error($validator->errors()->first());
+        }
+        $module = ModuleModel::find($param['module_id']);
+        if (empty($module)) {
+            return self::error('模块不存在');
+        }
+        $size = $param['size'] === '' ? my_config('app.limit') : $param['size'];
+        $res = RelationTagModel::hotTagsWithPagerInImageByValueAndFilterAndSize($param['value'] , $param , $size);
+        $res = RelationTagHandler::handlePaginator($res);
+        return self::success('' , $res);
+    }
+
     public static function category(Base $context , array $param = [])
     {
         $validator = Validator::make($param , [

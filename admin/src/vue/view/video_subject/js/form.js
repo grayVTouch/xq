@@ -1,20 +1,22 @@
-
 const form = {
     module_id: '' ,
     weight: 0 ,
-    country_id: '' ,
     status: 1 ,
+
 };
+
+const attr = [
+    {
+        field: '' ,
+        value: '' ,
+    }
+];
 
 const owner = {
     id: 0 ,
     username: 'unknow' ,
 };
 
-const country = {
-    id: 0 ,
-    name: 'unknow' ,
-};
 
 export default {
     name: "my-form" ,
@@ -56,11 +58,13 @@ export default {
 
             ins: {} ,
 
-            owner: G.copy(owner) ,
-
-            country: G.copy(country) ,
-
+            // 用户模块
             modules: [] ,
+
+            // 用户列表
+            owner:  G.copy(owner) ,
+
+            attr ,
 
         };
     } ,
@@ -68,14 +72,14 @@ export default {
     mounted () {
         this.initDom();
         this.initIns();
+        this.getModules();
     } ,
 
     methods: {
 
         getModules () {
             this.pending('getModules' , true);
-            Api.module
-                .all()
+            Api.module.all()
                 .then((res) => {
                     if (res.code !== TopContext.code.Success) {
                         this.errorHandle(res.message);
@@ -95,7 +99,7 @@ export default {
         initIns () {
             const self = this;
             this.ins.thumb = new Uploader(this.dom.thumb.get(0) , {
-                api: this.thumbApi(),
+                api: this.thumbApi() ,
                 mode: 'override' ,
                 clear: true ,
                 mimeLimit: 'image' ,
@@ -114,9 +118,9 @@ export default {
         } ,
 
         findById (id) {
-            this.pending('findById' , true);
             return new Promise((resolve , reject) => {
-               Api.videoCompany
+                this.pending('findById' , true);
+               Api.videoSubject
                    .show(id)
                    .then((res) => {
                        if (res.code !== TopContext.code.Success) {
@@ -124,9 +128,12 @@ export default {
                            reject();
                            return ;
                        }
-                       this.form = res.data;
+                       const data = res.data;
+                       delete data.password;
+                       this.form = data;
                        resolve();
-                   }).finally(() => {
+                    })
+                   .finally(() => {
                        this.pending('findById' , false);
                    });
             });
@@ -155,10 +162,10 @@ export default {
             if (this.mode === 'edit') {
                 this.findById(this.id)
                     .then(() => {
-                        this.owner      = this.form.user ? this.form.user : G.copy(owner);
-                        this.country    = this.form.region ? this.form.region : G.copy(country);
-
+                        // 做一些额外处理
                         this.ins.thumb.render(this.form.thumb);
+                        this.owner = this.form.user ? this.form.user : G.copy(owner);
+                        this.attr = G.jsonDecode(this.form.attr);
                     });
             }
         } ,
@@ -180,13 +187,12 @@ export default {
             }
             this.myValue.step = 'module';
             this.myValue.showModuleSelector = false;
-            this.setValue('show' , false);
-            this.modules    = [];
-            this.form       = G.copy(form);
-            this.owner      = G.copy(owner);
-            this.country    = G.copy(country);
-            this.error();
+            this.myValue.show = false;
+            this.form = G.copy(form);
+            this.attr = G.copy(attr);
+            this.owner = G.copy(owner);
             this.ins.thumb.clearAll();
+            this.error();
         } ,
 
         filter (form) {
@@ -200,9 +206,6 @@ export default {
             if (!G.isNumeric(form.module_id)) {
                 error.module_id = '请选择模块';
             }
-            if (!G.isNumeric(form.country_id)) {
-                error.country_id = '请选择所属国家';
-            }
             return {
                 status: G.isEmptyObject(error) ,
                 error ,
@@ -210,9 +213,11 @@ export default {
         } ,
 
 
+
         submitEvent () {
             const self = this;
             const form = G.copy(this.form);
+            form.attr = G.jsonEncode(this.attr);
             const filterRes = this.filter(form);
             if (!filterRes.status) {
                 this.error(filterRes.error , true);
@@ -233,15 +238,15 @@ export default {
                 });
             };
             const finalCallback = () => {
-                this.pending('submitEvent' , false);
                 this.error();
+                this.pending('submitEvent' , false);
             };
             this.pending('submitEvent' , true);
             if (this.mode === 'edit') {
-                Api.videoCompany.update(this.form.id , this.form).then(thenCallback).finally(finalCallback);
+                Api.videoSubject.update(form.id , form).then(thenCallback).finally(finalCallback);
                 return ;
             }
-            Api.videoCompany.store(this.form).then(thenCallback).finally(finalCallback);
+            Api.videoSubject.store(form).then(thenCallback).finally(finalCallback);
         } ,
 
         userChangeEvent (res) {
@@ -250,18 +255,8 @@ export default {
             this.owner          = res;
         } ,
 
-        countryChangeEvent (res) {
-            this.error({country_id: ''} , false);
-            this.form.country_id   = res.id;
-            this.country          = res;
-        } ,
-
         showUserSelector () {
             this.$refs['user-selector'].show();
-        } ,
-
-        showCountrySelector () {
-            this.$refs['country-selector'].show();
         } ,
     } ,
 }

@@ -82,6 +82,18 @@
                         </td>
                     </tr>
 
+                    <tr :class="{error: myValue.error.video_subject_id}">
+                        <td>视频主体：</td>
+                        <td>
+                            <input type="text" readonly="readonly" :value="`${videoSubject.name}【${videoSubject.id}】`" class="form-text w-180 run-cursor-not-allow">
+                            如需重新搜索，请点击
+                            <i-button @click="showVideoSubjectSelector">搜索</i-button>
+                            <span class="need"></span>
+                            <div class="msg">请务必在选择模块后操作</div>
+                            <div class="e-msg">{{ myValue.error.video_subject_id }}</div>
+                        </td>
+                    </tr>
+
                     <tr :class="{error: myValue.error.thumb}">
                         <td>封面</td>
                         <td>
@@ -100,7 +112,7 @@
                                                     <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                                                     <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                                                 </div>
-                                                <div class="text">请选择要上传的文件</div>
+                                                <div class="text">请选择要上传的文件或拖拽文件到此</div>
                                             </div>
 
                                         </div>
@@ -315,6 +327,7 @@
         <my-user-selector ref="user-selector" @on-change="userChangeEvent"></my-user-selector>
         <my-video-series-selector ref="video-series-selector" :moduleId="form.module_id" @on-change="videoSeriesChangeEvent"></my-video-series-selector>
         <my-video-company-selector ref="video-company-selector" :moduleId="form.module_id" @on-change="videoCompanyChangeEvent"></my-video-company-selector>
+        <my-video-subject-selector ref="video-subject-selector" :moduleId="form.module_id" @on-change="videoSubjectChangeEvent"></my-video-subject-selector>
 
         <!-- 第一步：模块选择器 -->
         <my-form-modal

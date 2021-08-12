@@ -14,6 +14,7 @@ const form = {
 const owner = {id: 0 , username: 'unknow'};
 const videoSeries = {id: 0 , name: 'unknow'};
 const videoCompany = {id: 0 , name: 'unknow'};
+const videoSubject = {id: 0 , name: 'unknow'};
 
 export default {
     name: "index",
@@ -52,6 +53,9 @@ export default {
 
             // 视频制作公司
             videoCompany: G.copy(videoCompany) ,
+
+            // 视频主体
+            videoSubject: G.copy(videoSubject) ,
 
             // 用户
             owner: G.copy(owner) ,
@@ -189,6 +193,7 @@ export default {
                 api: this.thumbApi() ,
                 mode: 'override' ,
                 clear: true ,
+                mimeLimit: 'image' ,
                 uploaded (file , data , code) {
                     if (code !== TopContext.code.Success) {
                         this.status(file.id , false);
@@ -316,6 +321,7 @@ export default {
                         this.videoSeries    = this.form.video_series ? this.form.video_series : G.copy(videoSeries);
                         this.owner          = this.form.user ? this.form.user : G.copy(owner);
                         this.videoCompany   = this.form.video_company ? this.form.video_company : G.copy(videoCompany);
+                        this.videoSubject   = this.form.video_subject ? this.form.video_subject : G.copy(videoSubject);
                         this.releaseDate            = this.form.release_date ? this.form.release_date : '';
                         this.endDate                = this.form.end_date ? this.form.end_date : '';
                         this.getTopTags();
@@ -359,6 +365,7 @@ export default {
             this.categories     = [];
             this.videoCompany   = G.copy(videoCompany);
             this.videoSeries    = G.copy(videoSeries);
+            this.videoSubject    = G.copy(videoSubject);
             this.owner          = G.copy(owner);
             this.releaseDate    = '';
             this.endDate        = '';
@@ -525,6 +532,20 @@ export default {
                 return ;
             }
             this.$refs['video-company-selector'].show();
+        } ,
+
+        showVideoSubjectSelector () {
+            if (!G.isNumeric(this.form.module_id)) {
+                this.errorHandle('请先选择模块');
+                return ;
+            }
+            this.$refs['video-subject-selector'].show();
+        } ,
+
+        videoSubjectChangeEvent (res) {
+            this.error({video_subject_id: ''} , false);
+            this.form.video_subject_id   = res.id;
+            this.videoSubject            = res;
         } ,
 
     } ,

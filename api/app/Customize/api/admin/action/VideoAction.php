@@ -15,6 +15,7 @@ use App\Customize\api\admin\model\ModuleModel;
 use App\Customize\api\admin\model\VideoSrcModel;
 use App\Customize\api\admin\model\VideoProjectModel;
 use App\Customize\api\admin\model\UserModel;
+use App\Customize\api\admin\model\VideoSubjectModel;
 use App\Customize\api\admin\model\VideoSubtitleModel;
 use App\Customize\api\admin\repository\FileRepository;
 use App\Customize\api\admin\repository\ResourceRepository;
@@ -44,6 +45,7 @@ class VideoAction extends Action
             'user' ,
             'category' ,
             'videoProject' ,
+            'videoSubject' ,
             'videoSubtitles' ,
         ] , $param , $order , $size);
         $res = VideoHandler::handlePaginator($res);
@@ -74,6 +76,7 @@ class VideoAction extends Action
             'module_id'     => 'required|integer' ,
             'category_id'   => 'sometimes|integer' ,
             'video_project_id' => 'sometimes|integer' ,
+            'video_subject_id' => 'sometimes|integer' ,
             'type'          => ['required' , Rule::in($type_range)] ,
             'weight'        => 'sometimes|integer' ,
             'view_count'    => 'sometimes|integer' ,
@@ -124,11 +127,12 @@ class VideoAction extends Action
             if (VideoModel::findByExcludeIdAndVideoProjectIdAndIndex($video->id , $video_project->id , $param['index'])) {
                 return self::error('索引已经存在');
             }
-            $param['category_id'] = 0;
             $index = (int) $param['index'];
             if ($index < $video_project->min_index || $index > $video_project->max_index) {
                 return self::error("不支持的索引【{$index}】，支持的索引范围：【{$video_project->min_index} - {$video_project->max_index}】");
             }
+            $param['video_subject_id'] = 0;
+            $param['category_id'] = 0;
         } else {
             // 杂项
             if ($param['name'] === '') {
@@ -140,6 +144,13 @@ class VideoAction extends Action
             $category = CategoryModel::find($param['category_id']);
             if (empty($category)) {
                 return self::error('分类不存在');
+            }
+            $video_subject = null;
+            if (!empty($param['video_subject_id'])) {
+                $video_subject = VideoSubjectModel::find($param['video_subject_id']);
+                if (empty($video_subject)) {
+                    return self::error('视频主体不存在');
+                }
             }
             $param['video_project_id']  = 0;
             $param['index']             = 0;
@@ -214,6 +225,7 @@ class VideoAction extends Action
                 'src' ,
                 'type' ,
                 'video_project_id' ,
+                'video_subject_id' ,
                 'thumb' ,
                 'description' ,
                 'weight' ,
@@ -297,6 +309,7 @@ class VideoAction extends Action
             'module_id'             => 'required|integer' ,
             'category_id'           => 'sometimes|integer' ,
             'video_project_id'      => 'sometimes|integer' ,
+            'video_subject_id'      => 'sometimes|integer' ,
             'src'                   => 'required' ,
             'type'                  => ['required' , Rule::in($type_range)] ,
             'weight'                => 'sometimes|integer' ,
@@ -325,13 +338,14 @@ class VideoAction extends Action
             if (VideoModel::findByVideoProjectIdAndIndex($video_project->id , $param['index'])) {
                 return self::error('索引已经存在');
             }
-            $param['category_id'] = 0;
-            $param['disk'] = $video_project->disk;
             // 检查索引范围
             $index = (int) $param['index'];
             if ($index < $video_project->min_index || $index > $video_project->max_index) {
                 return self::error("不支持的索引【{$index}】，支持的索引范围：【{$video_project->min_index} - {$video_project->max_index}】");
             }
+            $param['category_id'] = 0;
+            $param['video_subject_id'] = 0;
+            $param['disk'] = $video_project->disk;
         } else {
             if ($param['name'] === '') {
                 return self::error('名称尚未提供');
@@ -343,6 +357,13 @@ class VideoAction extends Action
             $category = CategoryModel::find($param['category_id']);
             if (empty($category)) {
                 return self::error('分类不存在');
+            }
+            $video_subject = null;
+            if (!empty($param['video_subject_id'])) {
+                $video_subject = VideoSubjectModel::find($param['video_subject_id']);
+                if (empty($video_subject)) {
+                    return self::error('视频主体不存在');
+                }
             }
             $param['video_project_id']  = 0;
             $param['index']             = 0;
@@ -386,6 +407,7 @@ class VideoAction extends Action
                 'src' ,
                 'type' ,
                 'video_project_id' ,
+                'video_subject_id' ,
                 'thumb' ,
                 'description' ,
                 'weight' ,
@@ -481,6 +503,8 @@ class VideoAction extends Action
         VideoHandler::videoSubtitles($res);
         // 附加：标签
         VideoHandler::tags($res);
+        // 附加：视频主体
+        VideoHandler::videoSubject($res);
 
         return self::success('' , $res);
     }

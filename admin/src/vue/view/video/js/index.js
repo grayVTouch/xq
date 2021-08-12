@@ -8,18 +8,13 @@ const search = {
     module_id: '' ,
     category_id: '' ,
     video_project_id: '' ,
+    video_subject_id: '' ,
     status: '' ,
 };
 
-const videoProject = {
-    id: 0 ,
-    name: 'unknow' ,
-};
-
-const myUser = {
-    id: 0 ,
-    name: 'unknow' ,
-};
+const videoProject = {id: 0 , name: 'unknow'};
+const videoSubject = {id: 0 , name: 'unknow'};
+const myUser = {id: 0 , name: 'unknow'};
 
 export default {
     name: "index",
@@ -118,6 +113,13 @@ export default {
                         slot: 'user_id',
                         minWidth: TopContext.table.name,
                         align: TopContext.table.alignCenter
+                    },
+                    {
+                        title: '视频主体【id】',
+                        slot: 'video_subject_id',
+                        minWidth: TopContext.table.name,
+                        align: TopContext.table.alignCenter,
+                        tooltip: true ,
                     },
                     {
                         title: '模块【id】',
@@ -235,6 +237,8 @@ export default {
             selection: [] ,
 
             videoProject: G.copy(videoProject) ,
+
+            videoSubject: G.copy(videoSubject) ,
 
             myUser: G.copy(myUser) ,
         };
@@ -462,6 +466,7 @@ export default {
 
             this.videoProject = G.copy(videoProject);
             this.myUser = G.copy(myUser);
+            this.videoSubject = G.copy(videoSubject);
             this.getData();
         } ,
 
@@ -653,6 +658,16 @@ export default {
                         this.pending('updateVideoProcessStatusEvent' , false);
                     });
             });
+        } ,
+
+        showVideoSubjectSelector () {
+            this.$refs['video-subject-selector'].show();
+        } ,
+
+        videoSubjectChangedEvent (row) {
+            this.videoSubject = row;
+            this.search.video_subject_id = row.id;
+            this.searchEvent();
         } ,
     } ,
 }

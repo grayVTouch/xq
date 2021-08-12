@@ -922,6 +922,7 @@
     align-items: center;
     font-size: 14px;
     height: 80px;
+    width: 100%;
 }
 
 .tag-selector > .inner .content > .tags .list.loading {

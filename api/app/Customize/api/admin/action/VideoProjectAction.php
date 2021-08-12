@@ -14,6 +14,7 @@ use App\Customize\api\admin\model\UserModel;
 use App\Customize\api\admin\model\VideoCompanyModel;
 use App\Customize\api\admin\model\VideoSeriesModel;
 use App\Customize\api\admin\model\VideoProjectModel;
+use App\Customize\api\admin\model\VideoSubjectModel;
 use App\Customize\api\admin\repository\ResourceRepository;
 use App\Customize\api\admin\repository\VideoProjectRepository;
 use App\Http\Controllers\api\admin\Base;
@@ -40,6 +41,7 @@ class VideoProjectAction extends Action
             'category' ,
             'videoSeries' ,
             'videoCompany' ,
+            'videoSubject' ,
         ] , $param , $order , $size);
         $res = VideoProjectHandler::handlePaginator($res);
         foreach ($res->data as $v)
@@ -56,6 +58,8 @@ class VideoProjectAction extends Action
             VideoProjectHandler::videoCompany($v);
             // 附加：标签
             VideoProjectHandler::tags($v);
+            // 附加：主体
+            VideoProjectHandler::videoSubject($v);
         }
 
         return self::success('' , $res);
@@ -75,6 +79,7 @@ class VideoProjectAction extends Action
             'weight'            => 'sometimes|integer' ,
             'video_series_id'   => 'sometimes|integer' ,
             'video_company_id'  => 'sometimes|integer' ,
+            'video_subject_id'  => 'sometimes|integer' ,
             'user_id'           => 'required|integer' ,
             'min_index'           => 'required|integer' ,
             'max_index'           => 'required|integer' ,
@@ -120,6 +125,13 @@ class VideoProjectAction extends Action
                 return self::error('视频制作公司不存在');
             }
         }
+        $video_subject = null;
+        if (!empty($param['video_subject_id'])) {
+            $video_subject = VideoSubjectModel::find($param['video_subject_id']);
+            if (empty($video_subject)) {
+                return self::error('视频主体不存在');
+            }
+        }
         $datetime               = current_datetime();
         $param['weight']        = $param['weight'] === '' ? 0 : $param['weight'];
         $param['updated_at']    = $datetime;
@@ -142,6 +154,7 @@ class VideoProjectAction extends Action
                 'description' ,
                 'video_series_id' ,
                 'video_company_id' ,
+                'video_subject_id' ,
                 'user_id',
                 'status',
                 'fail_reason',
@@ -212,6 +225,7 @@ class VideoProjectAction extends Action
             'weight'            => 'sometimes|integer' ,
             'video_series_id'   => 'sometimes|integer' ,
             'video_company_id'  => 'sometimes|integer' ,
+            'video_subject_id'  => 'sometimes|integer' ,
             'user_id'           => 'required|integer' ,
             'module_id'         => 'required|integer' ,
             'category_id'       => 'required|integer' ,
@@ -253,6 +267,13 @@ class VideoProjectAction extends Action
                 return self::error('视频制作公司不存在');
             }
         }
+        $video_subject = null;
+        if (!empty($param['video_subject_id'])) {
+            $video_subject = VideoSubjectModel::find($param['video_subject_id']);
+            if (empty($video_subject)) {
+                return self::error('视频主体不存在');
+            }
+        }
         $datetime = current_datetime();
 
         $param['file_process_status']   = 0;
@@ -278,6 +299,7 @@ class VideoProjectAction extends Action
                 'description',
                 'video_series_id',
                 'video_company_id',
+                'video_subject_id',
                 'user_id',
                 'status',
                 'fail_reason',
@@ -343,6 +365,8 @@ class VideoProjectAction extends Action
         VideoProjectHandler::videoCompany($res);
         // 附加：标签
         VideoProjectHandler::tags($res);
+        // 附加：视频主体
+        VideoProjectHandler::videoSubject($res);
 
         return self::success('' , $res);
     }

@@ -65,7 +65,7 @@ class PannelAction extends Action
         // 失败队列
         $failed_jobs_count_for_today = FailedJobsModel::countByDate($today);
         // 视频：处理失败的视频
-        $processed_video_count_for_today = VideoModel::countByDateAndProcessStatus($today , 2);
+        $processed_video_count_for_today = VideoModel::countByDateAndProcessStatus($today , 3);
         // 视频：处理成功的视频
         $process_failed_video_count_for_today = VideoModel::countByDateAndProcessStatus($today , -1);
 
@@ -131,7 +131,7 @@ class PannelAction extends Action
         $video_company_count = VideoCompanyModel::count();
         $category_count = VideoCompanyModel::count();
         $failed_jobs_count = FailedJobsModel::count();
-        $processed_video_count = VideoModel::countByProcessStatus(2);
+        $processed_video_count = VideoModel::countByProcessStatus(3);
         $process_failed_video_count = VideoModel::countByProcessStatus(-1);
 
         return self::success('' , [

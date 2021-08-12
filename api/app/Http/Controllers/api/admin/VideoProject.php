@@ -20,6 +20,7 @@ class VideoProject extends Base
         $param['category_id']  = $param['category_id'] ?? '';
         $param['video_series_id']  = $param['video_series_id'] ?? '';
         $param['video_company_id'] = $param['video_company_id'] ?? '';
+        $param['video_subject_id'] = $param['video_subject_id'] ?? '';
         $param['file_process_status'] = $param['file_process_status'] ?? '';
         $param['status'] = $param['status'] ?? '';
         $param['end_status'] = $param['end_status'] ?? '';
@@ -48,6 +49,7 @@ class VideoProject extends Base
         $param['category_id']          = $param['category_id'] ?? '';
         $param['video_series_id']          = $param['video_series_id'] ?? '';
         $param['video_company_id']          = $param['video_company_id'] ?? '';
+        $param['video_subject_id']          = $param['video_subject_id'] ?? '';
         $param['module_id']          = $param['module_id'] ?? '';
         $param['weight']          = $param['weight'] ?? '';
         $param['tags']          = $param['tags'] ?? '';
@@ -74,6 +76,7 @@ class VideoProject extends Base
         $param['category_id']          = $param['category_id'] ?? '';
         $param['video_series_id']          = $param['video_series_id'] ?? '';
         $param['video_company_id']          = $param['video_company_id'] ?? '';
+        $param['video_subject_id']          = $param['video_subject_id'] ?? '';
         $param['module_id']          = $param['module_id'] ?? '';
         $param['weight']          = $param['weight'] ?? '';
         $param['tags']          = $param['tags'] ?? '';

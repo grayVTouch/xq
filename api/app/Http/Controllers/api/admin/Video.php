@@ -19,6 +19,7 @@ class video extends Base
         $param['module_id']    = $param['module_id'] ?? '';
         $param['category_id']          = $param['category_id'] ?? '';
         $param['video_project_id']     = $param['video_project_id'] ?? '';
+        $param['video_subject_id']     = $param['video_subject_id'] ?? '';
         $param['type']         = $param['type'] ?? '';
         $param['status']       = $param['status'] ?? '';
         $param['file_process_status']       = $param['file_process_status'] ?? '';
@@ -45,6 +46,7 @@ class video extends Base
         $param['category_id']   = $param['category_id'] ?? '';
         $param['type']          = $param['type'] ?? '';
         $param['video_project_id'] = $param['video_project_id'] ?? '';
+        $param['video_subject_id']          = $param['video_subject_id'] ?? '';
         $param['thumb']         = $param['thumb'] ?? '';
         $param['description']   = $param['description'] ?? '';
         $param['weight']        = $param['weight'] ?? '';
@@ -74,6 +76,7 @@ class video extends Base
         $param['category_id']   = $param['category_id'] ?? '';
         $param['type']          = $param['type'] ?? '';
         $param['video_project_id']  = $param['video_project_id'] ?? '';
+        $param['video_subject_id']          = $param['video_subject_id'] ?? '';
         $param['thumb']         = $param['thumb'] ?? '';
         $param['description']   = $param['description'] ?? '';
         $param['weight']        = $param['weight'] ?? '';

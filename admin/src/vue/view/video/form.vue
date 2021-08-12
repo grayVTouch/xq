@@ -87,8 +87,20 @@
                                     如需重新搜索，请点击
                                     <i-button @click="showVideoProjectSelector">搜索</i-button>
                                     <span class="need">*</span>
-                                    <div class="msg">请务必在选择模块后操作；输入关联主体id、名称可查询</div>
+                                    <div class="msg">请务必在选择模块后操作</div>
                                     <div class="e-msg">{{ myValue.error.video_project_id }}</div>
+                                </td>
+                            </tr>
+
+                            <tr :class="{error: myValue.error.video_subject_id}" v-show="form.type === 'misc'">
+                                <td>视频主体：</td>
+                                <td>
+                                    <input type="text" readonly="readonly" :value="`${videoSubject.name}【${videoSubject.id}】`" class="form-text w-180 run-cursor-not-allow">
+                                    如需重新搜索，请点击
+                                    <i-button @click="showVideoSubjectSelector">搜索</i-button>
+                                    <span class="need">*</span>
+                                    <div class="msg">请务必在选择模块后操作</div>
+                                    <div class="e-msg">{{ myValue.error.video_subject_id }}</div>
                                 </td>
                             </tr>
 
@@ -120,7 +132,7 @@
                                                             <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                                                             <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                                                         </div>
-                                                        <div class="text">请选择要上传的文件</div>
+                                                        <div class="text">请选择要上传的文件或拖拽文件到此</div>
                                                     </div>
 
                                                 </div>
@@ -309,7 +321,7 @@
                                                                         <div class="feedback run-action-feedback-round"><i class="iconfont run-iconfont run-iconfont-shangchuan"></i></div>
                                                                         <div class="clear run-action-feedback-round" title="清空"><i class="iconfont run-iconfont run-iconfont-qingkong"></i></div>
                                                                     </div>
-                                                                    <div class="text">请选择要上传的文件</div>
+                                                                    <div class="text">请选择要上传的文件或拖拽文件到此</div>
                                                                 </div>
 
                                                             </div>
@@ -436,7 +448,7 @@
                                                 :data="videoSubtitles.data"
                                                 @on-selection-change="videoSubtitleSelectionChangeEvent"
                                         >
-                                            <template v-slot:src="{row,index}">{{ row.src }}</template>
+                                            <template v-slot:src="{row,index}"><i-button @click.stop="openWindow(row.src , '_blank')">查看</i-button></template>
                                             <template v-slot:action="{row,index}">
                                                 <my-table-button :loading="myValue.pending['delete_' + row.id]" @click="destroyVideoSubtitleEvent(index , row)">删除</my-table-button>
                                             </template>
@@ -457,6 +469,7 @@
             <!-- 请选择用户 -->
             <my-user-selector ref="user-selector" @on-change="userChangeEvent"></my-user-selector>
             <my-video-project-selector ref="video-project-selector" :moduleId="form.module_id" @on-change="videoProjectChangeEvent"></my-video-project-selector>
+            <my-video-subject-selector ref="video-subject-selector" :moduleId="form.module_id" @on-change="videoSubjectChangeEvent"></my-video-subject-selector>
 
             <!-- 第一步：模块选择器 -->
             <my-form-modal

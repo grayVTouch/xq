@@ -254,4 +254,27 @@ class RelationTagModel extends Model
             ->limit($size)
             ->get();
     }
+
+    // 热门标签-图片专题-分页
+    public static function hotTagsWithPagerInImageByValueAndFilterAndSize(string $value , array $filter = [] , int $size = 20): Paginator
+    {
+        $filter['module_id'] = $filter['module_id'] ?? '';
+
+        $where = [
+            ['rt.relation_type' , '=' , 'image'] ,
+        ];
+        if ($filter['module_id'] !== '') {
+            $where[] = ['rt.module_id' , '=' , $filter['module_id']];
+        }
+        if ($filter['value'] !== '') {
+            $where[] = ['rt.name' , 'like' , "%{$value}%"];
+        }
+        return self::from('xq_relation_tag as rt')
+            ->select('rt.*' , DB::raw('count(rt.id) as total'))
+            ->where($where)
+            ->groupBy('rt.tag_id')
+            ->orderBy('total' , 'desc')
+            ->orderBy('rt.id' , 'asc')
+            ->paginate($size);
+    }
 }

@@ -6,18 +6,13 @@ const search = {
     size: TopContext.size,
     video_series_id: '',
     video_company_id: '',
+    video_subject_id: '',
     module_id: '',
 };
 
-const myVideoCompany = {
-    id: 0 ,
-    name: 'unknow' ,
-};
-
-const myVideoSeries = {
-    id: 0 ,
-    name: 'unknow' ,
-};
+const myVideoCompany = {id: 0 , name: 'unknow'};
+const myVideoSeries = {id: 0 , name: 'unknow'};
+const myVideoSubject = {id: 0 , name: 'unknow'};
 
 export default {
     name: "index",
@@ -101,6 +96,12 @@ export default {
                     {
                         title: '视频制作公司' ,
                         slot: 'video_company_id' ,
+                        minWidth: TopContext.table.name ,
+                        align: TopContext.table.alignCenter ,
+                    } ,
+                    {
+                        title: '视频主体' ,
+                        slot: 'video_subject_id' ,
                         minWidth: TopContext.table.name ,
                         align: TopContext.table.alignCenter ,
                     } ,
@@ -212,12 +213,6 @@ export default {
                 data: [] ,
             } ,
 
-            // 视频系列
-            videoSeries: [] ,
-
-            // 视频公司
-            videoCompany: [] ,
-
             // 搜索
             search: G.copy(search) ,
 
@@ -232,6 +227,8 @@ export default {
             myVideoSeries: G.copy(myVideoSeries) ,
 
             myVideoCompany: G.copy(myVideoCompany) ,
+
+            myVideoSubject: G.copy(myVideoSubject) ,
 
             // 分类
             categories: [] ,
@@ -403,6 +400,7 @@ export default {
 
             this.myVideoSeries = G.copy(myVideoSeries);
             this.myVideoCompany = G.copy(myVideoCompany);
+            this.myVideoSubject = G.copy(myVideoSubject);
             this.getData();
             this.getCategories();
         } ,
@@ -508,6 +506,14 @@ export default {
             this.$refs['video-company-selector'].show();
         } ,
 
+        openVideoSubjectSelector () {
+            if (this.search.module_id <= 0) {
+                this.errorHandle('请先选择模块');
+                return ;
+            }
+            this.$refs['video-subject-selector'].show();
+        } ,
+
         videoSeriesChangedEvent (row) {
             this.myVideoSeries = G.copy(row);
             this.search.video_series_id = row.id;
@@ -517,6 +523,12 @@ export default {
         videoCompanyChangedEvent (row) {
             this.myVideoCompany = G.copy(row);
             this.search.video_company_id = row.id;
+            this.searchEvent();
+        } ,
+
+        videoSubjectChangedEvent (row) {
+            this.myVideoSubject = G.copy(row);
+            this.search.video_subject_id = row.id;
             this.searchEvent();
         } ,
 

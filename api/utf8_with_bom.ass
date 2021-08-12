@@ -1,0 +1,287 @@
+﻿Title: 
+Original Script: 
+Original Translation: 
+Original Editing: 
+Original Timing: 
+Synch Point: 
+Script Updated By: 
+Update Details: 
+ScriptType: V4.00
+PlayResY: 960
+PlayResX: 720
+PlayDepth: 0
+Timer: 100.0000
+Aegisub Video Zoom Percent: 1.000000
+Aegisub Scroll Position: 0
+Aegisub Active Line: 0
+Last Style Storage: Default
+
+[V4+ Styles]
+Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding
+Style: Default,微软雅黑,36,&H00FFFFFF,&H000000FF,&H00FF7C00,&H00000000,-1,0,0,0,100,100,0,0,1,2,3,2,10,10,10,1
+
+[Events]
+Format: Layer, Start, End, Style, Actor, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:35.95,0:00:38.79,Default,NTP,0,0,0,!Effect,這樣就好了,早點休息吧
+Dialogue: 0,0:00:39.56,0:00:40.52,Default,NTP,0,0,0,!Effect,烈火
+Dialogue: 0,0:01:33.98,0:01:35.44,Default,NTP,0,0,0,!Effect,撤退!   撤退!
+Dialogue: 0,0:01:51.96,0:01:53.26,Default,NTP,0,0,0,!Effect,費這麼多功夫
+Dialogue: 0,0:01:54.33,0:01:57.32,Default,NTP,0,0,0,!Effect,被逃走了嗎？\N受傷了  逃不遠的
+Dialogue: 0,0:01:57.87,0:02:00.10,Default,NTP,0,0,0,!Effect,不給他致命一擊嗎?\N沒有這個必要
+Dialogue: 0,0:02:02.61,0:02:03.73,Default,NTP,0,0,0,!Effect,是嗎?
+Dialogue: 0,0:02:06.94,0:02:08.10,Default,NTP,0,0,0,!Effect,這樣就好了
+Dialogue: 0,0:02:31.53,0:02:35.15,Default,NTP,0,0,0,!Effect,這次的任務行動\N結果是白忙一場
+Dialogue: 0,0:02:35.27,0:02:38.04,Default,NTP,0,0,0,!Effect,慢著\N這個最好不要說
+Dialogue: 0,0:02:39.68,0:02:40.97,Default,NTP,0,0,0,!Effect,妳太遲鈍了
+Dialogue: 0,0:02:41.61,0:02:43.17,Default,NTP,0,0,0,!Effect,用「白忙一場」來形容任務呀
+Dialogue: 0,0:02:43.95,0:02:45.50,Default,NTP,0,0,0,!Effect,需要「依賴他人」呀
+Dialogue: 0,0:02:45.98,0:02:47.92,Default,NTP,0,0,0,!Effect,和「失敗」之類的
+Dialogue: 0,0:02:48.65,0:02:50.98,Default,NTP,0,0,0,!Effect,這些都是某人面前的禁句
+Dialogue: 0,0:02:52.22,0:02:54.78,Default,NTP,0,0,0,!Effect,是嗎?妳是在說彩乃吧!
+Dialogue: 0,0:02:55.32,0:02:57.42,Default,NTP,0,0,0,!Effect,我不知不覺便說了\N對不起呢
+Dialogue: 0,0:02:58.39,0:02:59.52,Default,NTP,0,0,0,!Effect,你們二人也...
+Dialogue: 0,0:02:59.52,0:03:03.60,Default,NTP,0,0,0,!Effect,妳不必向我道歉的
+Dialogue: 0,0:03:03.60,0:03:04.50,Default,NTP,0,0,0,!Effect,對不起
+Dialogue: 0,0:03:04.97,0:03:11.77,Default,NTP,0,0,0,!Effect,這次至少確認到有鬼出現了\N也不能說是失敗的
+Dialogue: 0,0:03:12.28,0:03:16.23,Default,NTP,0,0,0,!Effect,就是說啊  彩乃\N鬼還是不出現的會較好呢
+Dialogue: 0,0:03:16.71,0:03:18.94,Default,NTP,0,0,0,!Effect,這些不用一一對我解釋了
+Dialogue: 0,0:03:25.02,0:03:25.85,Default,NTP,0,0,0,!Effect,你是...
+Dialogue: 0,0:03:27.12,0:03:28.49,Default,NTP,0,0,0,!Effect,小哥...
+Dialogue: 0,0:03:31.49,0:03:32.86,Default,NTP,0,0,0,!Effect,怎麼了?振作一點!
+Dialogue: 0,0:03:35.50,0:03:38.30,Default,NTP,0,0,0,!Effect,真可憐…受了這麼重的傷
+Dialogue: 0,0:03:38.90,0:03:41.70,Default,NTP,0,0,0,!Effect,那傷勢是因為\N從「鐵」中逃出來所造成的吧
+Dialogue: 0,0:03:42.07,0:03:43.16,Default,NTP,0,0,0,!Effect,不光是傷勢  妳看這個
+Dialogue: 0,0:03:44.47,0:03:46.30,Default,NTP,0,0,0,!Effect,這是手術過的痕跡
+Dialogue: 0,0:03:47.24,0:03:49.68,Default,NTP,0,0,0,!Effect,「鐵」他們究竟到底在幹什麼？
+Dialogue: 0,0:03:50.21,0:03:54.81,Default,NTP,0,0,0,!Effect,聽說他的殺鬼部隊\N一定要把殺掉的鬼帶走
+Dialogue: 0,0:03:55.72,0:03:57.71,Default,NTP,0,0,0,!Effect,這樣做法好奇怪
+Dialogue: 0,0:04:05.09,0:04:08.22,Default,NTP,0,0,0,!Effect,大家...我們又見面了
+Dialogue: 0,0:04:09.67,0:04:11.76,Default,NTP,0,0,0,!Effect,我有一個請求
+Dialogue: 0,0:04:13.04,0:04:17.44,Default,NTP,0,0,0,!Effect,希望大家趁現在…把我殺掉…
+Dialogue: 0,0:04:20.31,0:04:21.50,Default,NTP,0,0,0,!Effect,小鬼
+Dialogue: 0,0:04:28.85,0:04:29.94,Default,NTP,0,0,0,!Effect,什麼?
+Dialogue: 0,0:04:35.06,0:04:36.08,Default,NTP,0,0,0,!Effect,放手呀
+Dialogue: 0,0:04:36.46,0:04:37.82,Default,NTP,0,0,0,!Effect,危險  大家快到外面
+Dialogue: 0,0:04:49.14,0:04:54.63,Default,NTP,0,0,0,!Effect,好巨大   難道大家說看到的大鬼\N便是你嗎?
+Dialogue: 0,0:04:56.81,0:04:59.80,Default,NTP,0,0,0,!Effect,小鬼...為什麼?\N在這裡把他擋下來
+Dialogue: 0,0:05:00.28,0:05:02.27,Default,NTP,0,0,0,!Effect,但是...
+Dialogue: 0,0:05:02.69,0:05:04.55,Default,NTP,0,0,0,!Effect,雖然我不知道「鐵」幹了什麼\N總之現在有一點很肯定...
+Dialogue: 0,0:05:06.02,0:05:08.62,Default,NTP,0,0,0,!Effect,那個小鬼已經不在了
+Dialogue: 0,0:05:18.87,0:05:20.36,Default,NTP,0,0,0,!Effect,小鬼  對不起了
+Dialogue: 0,0:05:42.29,0:05:43.52,Default,NTP,0,0,0,!Effect,小鬼...
+Dialogue: 0,0:05:44.93,0:05:46.42,Default,NTP,0,0,0,!Effect,多謝了
+Dialogue: 0,0:05:47.80,0:05:52.53,Default,NTP,0,0,0,!Effect,這樣  我…\N可以不用給大家帶來麻煩了
+Dialogue: 0,0:05:53.40,0:05:55.46,Default,NTP,0,0,0,!Effect,這是「鐵」所幹的嗎?
+Dialogue: 0,0:05:56.87,0:05:59.64,Default,NTP,0,0,0,!Effect,我不記得了…
+Dialogue: 0,0:06:01.34,0:06:06.94,Default,NTP,0,0,0,!Effect,變成大鬼以後\N也能這樣微笑就好了
+Dialogue: 0,0:06:08.48,0:06:17.65,Default,NTP,0,0,0,!Effect,這樣做...\N就不會讓大家討厭了  我真是笨啊…
+Dialogue: 0,0:06:19.63,0:06:20.99,Default,NTP,0,0,0,!Effect,小鬼...
+Dialogue: 0,0:06:28.50,0:06:31.56,Default,NTP,0,0,0,!Effect,鬼所製造的虐殺案增加了
+Dialogue: 0,0:06:32.07,0:06:34.87,Default,NTP,0,0,0,!Effect,是的   雖然我們已處理了這麼多 還…
+Dialogue: 0,0:06:35.04,0:06:38.54,Default,NTP,0,0,0,!Effect,鬼的數量就如小遙所說的
+Dialogue: 0,0:06:39.05,0:06:40.98,Default,NTP,0,0,0,!Effect,真不知道是從哪裡冒出來的
+Dialogue: 0,0:06:41.15,0:06:42.75,Default,NTP,0,0,0,!Effect,對了...
+Dialogue: 0,0:06:43.00,0:06:43.95,Default,NTP,0,0,0,!Effect,怎麼了？
+Dialogue: 0,0:06:44.15,0:06:53.39,Default,NTP,0,0,0,!Effect,大概是一年前發生幾件我們影舞的成員\N說要當鬼而失蹤的事件
+Dialogue: 0,0:06:53.83,0:06:55.06,Default,NTP,0,0,0,!Effect,那是怎麼回事？
+Dialogue: 0,0:06:55.87,0:06:58.25,Default,NTP,0,0,0,!Effect,那原因到現在仍然不明
+Dialogue: 0,0:07:01.77,0:07:03.10,Default,NTP,0,0,0,!Effect,怎麼了？
+Dialogue: 0,0:07:03.71,0:07:05.37,Default,NTP,0,0,0,!Effect,我有話想跟你說
+Dialogue: 0,0:07:05.88,0:07:10.84,Default,NTP,0,0,0,!Effect,我之前跟你說我那沒血緣關係的哥哥   影舞\N在與鬼作戰時死了
+Dialogue: 0,0:07:11.00,0:07:11.84,Default,NTP,0,0,0,!Effect,這個你知道的吧
+Dialogue: 0,0:07:11.84,0:07:12.10,Default,NTP,0,0,0,!Effect,恩
+Dialogue: 0,0:07:12.20,0:07:13.60,Default,NTP,0,0,0,!Effect,其實不是那樣的
+Dialogue: 0,0:07:14.72,0:07:17.24,Default,NTP,0,0,0,!Effect,那是謊言
+Dialogue: 0,0:07:17.30,0:07:18.74,Default,NTP,0,0,0,!Effect,謊言？
+Dialogue: 0,0:07:19.09,0:07:23.96,Default,NTP,0,0,0,!Effect,哥哥是一個開朗堅強靠得住\N優秀的影舞
+Dialogue: 0,0:07:47.98,0:07:49.38,Default,NTP,0,0,0,!Effect,哥哥
+Dialogue: 0,0:07:50.79,0:07:52.12,Default,NTP,0,0,0,!Effect,別過來
+Dialogue: 0,0:07:52.56,0:07:55.22,Default,NTP,0,0,0,!Effect,鬼在我的體內
+Dialogue: 0,0:07:55.59,0:07:56.82,Default,NTP,0,0,0,!Effect,哥哥
+Dialogue: 0,0:07:57.36,0:08:00.82,Default,NTP,0,0,0,!Effect,鬼快控制我了..
+Dialogue: 0,0:08:01.23,0:08:02.53,Default,NTP,0,0,0,!Effect,哥哥   你怎麼了？
+Dialogue: 0,0:08:02.90,0:08:05.42,Default,NTP,0,0,0,!Effect,鬼…鬼啊…
+Dialogue: 0,0:08:11.61,0:08:13.80,Default,NTP,0,0,0,!Effect,哥哥  你怎麼了？
+Dialogue: 0,0:08:14.21,0:08:17.14,Default,NTP,0,0,0,!Effect,彩乃  我已不行了
+Dialogue: 0,0:08:18.65,0:08:21.78,Default,NTP,0,0,0,!Effect,你在說什麼啊?  \N你只是累了而已
+Dialogue: 0,0:08:23.42,0:08:26.51,Default,NTP,0,0,0,!Effect,飯菜放在這裡  你要好好的吃哦
+Dialogue: 0,0:08:29.43,0:08:30.92,Default,NTP,0,0,0,!Effect,我很清楚\N我就快變成鬼了
+Dialogue: 0,0:08:31.66,0:08:36.19,Default,NTP,0,0,0,!Effect,身體快被鬼控制了\N身體要被鬼所奪取了
+Dialogue: 0,0:08:36.57,0:08:38.26,Default,NTP,0,0,0,!Effect,怎麼可能會有那種事?
+Dialogue: 0,0:08:38.26,0:08:40.52,Default,NTP,0,0,0,!Effect,這是不可能的．．．
+Dialogue: 0,0:08:42.27,0:08:44.44,Default,NTP,0,0,0,!Effect,偏偏就是有啊
+Dialogue: 0,0:08:42.14,0:08:44.00,Default,NTP,0,0,0,!Effect,有可能的啊
+Dialogue: 0,0:08:44.00,0:08:45.50,Default,NTP,0,0,0,!Effect,哥哥!
+Dialogue: 0,0:08:53.75,0:08:55.18,Default,NTP,0,0,0,!Effect,這個很好吃的樣子
+Dialogue: 0,0:08:57.55,0:09:00.25,Default,NTP,0,0,0,!Effect,不要   住手
+Dialogue: 0,0:09:02.09,0:09:03.42,Default,NTP,0,0,0,!Effect,你要我住手?
+Dialogue: 0,0:09:03.96,0:09:05.86,Default,NTP,0,0,0,!Effect,所謂住手
+Dialogue: 0,0:09:07.50,0:09:09.66,Default,NTP,0,0,0,!Effect,是這個樣子嗎？
+Dialogue: 0,0:09:16.01,0:09:17.47,Default,NTP,0,0,0,!Effect,不要呀!
+Dialogue: 0,0:09:18.37,0:09:20.27,Default,NTP,0,0,0,!Effect,不要呀!
+Dialogue: 0,0:09:24.00,0:09:25.27,Default,NTP,0,0,0,!Effect,不要呀!
+Dialogue: 0,0:09:41.40,0:09:43.37,Default,NTP,0,0,0,!Effect,我已不是你的大哥了
+Dialogue: 0,0:09:43.93,0:09:47.87,Default,NTP,0,0,0,!Effect,所以就別在意無聊小節\N一起來享樂吧
+Dialogue: 0,0:10:24.04,0:10:25.03,Default,NTP,0,0,0,!Effect,不要呀!
+Dialogue: 0,0:10:25.14,0:10:25.73,Default,NTP,0,0,0,!Effect,住手
+Dialogue: 0,0:10:25.97,0:10:27.81,Default,NTP,0,0,0,!Effect,哥哥...
+Dialogue: 0,0:10:29.00,0:10:31.11,Default,NTP,0,0,0,!Effect,哥哥...
+Dialogue: 0,0:11:29.61,0:11:33.04,Default,NTP,0,0,0,!Effect,我…我做了什麼事…？
+Dialogue: 0,0:11:34.61,0:11:39.21,Default,NTP,0,0,0,!Effect,之後我聽說\N哥哥去了調查「鐵」的事了
+Dialogue: 0,0:11:39.78,0:11:41.41,Default,NTP,0,0,0,!Effect,可能哥哥也已...
+Dialogue: 0,0:11:42.05,0:11:44.92,Default,NTP,0,0,0,!Effect,就像把小鬼變成那樣的「鐵」...
+Dialogue: 0,0:11:46.12,0:11:48.85,Default,NTP,0,0,0,!Effect,彩乃\N謝謝妳告訴我
+Dialogue: 0,0:11:50.26,0:11:53.42,Default,NTP,0,0,0,!Effect,要打倒「鐵」?\N你認真的嗎?
+Dialogue: 0,0:11:53.55,0:11:54.30,Default,NTP,0,0,0,!Effect,恩
+Dialogue: 0,0:11:54.56,0:11:57.05,Default,NTP,0,0,0,!Effect,我對「鐵」那些人   恨之入骨了
+Dialogue: 0,0:11:58.30,0:12:03.20,Default,NTP,0,0,0,!Effect,烈火   你冷靜點  我明白你的心情\N但是這構不成理由
+Dialogue: 0,0:12:04.27,0:12:09.04,Default,NTP,0,0,0,!Effect,紅蓮和「鐵」是一樣的\N都是以打倒鬼為目的的組織
+Dialogue: 0,0:12:09.71,0:12:13.77,Default,NTP,0,0,0,!Effect,對其中一方抱持怨恨    是很奇怪的
+Dialogue: 0,0:12:14.35,0:12:15.82,Default,NTP,0,0,0,!Effect,這...\N而且
+Dialogue: 0,0:12:17.32,0:12:24.56,Default,NTP,0,0,0,!Effect,由於他們所做的事是不公開的\N所以就算問「鐵」的頭目在做什麼
+Dialogue: 0,0:12:24.60,0:12:25.16,Default,NTP,0,0,0,!Effect,也不會問到什麼的
+Dialogue: 0,0:12:25.56,0:12:28.83,Default,NTP,0,0,0,!Effect,可是…\N你還是會去吧?
+Dialogue: 0,0:12:30.23,0:12:32.50,Default,NTP,0,0,0,!Effect,去「鐵」的大本營
+Dialogue: 0,0:12:33.27,0:12:37.26,Default,NTP,0,0,0,!Effect,就算我阻止\N以你的個性  也不會放棄的
+Dialogue: 0,0:12:38.41,0:12:39.67,Default,NTP,0,0,0,!Effect,月影...
+Dialogue: 0,0:12:41.61,0:12:43.10,Default,NTP,0,0,0,!Effect,我求你
+Dialogue: 0,0:12:44.11,0:12:45.74,Default,NTP,0,0,0,!Effect,要活著的回來呀
+Dialogue: 0,0:12:50.89,0:12:52.05,Default,NTP,0,0,0,!Effect,月影...
+Dialogue: 0,0:13:21.02,0:13:22.42,Default,NTP,0,0,0,!Effect,真不愧是烈火   算你厲害 
+Dialogue: 0,0:13:22.89,0:13:27.05,Default,NTP,0,0,0,!Effect,不過   我不會讓你胡亂的闖進來的
+Dialogue: 0,0:13:27.76,0:13:31.62,Default,NTP,0,0,0,!Effect,我想從這裡開始給你帶路…\N意下如何？
+Dialogue: 0,0:13:34.80,0:13:37.53,Default,NTP,0,0,0,!Effect,身為「鐵」的你為何要幫我們?
+Dialogue: 0,0:13:38.17,0:13:42.13,Default,NTP,0,0,0,!Effect,我是不是「鐵」的頭目\N我是向夜叉大人誓忠的赤銅
+Dialogue: 0,0:13:42.77,0:13:45.54,Default,NTP,0,0,0,!Effect,不過  最近  心裡開始迷茫
+Dialogue: 0,0:13:45.94,0:13:47.07,Default,NTP,0,0,0,!Effect,怎麼說？
+Dialogue: 0,0:13:47.61,0:13:53.34,Default,NTP,0,0,0,!Effect,有一瞬間  我保持了與你們一樣的感情\N也許這樣比較好
+Dialogue: 0,0:13:54.25,0:13:57.84,Default,NTP,0,0,0,!Effect,「鐵」前進的道路是否正確的\N還是...
+Dialogue: 0,0:13:59.52,0:14:00.85,Default,NTP,0,0,0,!Effect,一切都很迷網
+Dialogue: 0,0:14:01.29,0:14:03.38,Default,NTP,0,0,0,!Effect,在我迷茫後\N我決定交給你們來判斷
+Dialogue: 0,0:14:03.99,0:14:06.26,Default,NTP,0,0,0,!Effect,這就是我放走那小鬼的用意
+Dialogue: 0,0:14:06.90,0:14:08.39,Default,NTP,0,0,0,!Effect,「鐵」究竟到底在想什麼？
+Dialogue: 0,0:14:10.47,0:14:12.63,Default,NTP,0,0,0,!Effect,我想讓你們自己親眼證實
+Dialogue: 0,0:14:13.44,0:14:14.30,Default,NTP,0,0,0,!Effect,這裡是…?
+Dialogue: 0,0:14:14.74,0:14:17.20,Default,NTP,0,0,0,!Effect,「鐵」的秘密工廠
+Dialogue: 0,0:14:24.85,0:14:26.04,Default,NTP,0,0,0,!Effect,赤銅
+Dialogue: 0,0:14:26.30,0:14:27.34,Default,NTP,0,0,0,!Effect,源內
+Dialogue: 0,0:14:27.50,0:14:29.18,Default,NTP,0,0,0,!Effect,他們是紅蓮的人吧?
+Dialogue: 0,0:14:29.60,0:14:31.25,Default,NTP,0,0,0,!Effect,你是什麼意思？
+Dialogue: 0,0:14:31.68,0:14:33.70,Default,NTP,0,0,0,!Effect,想背叛夜叉大人嗎？
+Dialogue: 0,0:14:33.85,0:14:35.00,Default,NTP,0,0,0,!Effect,源內啊
+Dialogue: 0,0:14:35.49,0:14:37.25,Default,NTP,0,0,0,!Effect,這不是背不背叛的問題
+Dialogue: 0,0:14:37.83,0:14:43.09,Default,NTP,0,0,0,!Effect,這是要甩開我心中的迷惑\N難道你從沒有迷惑過嗎?
+Dialogue: 0,0:14:43.60,0:14:48.47,Default,NTP,0,0,0,!Effect,迷惑?\N研究超越凡人  需要有什麼迷惑?
+Dialogue: 0,0:14:48.90,0:14:53.31,Default,NTP,0,0,0,!Effect,你看吧  我創造出來的可愛孩子們啊
+Dialogue: 0,0:14:54.58,0:14:57.44,Default,NTP,0,0,0,!Effect,這是我研究多年的成果
+Dialogue: 0,0:14:58.15,0:15:00.58,Default,NTP,0,0,0,!Effect,讓人與鬼融合
+Dialogue: 0,0:15:01.02,0:15:07.68,Default,NTP,0,0,0,!Effect,製造結合人的智慧和鬼強大肉體的超人類\N邁向「超人類」的方向
+Dialogue: 0,0:15:08.66,0:15:09.92,Default,NTP,0,0,0,!Effect,「超人類」?
+Dialogue: 0,0:15:10.56,0:15:14.62,Default,NTP,0,0,0,!Effect,而「鐵」便是邁出「超人類」的第一步
+Dialogue: 0,0:15:15.03,0:15:20.63,Default,NTP,0,0,0,!Effect,我們的目標\N是創造超越人與鬼的真正「超人類」
+Dialogue: 0,0:15:20.90,0:15:24.03,Default,NTP,0,0,0,!Effect,原來你們帶回打倒的鬼\N是用來做這種事的
+Dialogue: 0,0:15:24.51,0:15:28.77,Default,NTP,0,0,0,!Effect,這樣的話\N那為何你自己不先融合成鬼的身體?
+Dialogue: 0,0:15:29.44,0:15:31.50,Default,NTP,0,0,0,!Effect,因為研究還沒完成
+Dialogue: 0,0:15:32.95,0:15:38.05,Default,NTP,0,0,0,!Effect,把人和鬼融合\N一般會被鬼佔據了精神
+Dialogue: 0,0:15:38.65,0:15:41.52,Default,NTP,0,0,0,!Effect,那也只會是普通的鬼而已\N什麼?
+Dialogue: 0,0:15:44.09,0:15:48.12,Default,NTP,0,0,0,!Effect,他們的意志薄弱變成了鬼
+Dialogue: 0,0:15:49.03,0:15:52.00,Default,NTP,0,0,0,!Effect,那些不完全的   我都丟掉了
+Dialogue: 0,0:15:53.20,0:15:56.19,Default,NTP,0,0,0,!Effect,原來鬼的數量不斷增加\N全都是這裡的傑作啊
+Dialogue: 0,0:16:16.16,0:16:17.28,Default,NTP,0,0,0,!Effect,你幹什麼？
+Dialogue: 0,0:16:17.66,0:16:18.96,Default,NTP,0,0,0,!Effect,你問我幹什麼?
+Dialogue: 0,0:16:19.73,0:16:22.56,Default,NTP,0,0,0,!Effect,開什麼玩笑!\N你把人的生命當成什麼了?
+Dialogue: 0,0:16:23.67,0:16:24.69,Default,NTP,0,0,0,!Effect,我不會原諒你的!
+Dialogue: 0,0:16:25.27,0:16:27.90,Default,NTP,0,0,0,!Effect,我也是   絕不原諒...
+Dialogue: 0,0:16:29.84,0:16:31.40,Default,NTP,0,0,0,!Effect,我們也是...
+Dialogue: 0,0:16:35.28,0:16:38.21,Default,NTP,0,0,0,!Effect,赤銅   你快阻止他們
+Dialogue: 0,0:16:38.21,0:16:39.31,Default,NTP,0,0,0,!Effect,快阻止他們
+Dialogue: 0,0:16:39.55,0:16:42.54,Default,NTP,0,0,0,!Effect,你果然是…想背叛...
+Dialogue: 0,0:16:44.69,0:16:45.65,Default,NTP,0,0,0,!Effect,什麼?
+Dialogue: 0,0:16:47.42,0:16:48.41,Default,NTP,0,0,0,!Effect,雅瑪...
+Dialogue: 0,0:16:50.53,0:16:52.12,Default,NTP,0,0,0,!Effect,這是什麼怪物?
+Dialogue: 0,0:16:53.43,0:16:56.86,Default,NTP,0,0,0,!Effect,這是我最好的作品  雅瑪
+Dialogue: 0,0:16:57.50,0:17:00.87,Default,NTP,0,0,0,!Effect,能成為神的\N真正的超人類
+Dialogue: 0,0:17:01.14,0:17:03.73,Default,NTP,0,0,0,!Effect,雅瑪給我幹掉他們
+Dialogue: 0,0:17:11.11,0:17:11.84,Default,NTP,0,0,0,!Effect,烈火
+Dialogue: 0,0:17:24.03,0:17:25.32,Default,NTP,0,0,0,!Effect,不要呀!
+Dialogue: 0,0:17:26.83,0:17:29.00,Default,NTP,0,0,0,!Effect,不要呀!
+Dialogue: 0,0:17:29.50,0:17:31.49,Default,NTP,0,0,0,!Effect,住手呀...!
+Dialogue: 0,0:17:49.35,0:17:52.21,Default,NTP,0,0,0,!Effect,住手呀...!
+Dialogue: 0,0:18:00.66,0:18:03.46,Default,NTP,0,0,0,!Effect,女人...\N這怪物是怎麼一回事?
+Dialogue: 0,0:18:04.27,0:18:05.86,Default,NTP,0,0,0,!Effect,女人阿...
+Dialogue: 0,0:18:11.21,0:18:14.61,Default,NTP,0,0,0,!Effect,女人阿...
+Dialogue: 0,0:18:19.08,0:18:21.01,Default,NTP,0,0,0,!Effect,雅瑪  你怎麼了?
+Dialogue: 0,0:18:22.52,0:18:27.18,Default,NTP,0,0,0,!Effect,把女人的身體還給我
+Dialogue: 0,0:18:27.69,0:18:32.56,Default,NTP,0,0,0,!Effect,難道…她太久沒見到女人的身體\N恢復人的記憶了嗎?
+Dialogue: 0,0:18:34.56,0:18:36.00,Default,NTP,0,0,0,!Effect,住手呀!
+Dialogue: 0,0:18:37.47,0:18:39.63,Default,NTP,0,0,0,!Effect,住手呀!
+Dialogue: 0,0:18:41.54,0:18:43.63,Default,NTP,0,0,0,!Effect,放開我...住手呀...!
+Dialogue: 0,0:19:03.53,0:19:09.09,Default,NTP,0,0,0,!Effect,把女人的身體還給我...還給我...
+Dialogue: 0,0:19:03.53,0:19:09.09,Default,NTP,0,0,0,!Effect,可惡
+Dialogue: 0,0:19:10.07,0:19:11.09,Default,NTP,0,0,0,!Effect,解放吧
+Dialogue: 0,0:19:17.77,0:19:21.09,Default,NTP,0,0,0,!Effect,失火了  失火了  快救火…
+Dialogue: 0,0:19:21.54,0:19:23.07,Default,NTP,0,0,0,!Effect,夜叉大人在天守閣
+Dialogue: 0,0:19:27.82,0:19:29.25,Default,NTP,0,0,0,!Effect,赤銅   這是?
+Dialogue: 0,0:19:30.32,0:19:33.34,Default,NTP,0,0,0,!Effect,白剛\N我的迷惑消除了
+Dialogue: 0,0:19:34.26,0:19:37.25,Default,NTP,0,0,0,!Effect,「鐵」的存在   是不被允許的
+Dialogue: 0,0:19:38.13,0:19:39.86,Default,NTP,0,0,0,!Effect,那你做好覺悟了嗎？
+Dialogue: 0,0:19:43.57,0:19:45.26,Default,NTP,0,0,0,!Effect,勿庸置疑
+Dialogue: 0,0:20:03.65,0:20:06.31,Default,NTP,0,0,0,!Effect,你就是夜叉嗎？\N沒錯 
+Dialogue: 0,0:20:06.72,0:20:09.32,Default,NTP,0,0,0,!Effect,我就是統治「鐵」的  夜叉
+Dialogue: 0,0:20:09.69,0:20:12.92,Default,NTP,0,0,0,!Effect,和「鐵」作對的紅蓮就是你們嗎？
+Dialogue: 0,0:20:13.56,0:20:16.33,Default,NTP,0,0,0,!Effect,我是退魔機關   紅蓮首領   烈火
+Dialogue: 0,0:20:17.03,0:20:22.13,Default,NTP,0,0,0,!Effect,我答應了他喚醒鬼\N讓鬼與人融合的計劃
+Dialogue: 0,0:20:23.91,0:20:27.14,Default,NTP,0,0,0,!Effect,不過   沒有超過鬼的意志力的話
+Dialogue: 0,0:20:27.14,0:20:31.64,Default,NTP,0,0,0,!Effect,人就會給鬼奪走身體\N直接變成鬼
+Dialogue: 0,0:20:32.05,0:20:34.38,Default,NTP,0,0,0,!Effect,我渴望得到力量\N保護國家不受到鬼侵犯的強大力量
+Dialogue: 0,0:20:34.98,0:20:42.12,Default,NTP,0,0,0,!Effect,知道了我這個願望的源內  來找了我
+Dialogue: 0,0:20:42.62,0:20:45.75,Default,NTP,0,0,0,!Effect,他問我\N「想不想試試超越凡人?」
+Dialogue: 0,0:20:50.30,0:20:52.56,Default,NTP,0,0,0,!Effect,強大的力量算什麼？
+Dialogue: 0,0:20:53.07,0:20:58.30,Default,NTP,0,0,0,!Effect,就是因為有那種願望\N所以我便創立了「鐵」
+Dialogue: 0,0:20:58.84,0:21:03.17,Default,NTP,0,0,0,!Effect,原來如此\N所以   你的人格已經給鬼佔據了
+Dialogue: 0,0:21:03.61,0:21:04.91,Default,NTP,0,0,0,!Effect,是又怎麼樣？
+Dialogue: 0,0:21:05.78,0:21:08.61,Default,NTP,0,0,0,!Effect,不用說...當然是殺了你
+Dialogue: 0,0:21:10.59,0:21:11.92,Default,NTP,0,0,0,!Effect,赤銅告訴我吧
+Dialogue: 0,0:21:12.62,0:21:15.02,Default,NTP,0,0,0,!Effect,「鐵」有錯嗎？
+Dialogue: 0,0:21:15.49,0:21:16.89,Default,NTP,0,0,0,!Effect,他也有正確的時候
+Dialogue: 0,0:21:17.29,0:21:20.89,Default,NTP,0,0,0,!Effect,但是   在不知不覺中\N偏離了人道
+Dialogue: 0,0:21:21.50,0:21:25.69,Default,NTP,0,0,0,!Effect,你不這麼認為嗎?\N也許是這樣
+Dialogue: 0,0:21:26.70,0:21:31.23,Default,NTP,0,0,0,!Effect,可是  向夜叉大人誓忠後\N一切都無法後悔了
+Dialogue: 0,0:21:32.14,0:21:36.13,Default,NTP,0,0,0,!Effect,赤銅\N走上你相信的道路吧
+Dialogue: 0,0:22:00.80,0:22:04.03,Default,NTP,0,0,0,!Effect,人類的力量最多也只有這點程度
+Dialogue: 0,0:22:04.54,0:22:07.20,Default,NTP,0,0,0,!Effect,看我這超越鬼的力量怎樣!
+Dialogue: 0,0:22:08.64,0:22:09.61,Default,NTP,0,0,0,!Effect,赤銅!
+Dialogue: 0,0:22:11.31,0:22:12.75,Default,NTP,0,0,0,!Effect,赤銅!
+Dialogue: 0,0:22:21.29,0:22:23.81,Default,NTP,0,0,0,!Effect,做什麼都是多餘的
+Dialogue: 0,0:22:26.19,0:22:28.42,Default,NTP,0,0,0,!Effect,你是當時的退魔師
+Dialogue: 0,0:22:28.90,0:22:29.86,Default,NTP,0,0,0,!Effect,妳知道
+Dialogue: 0,0:22:30.40,0:22:33.99,Default,NTP,0,0,0,!Effect,在四年前退魔師把我爸爸殺了
+Dialogue: 0,0:22:34.87,0:22:38.93,Default,NTP,0,0,0,!Effect,不只如此   其餘無辜的村民也被殺了
+Dialogue: 0,0:22:47.92,0:22:49.88,Default,NTP,0,0,0,!Effect,對  是有那麼回事
+Dialogue: 0,0:22:50.52,0:22:56.65,Default,NTP,0,0,0,!Effect,難得我邀請他一起超越人類\N只有白痴才會拒絕的
+Dialogue: 0,0:22:57.43,0:23:00.36,Default,NTP,0,0,0,!Effect,不可原諒...\N那妳想怎麼樣？小丫頭!
+Dialogue: 0,0:23:03.75,0:23:04.30,Default,NTP,0,0,0,!Effect,這傢伙...
+Dialogue: 0,0:23:13.50,0:23:17.62,Default,NTP,0,0,0,!Effect,父親的仇\N村民的仇
+Dialogue: 0,0:23:17.70,0:23:20.34,Default,NTP,0,0,0,!Effect,對你的所作所為\N絕不原諒!!
+Dialogue: 0,0:23:47.00,0:23:48.74,Default,NTP,0,0,0,!Effect,小遙!
+Dialogue: 0,0:24:16.97,0:24:20.20,Default,NTP,0,0,0,!Effect,烈火   你回來了!
+Dialogue: 0,0:24:21.78,0:24:22.74,Default,NTP,0,0,0,!Effect,月影
+Dialogue: 0,0:24:32.35,0:24:33.55,Default,NTP,0,0,0,!Effect,月影
+Dialogue: 0,0:24:34.12,0:24:36.78,Default,NTP,0,0,0,!Effect,我們從今以後可以在一起了
+Dialogue: 0,0:24:38.43,0:24:40.22,Default,NTP,0,0,0,!Effect,永遠在一起  烈火
+Dialogue: 0,0:24:45.23,0:24:46.50,Default,NTP,0,0,0,!Effect,烈火
+Dialogue: 0,0:26:48.09,0:26:50.02,Default,NTP,0,0,0,!Effect,這傢伙究竟怎麼一回事?
+Dialogue: 0,0:26:50.50,0:26:50.80,Default,NTP,0,0,0,!Effect,是
+Dialogue: 0,0:26:50.99,0:26:52.25,Default,NTP,0,0,0,!Effect,很對不起!
+Dialogue: 0,0:26:53.80,0:26:56.79,Default,NTP,0,0,0,!Effect,我要吞併弱小的國家  把天下納為己有
+Dialogue: 0,0:26:57.36,0:26:58.28,Default,NTP,0,0,0,!Effect,是
+Dialogue: 0,0:27:01.07,0:27:05.13,Default,NTP,0,0,0,!Effect,對了  當代的鬼是怎麼樣召喚出來的？
+Dialogue: 0,0:27:05.99,0:27:06.40,Default,NTP,0,0,0,!Effect,不知道
+Dialogue: 0,0:27:06.65,0:27:10.03,Default,NTP,0,0,0,!Effect,我們只能祈禱鬼別再出現
+Dialogue: 0,0:27:10.68,0:27:13.91,Default,NTP,0,0,0,!Effect,「鐵」的消失相信是眾人所希望的
+Dialogue: 0,0:27:14.95,0:27:16.25,Default,NTP,0,0,0,!Effect,要是再有人創造鬼的話
+Dialogue: 0,0:27:16.75,0:27:19.52,Default,NTP,0,0,0,!Effect,那時候大家再合力幹掉它不就好了嗎?
+Dialogue: 0,0:27:19.72,0:27:20.69,Default,NTP,0,0,0,!Effect,說的一點也沒錯
+Dialogue: 0,0:27:21.96,0:27:24.72,Default,NTP,0,0,0,!Effect,就是說啊  就是這樣
+Dialogue: 0,0:27:26.56,0:27:27.72,Default,NTP,0,0,0,!Effect,恩
+Dialogue: 0,0:27:28.00,0:27:30.00,Default,NTP,0,0,0,!Effect,說的一點也沒錯

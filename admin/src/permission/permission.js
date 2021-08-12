@@ -118,6 +118,18 @@ export default [
                 children: [] ,
             } ,
             {
+                key: 'video_subject' ,
+                cn: '视频主体' ,
+                en: 'Video Subject' ,
+                // 路由路径
+                path: '/video/subject' ,
+                hidden: false ,
+                view: true ,
+                sIco: videoIco ,
+                bIco: videoIco ,
+                children: [] ,
+            } ,
+            {
                 key: 'video_project' ,
                 cn: '视频专题' ,
                 en: 'Video Project' ,

@@ -82,7 +82,7 @@ class PannelAction extends Action
         $video_company_count_for_yesterday  = VideoCompanyModel::countByDate($yesterday);
         $category_count_for_yesterday  = CategoryModel::countByDate($yesterday);
         $failed_jobs_count_for_yesterday = FailedJobsModel::countByDate($yesterday);
-        $processed_video_count_for_yesterday = VideoModel::countByDateAndProcessStatus($yesterday , 2);
+        $processed_video_count_for_yesterday = VideoModel::countByDateAndProcessStatus($yesterday , 3);
         $process_failed_video_count_for_yesterday = VideoModel::countByDateAndProcessStatus($yesterday , -1);
 
         // 比例

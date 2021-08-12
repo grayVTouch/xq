@@ -16,20 +16,22 @@ use function core\remove_bom_header;
 require_once __DIR__ . '/app/Customize/api/admin/plugin/extra/app.php';
 
 
-$dir = __DIR__ . '/utf8_with_bom.ass';
-$c = file_get_contents($dir);
-$c = remove_bom_header($c);
+$a = 0;
+$b = 39;
 
-file_put_contents(__DIR__ . '/utf8_without_bom.ass' , $c);
-var_dump(detect_encoding($c));
+var_dump(ratio($a , $b));
 
-//
-////$file = 'D:\web\xinqu\resource\upload\开发模式\专题视频\魔法少女 梅露露\0001【原画】.mp4';
-////$file = 'E:\myself\human\二次元\魔法少女梅露露\魔法少女 梅露露 (1).mkv';
-//$file = 'G:\pornhub\temp_ts_CDQFLI\sequence-37.ts';
-//
-//$info = FFprobe::create($file)
-//        ->coreInfo();
-//
-//print_r($info);
-//
+// 获取 增加/减少 百分比
+function ratio($a , $b): string
+{
+    if ($b == 0) {
+        var_dump('1');
+        $ratio = bcmul($a , 100 , 2);
+    } else {
+        $amount = bcsub($a  , $b);
+        $ratio = bcdiv($amount , $b , 4);
+        $ratio = bcmul($ratio , 100 , 2);
+    }
+    $ratio = abs($ratio);
+    return sprintf('%s%%' , $ratio);
+}

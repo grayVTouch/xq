@@ -17,6 +17,8 @@ class PannelUtil
     {
         if ($b == 0) {
             $ratio = bcmul($a , 100 , 2);
+        } else if ($a == 0) {
+            $ratio = bcmul($b , 100 , 2);
         } else {
             $amount = bcsub($a  , $b);
             $ratio = bcdiv($amount , $b , 4);

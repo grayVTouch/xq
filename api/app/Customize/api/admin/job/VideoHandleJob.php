@@ -306,6 +306,7 @@ class VideoHandleJob implements ShouldQueue
         }
         FFmpeg::create()
             ->concat($ts)
+            ->codec('h264' , 'video')
             ->save($video_simple_preview_file);
         ResourceRepository::create('' , $video_simple_preview_file , 'local' , 0 , 0);
         $simple_preview_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $aliyun_simple_preview_file , $video_simple_preview_file);
@@ -693,6 +694,7 @@ class VideoHandleJob implements ShouldQueue
         }
         FFmpeg::create()
             ->concat($ts)
+            ->codec('h264' , 'video')
             ->save($video_simple_preview_file);
 
         VideoModel::updateById($this->video->id , [

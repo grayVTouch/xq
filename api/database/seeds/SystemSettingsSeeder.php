@@ -19,7 +19,6 @@ class SystemSettingsSeeder extends Seeder
         ] , [
             'disk' => 'local' ,
             'is_enable_grapha_verify_code_for_login' => 1 ,
-            'cloud_storage_manufacturer' => 'aliyun' ,
             'friend_links' => '[]' ,
             'is_show_tool' => 0 ,
             'created_at' => $datetime ,

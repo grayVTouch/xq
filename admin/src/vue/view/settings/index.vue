@@ -132,6 +132,42 @@
                                 </td>
                             </tr>
 
+                            <tr :class="{error: myValue.error.friend_links}">
+                                <td>友情链接</td>
+                                <td>
+
+                                    <div class="friend-links">
+                                        <div class="line">
+                                            <table class="line-table">
+                                                <thead>
+                                                <tr>
+                                                    <th>名称</th>
+                                                    <th>链接</th>
+                                                    <th>操作</th>
+                                                </tr>
+                                                </thead>
+                                                <tbody>
+                                                <tr v-for="(v,k) in friendLinks" :key="k">
+                                                    <td><input type="text" v-model="v.name" class="form-text w-r-100"></td>
+                                                    <td><input type="text" v-model="v.link" class="form-text w-r-100"></td>
+                                                    <td>
+                                                        <my-table-button @click="friendLinks.splice(k + 1 , 0 , {name: '' , link: ''})">添加</my-table-button>
+                                                        <my-table-button type="error" @click="friendLinks.splice(k , 1)">删除</my-table-button>
+                                                    </td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <div class="line m-t-10">
+                                            <my-table-button @click="friendLinks.push({name: '' , link: ''})"><my-icon icon="add" />添加</my-table-button>
+                                        </div>
+                                    </div>
+                                    <span class="need"></span>
+                                    <div class="msg">例：https://www.test.com</div>
+                                    <div class="e-msg">{{ myValue.error.friend_links }}</div>
+                                </td>
+                            </tr>
+
                             <tr>
                                 <td colspan="2">
                                     <i-button

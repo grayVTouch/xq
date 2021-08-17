@@ -100,19 +100,23 @@
                                         <tr>
                                             <th>字段</th>
                                             <th>值</th>
+                                            <th>操作</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         <tr v-for="(v,k) in attr" :key="k">
                                             <td><input type="text" v-model="v.field" class="form-text w-r-100"></td>
                                             <td><input type="text" v-model="v.value" class="form-text w-r-100"></td>
+                                            <td>
+                                                <my-table-button @click="attr.splice(k + 1 , 0 , {field: '' , value: ''})">添加</my-table-button>
+                                                <my-table-button type="error" @click="attr.splice(k , 1)">删除</my-table-button>
+                                            </td>
                                         </tr>
                                         </tbody>
                                     </table>
                                 </div>
                                 <div class="line m-t-10">
                                     <my-table-button @click="attr.push({field: '' , value: ''})"><my-icon icon="add" />添加</my-table-button>
-                                    <my-table-button type="error" @click="attr.pop()"><my-icon icon="delete" />减少</my-table-button>
                                 </div>
                             </div>
                             <span class="need"></span>

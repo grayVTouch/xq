@@ -116,12 +116,15 @@ class ImageProjectResourceHandleJob implements ShouldQueue
         if ($image_project->type === 'pro') {
             $origin_dir = FileRepository::generateRealPathByWithoutPrefixRelativePath($origin_relative_dir);;
             $preview_dir = FileRepository::generateRealPathByWithoutPrefixRelativePath($preview_relative_dir);;
-            if (!File::exists($origin_dir)) {
-                File::mkdir($origin_dir , 0777 , true);
-            }
-            if (!File::exists($preview_dir)) {
-                File::mkdir($preview_dir , 0777 , true);
-            }
+        } else {
+            $origin_dir = $save_dir;
+            $preview_dir = $save_dir;
+        }
+        if (!File::exists($origin_dir)) {
+            File::mkdir($origin_dir , 0777 , true);
+        }
+        if (!File::exists($preview_dir)) {
+            File::mkdir($preview_dir , 0777 , true);
         }
         ImageProjectHandler::images($image_project);
 
@@ -213,6 +216,7 @@ class ImageProjectResourceHandleJob implements ShouldQueue
                 }
                 $preview_file = $preview_dir . '/' . $filename;
 
+                $original_ext = $extension;
                 $original_src = '';
                 $preview_src = '';
                 if ($o_resource->disk === 'local') {
@@ -221,10 +225,14 @@ class ImageProjectResourceHandleJob implements ShouldQueue
                      * 预览图
                      * *******************
                      */
+                    /**
+                     * *******************
+                     * 移动预览图
+                     * *******************
+                     */
+
                     $p_resource = null;
                     if (empty($v->src)) {
-                        // 生成预览图
-                        $p_source_file = $this->imageProcess($o_resource->path , $p_compress_extension);
 
                         // 原图上传
                         $o_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $original_file , $o_resource->path);
@@ -234,6 +242,20 @@ class ImageProjectResourceHandleJob implements ShouldQueue
                             continue ;
                         }
                         $original_src = $o_upload_res['data'];
+                        ResourceRepository::createAliyun($original_src , $this->settings->aliyun_bucket , 0 , 0);
+                        if (in_array($original_ext , ['gif'])) {
+                            ImageModel::updateById($v->id , [
+                                'original_src'  => $original_src ,
+                                'src'           => $original_src ,
+                            ]);
+                            ResourceRepository::used($original_src);
+                            DB::commit();
+                            $success_count++;
+                            continue ;
+                        }
+
+                        // 生成预览图
+                        $p_source_file = $this->imageProcess($o_resource->path , $p_compress_extension);
 
                         // 预览图上传
                         $p_upload_res = AliyunOss::upload($this->settings->aliyun_bucket , $preview_file , $p_source_file);
@@ -425,18 +447,29 @@ class ImageProjectResourceHandleJob implements ShouldQueue
                     File::move($source_file , $target_file);
                     // 删除源文件
                     ResourceRepository::delete($source_file);
-                    ResourceRepository::create($target_url , $target_file , 'local' , 1 , 0);
+                    ResourceRepository::create($target_url , $target_file , 'local' , 0 , 0);
                 }
 
                 // 更新原图地址
                 $original_file = $target_file;
                 $original_src  = $target_url;
+                $original_ext  = $extension;
 
                 /**
                  * *******************
                  * 移动预览图
                  * *******************
                  */
+                if (in_array($original_ext , ['gif'])) {
+                    ImageModel::updateById($v->id , [
+                        'original_src'  => $original_src ,
+                        'src'           => $original_src ,
+                    ]);
+                    ResourceRepository::used($original_src);
+                    DB::commit();
+                    $success_count++;
+                    continue ;
+                }
                 $extension = 'webp';
                 if (empty($v->src)) {
                     // 生成预览图
@@ -471,7 +504,7 @@ class ImageProjectResourceHandleJob implements ShouldQueue
                     File::move($source_file , $target_file);
                     // 删除旧文件
                     ResourceRepository::delete($source_file);
-                    ResourceRepository::create($target_url , $target_file , 'local' , 1 , 0);
+                    ResourceRepository::create($target_url , $target_file , 'local' , 0 , 0);
                 }
 
                 // 更新预览图地址
@@ -481,6 +514,8 @@ class ImageProjectResourceHandleJob implements ShouldQueue
                     'original_src'  => $original_src ,
                     'src'           => $src ,
                 ]);
+                ResourceRepository::used($original_src);
+                ResourceRepository::used($src);
                 $success_count++;
                 DB::commit();
             } catch (Exception $e) {

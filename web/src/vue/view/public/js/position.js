@@ -23,7 +23,7 @@ export default [
         id: imageId,
         key: 'image',
         name: '图片',
-        route: '/image/search',
+        route: '/image',
         hidden: false,
         parentId: 0,
         children: [
@@ -51,7 +51,7 @@ export default [
         id: videoId,
         key: 'image',
         name: '视频',
-        route: '/video/search',
+        route: '/video',
         hidden: false,
         parentId: 0,
         children: [

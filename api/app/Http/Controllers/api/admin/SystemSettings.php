@@ -32,6 +32,7 @@ class SystemSettings extends Base
         $param['aliyun_secret'] = $param['aliyun_secret'] ?? '';
         $param['aliyun_endpoint'] = $param['aliyun_endpoint'] ?? '';
         $param['aliyun_bucket'] = $param['aliyun_bucket'] ?? '';
+        $param['friend_links'] = $param['friend_links'] ?? '';
         $res = SystemSettingsAction::update($this , $param);
         if ($res['code'] != 0) {
             return error($res['message'] , $res['data'] , $res['code']);

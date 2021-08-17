@@ -38,11 +38,18 @@
             initData () {
                 const permissions = this.state().permissions;
                 // 生成id & parentId
-                G.tree.link(permissions , {
+                G.tree.buildTree(permissions , {
                     id:     'id' ,
                     p_id:   'parentId' ,
                 });
                 G.tree.loop(permissions , (v) => {
+                    // 临时性措施
+                    const isShowTool = Number(this.state().settings.is_show_tool);
+                    if (isShowTool === 0) {
+                       if (v.path === '/toolbox/index') {
+                           v.hidden = true;
+                       }
+                    }
                     if (this.TopContext.debug) {
                         return ;
                     }

@@ -6,10 +6,10 @@ const form = {
 };
 
 const attr = [
-    {
-        field: '' ,
-        value: '' ,
-    }
+    // {
+    //     field: '' ,
+    //     value: '' ,
+    // }
 ];
 
 const owner = {
@@ -64,7 +64,7 @@ export default {
             // 用户列表
             owner:  G.copy(owner) ,
 
-            attr ,
+            attr: G.copy(attr) ,
 
         };
     } ,

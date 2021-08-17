@@ -24,6 +24,7 @@ use App\Customize\api\web\model\ImageModel;
 use App\Customize\api\web\model\ImageProjectModel;
 use App\Customize\api\web\model\ModuleModel;
 use App\Customize\api\web\model\PraiseModel;
+use App\Customize\api\web\model\SystemSettingsModel;
 use App\Customize\api\web\model\UserModel;
 use App\Customize\api\web\model\UserTokenModel;
 use App\Customize\api\web\model\VideoModel;

@@ -418,6 +418,7 @@ export default {
             this.videoProject       = G.copy(videoProject);
             this.videos             = G.copy(videos);
             this.videoSubtitles     = G.copy(videoSubtitles);
+            this.videoSubject     = G.copy(videoSubject);
             this.form               = G.copy(form);
             this.error();
         } ,
@@ -720,6 +721,12 @@ export default {
 
         showVideoSubjectSelector () {
             this.$refs['video-subject-selector'].show();
+        } ,
+
+        clearVideoSubjectEvent () {
+            this.videoSubject = G.copy(videoSubject);
+            this.form.video_subject_id = 0;
+            this.error({video_subject_id: ''} , false);
         } ,
 
         isExistTagByTagId (tagId) {

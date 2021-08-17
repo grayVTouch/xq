@@ -548,6 +548,11 @@ export default {
             this.videoSubject            = res;
         } ,
 
+        clearVideoSubjectEvent () {
+            this.videoSubject = G.copy(videoSubject);
+            this.form.video_subject_id = 0;
+            this.error({video_subject_id: ''} , false);
+        } ,
     } ,
 
 }

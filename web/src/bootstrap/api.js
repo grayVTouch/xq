@@ -18,6 +18,7 @@ import history from '@api/history.js';
 import collectionGroup from '@api/collection_group.js';
 import praise from '@api/praise.js';
 import collection from '@api/collection.js';
+import system from '@api/system.js';
 
 window.Api = {
     misc ,
@@ -40,4 +41,5 @@ window.Api = {
     collectionGroup ,
     praise ,
     collection ,
+    system ,
 };

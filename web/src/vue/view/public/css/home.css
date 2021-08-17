@@ -1140,6 +1140,23 @@
     font-size: 14px;
 }
 
+.main > .footer > .inner .links {
+
+}
+
+.main > .footer > .inner .links .link {
+    transition: all 0.3s ease;
+    margin-right: 10px;
+}
+
+.main > .footer > .inner .links .link:nth-last-of-type(1) {
+    margin-right: 0;
+}
+
+.main > .footer > .inner .links .link:hover {
+    color: #fff;
+}
+
 /*** 箭头 ***/
 .main > .to-top {
     position: fixed;

@@ -15,6 +15,10 @@
                             </my-button>
                             <my-button class="praise" @click="showFavorites"><my-icon icon="shoucang5" :class="{'run-red': data.is_collected}" /> 收藏</my-button>
 
+                            <my-button class="praise" @click="myValue.viewMode === 'list' ? myValue.viewMode = 'image' : myValue.viewMode = 'list'">
+                                <template v-if="myValue.viewMode === 'image'">列表模式</template>
+                                <template v-if="myValue.viewMode === 'list'">大图模式</template>
+                            </my-button>
                         </div>
                     </div>
 
@@ -29,8 +33,14 @@
                     </div>
 
                     <div class="desc m-b-30">{{ data.description }}</div>
-                    <div class="images" ref="images">
-                        <img v-for="(v,k) in images.data" :src="v.src" @click="imageClick(k + 1)" class="image">
+                    <div class="images" :class="{'list-view-mode': myValue.viewMode === 'list' , 'image-view-mode': myValue.viewMode === 'image'}" ref="images">
+                        <template v-for="(v,k) in images.data">
+                            <div v-if="myValue.viewMode === 'list'" class="image-container" :key="k">
+                                <img :data-src="v.src" alt="" @click="imageClick(k + 1)" class="image judge-img-size" v-judge-img-size>
+                            </div>
+
+                            <img v-if="myValue.viewMode === 'image'" :key="k" :src="v.src" alt="" @click="imageClick(k + 1)" class="image">
+                        </template>
                     </div>
                 </div>
 

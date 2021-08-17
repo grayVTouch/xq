@@ -480,6 +480,7 @@ class VideoAction extends Action
         }
         $param['exclude_id'] = $video->id;
         $param['category_id'] = $video->category_id;
+        $param['video_subject_id'] = $video->video_subject_id > 0 ? $video->video_subject_id : '';
         $size = empty($param['size']) ? my_config('app.limit') : $param['size'];
         $res = VideoModel::getRecommendByRelationAndFieldAndFilterAndSize(['tags'] , null , $param , $size);
         $res = VideoHandler::handlePaginator($res);

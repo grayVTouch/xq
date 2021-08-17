@@ -3,16 +3,22 @@ export default {
     props: ['id'] ,
     data () {
         return {
+            myValue: {
+                viewMode: 'image' ,
+            } ,
+
             data: {
                 user: {} ,
                 module: {} ,
                 image_subject: {} ,
                 images: [] ,
                 tags: [] ,
+                // list-列表 image-大图
             } ,
+
             images: {
                 data: [] ,
-                size: 5 ,
+                size: 9 ,
             } ,
 
             dom: {} ,

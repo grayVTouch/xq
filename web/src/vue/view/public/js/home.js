@@ -199,6 +199,7 @@ export default {
             const last  = positionTree[positionTree.length - 1];
             const ids   = first.route === last.route ?  [first.route] : [first.route , last.route];
             this.ins.nav.focusByIds(ids);
+            this.autoSwitchSearchType(first.route);
         }
         next();
     } ,
@@ -212,6 +213,7 @@ export default {
         // 数据获取
         this.getPositions();
         this.getModules();
+        this.getSettings();
 
         if (G.s.exists('token')) {
             // 用户如果已经登录，则获取用户信息
@@ -270,7 +272,26 @@ export default {
                         this.pending('userInfo' , false);
                     });
             });
+        } ,
 
+        getSettings () {
+            return new Promise((resolve) => {
+                this.pending('getSettings' , true);
+                Api.system
+                    .settings()
+                    .then((res) => {
+                        if (res.code !== TopContext.code.Success) {
+                            this.errorHandle(res.message);
+                            return ;
+                        }
+                        const settings = res.data;
+                        this.dispatch('settings' , settings);
+                        resolve(true);
+                    })
+                    .finally(() => {
+                        this.pending('getSettings' , false);
+                    });
+            });
         } ,
 
         /**
@@ -331,7 +352,7 @@ export default {
                     [first.route , last.route]
                 ) :
                 [];
-            this.ins.nav    = new Nav(this.dom.navMenu.get(0) , {
+            this.ins.nav = new Nav(this.dom.navMenu.get(0) , {
                 // click (id) {
                 //     self.openWindow(self.genUrl(id) , '_self');
                 // } ,
@@ -343,9 +364,38 @@ export default {
                 ids ,
             });
 
+            console.log('first route' , first.route);
+            this.autoSwitchSearchType(first.route);
+
             // 分类需要修改（区分不同的事物主体，而不再是一套分类适用于所有事物）
             // 比如，视频、图片、视频专题、图片专题等，他们不允许共用一套分类！
             // 需要为他们分别设计单独的分类体系
+        } ,
+
+        autoSwitchSearchType (route) {
+            switch (route)
+            {
+                case '/index':
+                case '#/index':
+                    this.switchSearchType('image_project' , '图片专题');
+                    break;
+                case '/image':
+                case '#/image':
+                    this.switchSearchType('image' , '图片');
+                    break;
+                case '/image_project':
+                case '#/image_project':
+                    this.switchSearchType('image_project' , '图片专题');
+                    break;
+                case '/video':
+                case '#/video':
+                    this.switchSearchType('video' , '视频');
+                    break;
+                case '/video_project':
+                case '#/video_project':
+                    this.switchSearchType('video_project' , '视频专题');
+                    break;
+            }
         } ,
 
         initStyle () {

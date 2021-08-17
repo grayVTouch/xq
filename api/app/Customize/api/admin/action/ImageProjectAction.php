@@ -446,7 +446,7 @@ class ImageProjectAction extends Action
             }
             $image_project = ImageProjectHandler::handle($image_project);
             if ($image_project->process_status == 2) {
-                return self::error('包含无效处理状态视频【视频处理状态：已完成】【文件处理状态：已完成】' , '' , 403);
+                return self::error('包含无效处理状态【已完成】' , '' , 403);
             }
             $image_projects[] = $image_project;
         }

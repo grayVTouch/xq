@@ -15,13 +15,13 @@
                     </i-select>
                 </my-search-form-item>
 
-                <my-search-form-item name="分类" v-show="search.type === 'misc'">
+                <my-search-form-item name="分类">
                     <my-deep-select :data="categories" v-model="search.category_id" :has="false" empty=""></my-deep-select>
                     <my-loading v-if="myValue.pending.getCategories"></my-loading>
                     <span class="msg">请选择模块后操作</span>
                 </my-search-form-item>
 
-                <my-search-form-item name="视频主体" v-show="search.type === 'misc'">
+                <my-search-form-item name="视频主体">
                     <i-input
                             :value="videoSubject.id > 0 ? `${videoSubject.name}【${videoSubject.id}】` : ''"
                             class="w-200 run-cursor"

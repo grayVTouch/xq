@@ -80,6 +80,7 @@ class VideoModel extends Model
         $filter['module_id'] = $filter['module_id'] ?? '';
         $filter['exclude_id'] = $filter['exclude_id'] ?? '';
         $filter['category_id'] = $filter['category_id'] ?? '';
+        $filter['video_subject_id'] = $filter['video_subject_id'] ?? '';
 
         $where = [
             ['type' , '=' , 'misc'] ,
@@ -104,6 +105,9 @@ class VideoModel extends Model
         }
         if ($filter['category_id'] !== '') {
             $where[] = ['category_id' , '=' , $filter['category_id']];
+        }
+        if ($filter['video_subject_id'] !== '') {
+            $where[] = ['video_subject_id' , '=' , $filter['video_subject_id']];
         }
         return self::with($with)
             ->select($field)

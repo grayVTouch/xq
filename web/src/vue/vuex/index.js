@@ -5,7 +5,9 @@
 export default new Vuex.Store({
     state: {
         // 当前登录用户
-        user: null ,
+        user: {} ,
+
+        settings: {} ,
 
         context: TopContext ,
 
@@ -25,6 +27,10 @@ export default new Vuex.Store({
             state.user = payload;
         } ,
 
+        settings (state , payload) {
+            state.settings = payload;
+        } ,
+
         position (state , payload) {
             state.position = payload;
         } ,
@@ -36,6 +42,10 @@ export default new Vuex.Store({
     actions: {
         user (context , payload) {
             context.commit('user' , payload);
+        } ,
+
+        settings (context , payload) {
+            context.commit('settings' , payload);
         } ,
 
         position (state , payload) {

@@ -110,7 +110,8 @@ export default [
                 props: true ,
             } ,
             {
-                path: 'image/search' ,
+                path: 'image' ,
+                alias: 'image/search' ,
                 component: () => import('@vue/view/image/search.vue') ,
                 props: true ,
             } ,
@@ -120,7 +121,8 @@ export default [
                 props: true ,
             } ,
             {
-                path: 'video/search' ,
+                path: 'video' ,
+                alias: 'video/search' ,
                 component: () => import('@vue/view/video/search.vue') ,
                 props: true ,
             } ,

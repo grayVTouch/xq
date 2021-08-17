@@ -98,6 +98,7 @@
                                     <input type="text" readonly="readonly" :value="`${videoSubject.name}【${videoSubject.id}】`" class="form-text w-180 run-cursor-not-allow">
                                     如需重新搜索，请点击
                                     <i-button @click="showVideoSubjectSelector">搜索</i-button>
+                                    <i-button @click="clearVideoSubjectEvent">清除</i-button>
                                     <span class="need">*</span>
                                     <div class="msg">请务必在选择模块后操作</div>
                                     <div class="e-msg">{{ myValue.error.video_subject_id }}</div>

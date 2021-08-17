@@ -58,6 +58,7 @@ class SystemSettingsAction extends Action
                 'aliyun_endpoint' => $param['aliyun_endpoint'] ,
                 'aliyun_bucket' => $param['aliyun_bucket'] ,
                 'proxy_pass' => $param['proxy_pass'] ,
+                'friend_links' => $param['friend_links'] ,
             ]);
             foreach ($web_route_mappings as $v)
             {

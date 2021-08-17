@@ -26,6 +26,8 @@ class CreateSystemSettingsTable extends Migration
             $table->string('aliyun_bucket' , 255)->default('')->comment('阿里云 bucket');
             $table->string('disk' , 255)->default('local')->comment('存储介质：local-本地磁盘 aliyun-阿里云');
             $table->string('proxy_pass' , 255)->default('')->comment('默认-代理地址');
+            $table->text('friend_links')->nullable(true)->comment('友情链接：json 格式，形如：[{name: "ceshi" , link: "https://www.baidu.com"}]');
+            $table->tinyInteger('is_show_tool')->default(0)->comment('是否显示工具箱模块：0-否 1-是');
 
             $table->timestamps();
 

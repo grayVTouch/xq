@@ -43,7 +43,9 @@ class ImageProjectRepository
         // 删除图片对应的标签
         RelationTagModel::delByRelationTypeAndRelationId('image_project' , $res->id);
         // 删除图片专题对应的目录
-        ResourceRepository::delete($res->directory);
+        if ($res->type === 'pro') {
+            ResourceRepository::delete($res->directory);
+        }
         return true;
     }
 }

@@ -5,6 +5,13 @@ const systemSettings = {
 };
 const webRouteMappings = [];
 
+const friendLinks = [
+    // {
+    //     name: '' ,
+    //     link: '' ,
+    // } ,
+];
+
 export default {
     name: "index",
 
@@ -19,6 +26,7 @@ export default {
             ins: {},
             systemSettings ,
             webRouteMappings ,
+            friendLinks ,
         };
     } ,
 
@@ -50,6 +58,9 @@ export default {
                     const data = res.data;
                     this.systemSettings = data.system_settings;
                     this.webRouteMappings = data.web_route_mappings;
+                    this.friendLinks = G.jsonDecode(this.systemSettings.friend_links);
+
+                    console.log(this.friendLinks , JSON.stringify(this.friendLinks));
                 })
                 .finally(() => {
                     this.pending('getData' , false);
@@ -58,6 +69,7 @@ export default {
 
         filter (form) {
             const error = {};
+
             return {
                 status: G.isEmptyObject(error) ,
                 error ,
@@ -73,12 +85,25 @@ export default {
             const form = {
                 ...this.systemSettings ,
                 web_route_mappings: this.webRouteMappings ,
+                friend_links: G.jsonEncode(this.friendLinks) ,
             };
             const filterRes = this.filter(form);
             if (!filterRes.status) {
                 this.error(filterRes.error , true);
                 this.errorHandle(G.getObjectFirstKeyMappingValue(filterRes.error));
                 return ;
+            }
+            for (let i = 0; i < this.friendLinks.length; ++i)
+            {
+                const cur = this.friendLinks[i];
+                if (G.isEmptyString(cur.name)) {
+                    this.errorHandle('友情链接：名称不能为空');
+                    return ;
+                }
+                if (G.isEmptyString(cur.link)) {
+                    this.errorHandle('友情链接：链接不能为空');
+                    return ;
+                }
             }
             form.web_route_mappings = G.jsonEncode(this.webRouteMappings);
             this.pending('submitEvent' , true);

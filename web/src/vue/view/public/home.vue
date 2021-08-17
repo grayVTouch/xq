@@ -308,11 +308,9 @@
         <footer class="footer">
             <div class="inner">
                 <p class="website">兴趣部落</p>
-                <p class="links">
+                <p class="links" v-if="state().settings.friend_links.length > 0">
                     友情链接：
-                    <a class="m-r-5" target="_blank" href="https://awm.moe/">ACG萌图</a>
-                    <a class="m-r-5" target="_blank" href="https://hanime.tv/">hanime</a>
-                    <a class="m-r-5" target="_blank" href="https://95mm.net/">mm</a>
+                    <a class="link" v-for="v in state().settings.friend_links" :key="v.name" target="_blank" :href="v.link">{{ v.name }}</a>
                 </p>
                 <p class="copyright">{{ TopContext.os.name }} 版权所有</p>
             </div>

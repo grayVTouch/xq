@@ -17,6 +17,7 @@ use App\Http\Controllers\api\web\Module;
 use App\Http\Controllers\api\web\Nav;
 use App\Http\Controllers\api\web\ImageSubject;
 use App\Http\Controllers\api\web\Praise;
+use App\Http\Controllers\api\web\System;
 use App\Http\Controllers\api\web\Tag;
 use App\Http\Controllers\api\web\User;
 use App\Http\Controllers\api\web\Video;
@@ -237,6 +238,9 @@ Route::prefix('web')
             Route::get('video/{id}/recommend'        , [Video::class , 'recommend']);
             // 视频 - 详情
             Route::get('video/{id}'        , [Video::class , 'show']);
+
+            // 系统设置
+            Route::get('settings'        , [System::class , 'settings']);
         });
 
         Route::middleware([

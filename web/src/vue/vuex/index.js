@@ -7,7 +7,9 @@ export default new Vuex.Store({
         // 当前登录用户
         user: {} ,
 
-        settings: {} ,
+        settings: {
+            friend_links: [] ,
+        } ,
 
         context: TopContext ,
 
